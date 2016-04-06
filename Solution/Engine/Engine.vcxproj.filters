@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="stdafx.h">
+      <Filter>Precompile</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h" />
+    <ClInclude Include="Model.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseModel.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GfxStructs.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Precompile</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX.cpp" />
+    <ClCompile Include="Model.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseModel.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Precompile">
+      <UniqueIdentifier>{5e9f812d-de6c-4dae-aa9e-f2deb6a2db76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{6044f429-b27f-4d29-b884-2ce5b17ad9b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Effect">
+      <UniqueIdentifier>{d0b6e00c-faa7-437b-935f-2073efb48f78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
