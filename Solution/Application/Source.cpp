@@ -103,8 +103,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void OnResize()
 {
-	int* apa = nullptr;
-	*apa = 5;
+	//int* apa = nullptr;
+	//*apa = 5;
 
 	//Engine::GetInstance()->OnResize(globalClientWidth, globalClientHeight);
 

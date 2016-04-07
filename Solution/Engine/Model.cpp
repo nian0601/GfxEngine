@@ -6,14 +6,46 @@
 Model::Model()
 {
 	myOrientation.SetPos({ 0.f, 0.f, 2.f });
-	myView.SetPos({ 0.f, 0.5f, -1.f });
-	myProjection = CU::Matrix44<float>::CreateProjectionMatrixLH(0.1f, 100.f, static_cast<float>(1280.f) / static_cast<float>(720.f), PI);
+	myView.SetPos({ 0.f, 0.f, -5.f });
+	myProjection = CU::Matrix44<float>::CreateProjectionMatrixLH(0.1f, 100.f, static_cast<float>(1280.f) / static_cast<float>(720.f), PI/2.f);
 
 }
 
 
 Model::~Model()
 {
+}
+
+void Model::InitTriangle(Effect* aEffect)
+{
+	myEffect = aEffect;
+
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+
+	InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc));
+
+
+	CU::GrowingArray<VertexPosColor> vertices(4);
+	vertices.Add({ { 0.0f, 0.5f, 0.5f, 0.f }, { 1.f, 0.f, 0.f, 1.f } });
+	vertices.Add({ { 0.5f, -0.5f, 0.5, 0.f }, { 0.f, 1.f, 0.f, 1.f } });
+	vertices.Add({ { -0.5f, -0.5f, 0.5f, 0.f }, { 0.f, 0.f, 1.f, 1.f } });
+
+
+	CU::GrowingArray<int> indices(24);
+	indices.Add(0);
+	indices.Add(1);
+	indices.Add(2);
+
+	InitVertexBuffer(sizeof(VertexPosColor), D3D11_USAGE_IMMUTABLE, 0);
+	InitIndexBuffer();
+
+	SetupVertexBuffer(vertices.Size(), reinterpret_cast<char*>(&vertices[0]));
+	SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
 }
 
 void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect)

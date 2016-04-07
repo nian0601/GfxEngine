@@ -9,6 +9,7 @@ public:
 	Model();
 	~Model();
 
+	void InitTriangle(Effect* aEffect);
 	void InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect);
 
 	void Render() override;

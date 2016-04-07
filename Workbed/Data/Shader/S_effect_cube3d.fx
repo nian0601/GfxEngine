@@ -29,9 +29,9 @@ PS_INPUT_CUBE3D VS(VS_INPUT_CUBE3D input)
 /*
 	output.Position = input.Position * float4(Scale, 1);
 */
-	output.Position = mul(input.Position, World);
-	output.Position = mul(output.Position, View);
-	output.Position = mul(output.Position, Projection);
+	//output.Position = mul(input.Position, World);
+	//output.Position = mul(output.Position, View);
+	//output.Position = mul(output.Position, Projection);
 
 
 	output.Position = input.Position;

@@ -60,8 +60,8 @@ void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float
 		aTitle.c_str(),
 		aTitle.c_str(),
 		WS_OVERLAPPEDWINDOW,
-		-2,
-		-2,
+		0,
+		0,
 		rc.right - rc.left,
 		rc.bottom - rc.top,
 		NULL,
@@ -72,6 +72,7 @@ void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float
 	DL_ASSERT_EXP(aHwnd != nullptr, "Failed to CreateWindowEx");
 
 	ShowWindow(aHwnd, 10);
+	UpdateWindow(aHwnd);
 }
 
 void Engine::CreateDirectX(const HWND& aHwnd)
@@ -81,7 +82,8 @@ void Engine::CreateDirectX(const HWND& aHwnd)
 
 
 	myEffect.Init("Data/Shader/S_effect_cube3d.fx");
-	myCube.InitCube({ 1.f, 1.f, 1.f }, { 1.f, 0.f, 1., 1.f }, &myEffect);
+	myCube.InitTriangle(&myEffect);
+	//myCube.InitCube({ 1.f, 1.f, 1.f }, { 1.f, 0.f, 1., 1.f }, &myEffect);
 }
 
 void Engine::Render()
