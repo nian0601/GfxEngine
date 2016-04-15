@@ -19,6 +19,13 @@
     <ClInclude Include="Effect.h">
       <Filter>Rendering\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="ModelProxy.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -36,6 +43,13 @@
     <ClCompile Include="Effect.cpp">
       <Filter>Rendering\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="ModelProxy.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

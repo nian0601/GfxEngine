@@ -17,10 +17,10 @@ namespace Frost
 		BaseModel();
 		~BaseModel();
 
-		virtual void Render();
-	protected:
+		virtual void Render(Effect& aEffect);
 
-		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize);
+	protected:
+		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect& aEffect);
 		void InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage);
 		void InitIndexBuffer();
 
@@ -29,7 +29,6 @@ namespace Frost
 
 		VertexBuffer* myVertexBuffer;
 		IndexBuffer* myIndexBuffer;
-		Effect* myEffect;
 		ID3D11InputLayout* myInputLayout;
 	};
 }

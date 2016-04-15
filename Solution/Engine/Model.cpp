@@ -7,10 +7,6 @@ namespace Frost
 {
 	Model::Model()
 	{
-		myOrientation.SetPos({ 0.f, 0.f, 4.f });
-		myView.SetPos({ 0.f, 2.f, -4.f });
-		myProjection = CU::Matrix44<float>::CreateProjectionMatrixLH(0.1f, 100.f, static_cast<float>(720.f) / static_cast<float>(1280.f), PI / 2.f);
-
 	}
 
 
@@ -18,10 +14,8 @@ namespace Frost
 	{
 	}
 
-	void Model::InitTriangle(Effect* aEffect)
+	void Model::InitTriangle(Effect& aEffect)
 	{
-		myEffect = aEffect;
-
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -29,7 +23,7 @@ namespace Frost
 		};
 
 
-		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc));
+		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), aEffect);
 
 		CU::GrowingArray<VertexPosColor> vertices(4);
 		vertices.Add({ { 0.0f, 0.5f, 0.5f, 0.f }, { 1.f, 0.f, 0.f, 1.f } });
@@ -49,17 +43,14 @@ namespace Frost
 		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
 	}
 
-	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect)
+	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect& aEffect)
 	{
-		myEffect = aEffect;
-
-
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc));
+		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), aEffect);
 
 #pragma region Vertices
 		CU::GrowingArray<VertexPosColor> vertices;
@@ -140,12 +131,8 @@ namespace Frost
 		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
 	}
 
-	void Model::Render()
+	void Model::Render(Effect& aEffect)
 	{
-		myEffect->SetWorldMatrix(myOrientation);
-		myEffect->SetViewMatrix(CU::InverseSimple(myView));
-		myEffect->SetProjectionMatrix(myProjection);
-
-		BaseModel::Render();
+		BaseModel::Render(aEffect);
 	}
 }

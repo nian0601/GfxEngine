@@ -41,9 +41,6 @@ namespace Frost
 		DirectX* myDirectX;
 		CU::Vector2<float> myWindowSize;
 
-		Model myCube;
-		Effect myEffect;
-
 		static Engine* myInstance;
 	};
 

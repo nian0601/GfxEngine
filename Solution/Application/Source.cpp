@@ -3,6 +3,7 @@
 #include <Game.h>
 #include <Engine.h>
 #include <DL_Debug.h>
+
 Game* globalGame = nullptr;
 int globalClientWidth = 800;
 int globalClientHeight = 600;
@@ -18,6 +19,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 	Frost::Engine::Create();
 	Frost::Engine::GetInstance()->CreateWindow(hwnd, WndProc, { 1280.f, 720.f }, "Test");
 	Frost::Engine::GetInstance()->CreateDirectX(hwnd);
+
+	globalGame = new Game();
 
 	MSG msg;
 	while (1)
@@ -35,10 +38,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 		else
 		{
 
-			//UpdateGame
+			globalGame->Update();
+			globalGame->Render();
 			Frost::Engine::GetInstance()->Render();
 		}
 	}
+
+	delete globalGame;
+	globalGame = nullptr;
 
 	Frost::Engine::Destroy();
 

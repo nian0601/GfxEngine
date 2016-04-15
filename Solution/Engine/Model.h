@@ -11,14 +11,11 @@ namespace Frost
 		Model();
 		~Model();
 
-		void InitTriangle(Effect* aEffect);
-		void InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect);
+		void InitTriangle(Effect& aEffect);
+		void InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect& aEffect);
 
-		void Render() override;
+		void Render(Effect& aEffect) override;
 
 	private:
-		CU::Matrix44<float> myOrientation;
-		CU::Matrix44<float> myView;
-		CU::Matrix44<float> myProjection;
 	};
 }

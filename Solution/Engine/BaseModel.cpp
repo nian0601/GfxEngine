@@ -17,7 +17,7 @@ namespace Frost
 	{
 	}
 
-	void BaseModel::Render()
+	void BaseModel::Render(Effect& aEffect)
 	{
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
 
@@ -29,18 +29,18 @@ namespace Frost
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		D3DX11_TECHNIQUE_DESC techDesc;
-		myEffect->GetTechnique("Render")->GetDesc(&techDesc);
+		aEffect.GetTechnique("Render")->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
-			myEffect->GetTechnique("Render")->GetPassByIndex(i)->Apply(0, context);
+			aEffect.GetTechnique("Render")->GetPassByIndex(i)->Apply(0, context);
 			context->DrawIndexed(36, 0, 0);
 		}
 	}
 
-	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize)
+	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect& aEffect)
 	{
 		D3DX11_PASS_DESC passDesc;
-		myEffect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
+		aEffect.GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myInputLayout);
 		if (FAILED(hr) != S_OK)

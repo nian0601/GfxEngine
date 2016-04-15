@@ -81,16 +81,10 @@ namespace Frost
 	{
 		myDirectX = new DirectX();
 		myDirectX->Init(aHwnd, myWindowSize);
-
-
-		myEffect.Init("Data/Shader/S_effect_cube3d.fx");
-		//myCube.InitTriangle(&myEffect);
-		myCube.InitCube({ 1.f, 1.f, 1.f }, { 1.f, 0.f, 1., 1.f }, &myEffect);
 	}
 
 	void Engine::Render()
 	{
-		myCube.Render();
 		myDirectX->FinishFrame();
 	}
 
