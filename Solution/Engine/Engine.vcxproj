@@ -94,6 +94,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseModel.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Engine.h" />
@@ -103,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseModel.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Engine.cpp" />

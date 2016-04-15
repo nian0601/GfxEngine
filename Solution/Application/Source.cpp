@@ -15,9 +15,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 	DL_Debug::Debug::Create();
 
 	HWND hwnd;
-	Engine::Create();
-	Engine::GetInstance()->CreateWindow(hwnd, WndProc, { 1280.f, 720.f }, "Test");
-	Engine::GetInstance()->CreateDirectX(hwnd);
+	Frost::Engine::Create();
+	Frost::Engine::GetInstance()->CreateWindow(hwnd, WndProc, { 1280.f, 720.f }, "Test");
+	Frost::Engine::GetInstance()->CreateDirectX(hwnd);
 
 	MSG msg;
 	while (1)
@@ -36,11 +36,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 		{
 
 			//UpdateGame
-			Engine::GetInstance()->Render();
+			Frost::Engine::GetInstance()->Render();
 		}
 	}
 
-	Engine::Destroy();
+	Frost::Engine::Destroy();
 
 	DL_Debug::Debug::Destroy();
 	return 0;

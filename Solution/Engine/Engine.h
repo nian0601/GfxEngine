@@ -9,38 +9,46 @@
 
 #undef CreateWindow
 
-class DirectX;
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 
-class Engine
+namespace Frost
 {
-public:
-	static void Create();
-	static void Destroy();
-	static Engine* GetInstance();
+	class DirectX;
 
-	
+	class Engine
+	{
+	public:
+		static void Create();
+		static void Destroy();
+		static Engine* GetInstance();
 
-	void CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const std::string& aTitle);
-	void CreateDirectX(const HWND& aHwnd);
+		void CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const std::string& aTitle);
+		void CreateDirectX(const HWND& aHwnd);
 
-	void Render();
+		void Render();
 
-	ID3D11Device* GetDevice() const;
-	ID3D11DeviceContext* GetContext() const;
+		ID3D11Device* GetDevice() const;
+		ID3D11DeviceContext* GetContext() const;
 
-private:
-	Engine();
-	~Engine();
+		const CU::Vector2<float>& GetWindowSize() const;
 
-	DirectX* myDirectX;
-	CU::Vector2<float> myWindowSize;
+	private:
+		Engine();
+		~Engine();
 
-	Model myCube;
-	Effect myEffect;
+		DirectX* myDirectX;
+		CU::Vector2<float> myWindowSize;
 
-	static Engine* myInstance;
-};
+		Model myCube;
+		Effect myEffect;
 
+		static Engine* myInstance;
+	};
+
+	inline const CU::Vector2<float>& Engine::GetWindowSize() const
+	{
+		return myWindowSize;
+	}
+}

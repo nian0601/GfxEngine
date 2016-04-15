@@ -15,7 +15,10 @@
     <ClInclude Include="GfxStructs.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Effect.h">
+      <Filter>Rendering\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -29,7 +32,10 @@
     <ClCompile Include="BaseModel.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Effect.cpp">
+      <Filter>Rendering\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

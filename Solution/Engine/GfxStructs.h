@@ -4,67 +4,70 @@
 struct ID3D11Buffer;
 struct D3D11_BUFFER_DESC;
 
-struct VertexBuffer
+namespace Frost
 {
-	VertexBuffer()
-		: myVertexBuffer(nullptr)
-	{}
-
-	unsigned int myStride;
-	ID3D11Buffer* myVertexBuffer;
-	D3D11_BUFFER_DESC* myBufferDesc;
-};
-
-struct VertexData
-{
-	VertexData()
-		: myVertexData(nullptr)
-	{}
-
-	~VertexData()
+	struct VertexBuffer
 	{
-		delete myVertexData;
-	}
+		VertexBuffer()
+			: myVertexBuffer(nullptr)
+		{}
 
-	int myNumberOfVertices;
-	int mySize;
-	int myStride;
-	char* myVertexData;
-};
+		unsigned int myStride;
+		ID3D11Buffer* myVertexBuffer;
+		D3D11_BUFFER_DESC* myBufferDesc;
+	};
 
-
-
-struct IndexBuffer
-{
-	IndexBuffer()
-		: myIndexBuffer(nullptr)
-		, myIndexBufferFormat(0)
-	{}
-
-	unsigned int myIndexBufferFormat;
-	ID3D11Buffer* myIndexBuffer;
-	D3D11_BUFFER_DESC* myBufferDesc;
-};
-
-struct IndexData
-{
-	IndexData()
-		: myIndexData(nullptr)
-	{}
-	~IndexData()
+	struct VertexData
 	{
-		SAFE_DELETE(myIndexData);
-	}
+		VertexData()
+			: myVertexData(nullptr)
+		{}
 
-	unsigned int myFormat;
-	char* myIndexData;
-	int myNumberOfIndices;
-	int mySize;
-};
+		~VertexData()
+		{
+			delete myVertexData;
+		}
+
+		int myNumberOfVertices;
+		int mySize;
+		int myStride;
+		char* myVertexData;
+	};
 
 
-struct VertexPosColor
-{
-	CU::Vector4<float> myPos;
-	CU::Vector4<float> myCol;
-};
+
+	struct IndexBuffer
+	{
+		IndexBuffer()
+			: myIndexBuffer(nullptr)
+			, myIndexBufferFormat(0)
+		{}
+
+		unsigned int myIndexBufferFormat;
+		ID3D11Buffer* myIndexBuffer;
+		D3D11_BUFFER_DESC* myBufferDesc;
+	};
+
+	struct IndexData
+	{
+		IndexData()
+			: myIndexData(nullptr)
+		{}
+		~IndexData()
+		{
+			SAFE_DELETE(myIndexData);
+		}
+
+		unsigned int myFormat;
+		char* myIndexData;
+		int myNumberOfIndices;
+		int mySize;
+	};
+
+
+	struct VertexPosColor
+	{
+		CU::Vector4<float> myPos;
+		CU::Vector4<float> myCol;
+	};
+}
