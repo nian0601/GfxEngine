@@ -44,3 +44,7 @@ Libs/
 *.pdb
 /Workbed/log
 *.ilk
+
+*.dds
+*.fbx
+*.lib
