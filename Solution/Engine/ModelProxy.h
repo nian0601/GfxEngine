@@ -8,7 +8,7 @@ namespace Frost
 
 	class ModelProxy
 	{
-		friend class AssetSystem;
+		friend class AssetContainer;
 	public:
 		ModelProxy();
 		~ModelProxy();

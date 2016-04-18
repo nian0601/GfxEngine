@@ -11,7 +11,7 @@ bool globalIsResizing = false;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void OnResize();
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
 	DL_Debug::Debug::Create();
 
@@ -22,8 +22,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 
 	globalGame = new Game();
 
+	CU::InputWrapper::Create(hwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE
+		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
 	MSG msg;
-	while (1)
+	for (;;)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -37,6 +40,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 		}
 		else
 		{
+			CU::InputWrapper::GetInstance()->Update();
 
 			globalGame->Update();
 			globalGame->Render();

@@ -3,9 +3,13 @@
 struct ID3DX11Effect;
 struct ID3DX11EffectTechnique;
 struct ID3DX11EffectMatrixVariable;
+struct ID3DX11EffectShaderResourceVariable;
+struct ID3DX11EffectVectorVariable;
 
 namespace Frost
 {
+	class Texture;
+
 	class Effect
 	{
 	public:
@@ -23,8 +27,14 @@ namespace Frost
 		void SetProjectionMatrix(const CU::Matrix44<float>& aProjectionMatrix);
 		void SetViewProjectionMatrix(const CU::Matrix44<float>& aMatrix);
 
+		void SetCubemap(Texture* aTexture);
+
+		void SetCameraPosition(const CU::Vector3<float>& aVector);
+
 	private:
 		void LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind = true);
+		void LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind = true);
+		void LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind = true);
 
 		ID3DX11Effect* myEffect;
 
@@ -32,6 +42,10 @@ namespace Frost
 		ID3DX11EffectMatrixVariable* myViewMatrix;
 		ID3DX11EffectMatrixVariable* myWorldMatrix;
 		ID3DX11EffectMatrixVariable* myViewProjectionMatrix;
+
+		ID3DX11EffectShaderResourceVariable* myCubemap;
+
+		ID3DX11EffectVectorVariable* myCameraPosition;
 
 		std::string myFileName;
 		std::string myFilePath;

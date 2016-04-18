@@ -16,10 +16,10 @@ namespace Frost
 		, myDepthStencil(nullptr)
 		, myDepthStencilView(nullptr)
 	{
-		myClearColor[0] = 1.f;
-		myClearColor[0] = 0.f;
-		myClearColor[0] = 0.f;
-		myClearColor[0] = 1.f;
+		myClearColor[0] = 0.2f;
+		myClearColor[1] = 0.2f;
+		myClearColor[2] = 0.2f;
+		myClearColor[3] = 1.f;
 	}
 
 
@@ -44,7 +44,7 @@ namespace Frost
 		myContext->Flush();
 		SAFE_RELEASE(myContext);
 
-#if 0
+#if _DEBUG
 		myDebugInterface->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		SAFE_RELEASE(myDebugInterface);
 #endif
@@ -119,7 +119,7 @@ namespace Frost
 
 	void DirectX::SetupDebugInterface()
 	{
-#if 0
+#ifdef _DEBUG
 		myDebugInterface = nullptr;
 		HRESULT result = myDevice->QueryInterface(__uuidof(ID3D11Debug), (void**)&myDebugInterface);
 		DL_ASSERT_EXP(SUCCEEDED(result) == TRUE, "Failed to Query DebugInterface");

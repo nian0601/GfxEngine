@@ -5,6 +5,7 @@
 #include <D3DX11async.h>
 #include <D3Dcompiler.h>
 #include "Effect.h"
+#include "Texture.h"
 
 namespace Frost
 {
@@ -14,6 +15,8 @@ namespace Frost
 		, myViewMatrix(nullptr)
 		, myProjectionMatrix(nullptr)
 		, myViewProjectionMatrix(nullptr)
+		, myCubemap(nullptr)
+		, myCameraPosition(nullptr)
 		, myFileName("NOT INITIALIZED")
 	{
 	}
@@ -73,6 +76,10 @@ namespace Frost
 		LoadMatrix(myViewMatrix, "View");
 		LoadMatrix(myProjectionMatrix, "Projection");
 		LoadMatrix(myViewProjectionMatrix, "ViewProjection");
+
+		LoadShaderResource(myCubemap, "Cubemap", false);
+
+		LoadVector(myCameraPosition, "CameraPosition");
 	}
 
 	ID3DX11Effect* Effect::GetEffect() const
@@ -106,6 +113,19 @@ namespace Frost
 	}
 
 
+	void Effect::SetCubemap(Texture* aTexture)
+	{
+		if (myCubemap)
+		{
+			myCubemap->SetResource(aTexture->GetShaderView());
+		}
+	}
+
+	void Effect::SetCameraPosition(const CU::Vector3<float>& aVector)
+	{
+		myCameraPosition->SetFloatVector(&aVector.x);
+	}
+
 	void Effect::LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind)
 	{
 		aMatrix = myEffect->GetVariableByName(aVariableName.c_str())->AsMatrix();
@@ -118,4 +138,31 @@ namespace Frost
 			}
 		}
 	}
+
+	void Effect::LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind)
+	{
+		aResource = myEffect->GetVariableByName(aVariableName.c_str())->AsShaderResource();
+		if (aResource->IsValid() == false)
+		{
+			aResource = nullptr;
+			if (aForceFind == true)
+			{
+				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+			}
+		}
+	}
+
+	void Effect::LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind /*= true*/)
+	{
+		aVector = myEffect->GetVariableByName(aVariableName.c_str())->AsVector();
+		if (aVector->IsValid() == false)
+		{
+			aVector = nullptr;
+			if (aForceFind == true)
+			{
+				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+			}
+		}
+	}
+
 }

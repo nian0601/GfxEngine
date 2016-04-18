@@ -1,10 +1,17 @@
 #pragma once
 
+#include <GrowingArray.h>
+
 namespace Frost
 {
 	class Camera;
-	class Effect;
 	class Instance;
+	class Scene;
+}
+
+namespace CU
+{
+	class TimerManager;
 }
 
 class Game
@@ -17,8 +24,13 @@ public:
 	void Render();
 
 private:
+	void UpdateCamera(float aDelta);
+
 	Frost::Camera* myCamera;
-	Frost::Instance* myInstance;
-	Frost::Effect* myEffect;
+	Frost::Scene* myScene;
+
+	CU::GrowingArray<Frost::Instance*> myInstances;
+
+	CU::TimerManager* myTimerManager;
 };
 

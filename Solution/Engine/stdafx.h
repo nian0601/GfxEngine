@@ -5,3 +5,5 @@
 #include <Macros.h>
 #include "Engine.h"
 #include "GfxStructs.h"
+#include <Vector.h>
+#include <Matrix.h>

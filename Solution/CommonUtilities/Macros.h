@@ -9,4 +9,4 @@
 
 #define SAFE_DELETE(ptr) delete ptr; ptr = nullptr;
 #define SAFE_ARRAY_DELETE(ptr) delete[] ptr; ptr = nullptr;
-#define SAFE_RELEASE(ptr) ptr->Release(); ptr = nullptr;
+#define SAFE_RELEASE(ptr) if (ptr) { ptr->Release(); ptr = nullptr;}

@@ -2,10 +2,14 @@
 #include "Model.h"
 #include <d3dx11effect.h>
 #include <GrowingArray.h>
+#include "Surface.h"
 
 namespace Frost
 {
 	Model::Model()
+		: myChildren(4)
+		, myChildTransforms(4)
+		, mySurfaces(4)
 	{
 	}
 
@@ -14,42 +18,53 @@ namespace Frost
 	{
 	}
 
-	void Model::InitTriangle(Effect& aEffect)
+	void Model::AddChild(Model* aModel)
 	{
-		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-
-
-		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), aEffect);
-
-		CU::GrowingArray<VertexPosColor> vertices(4);
-		vertices.Add({ { 0.0f, 0.5f, 0.5f, 0.f }, { 1.f, 0.f, 0.f, 1.f } });
-		vertices.Add({ { 0.5f, -0.5f, 0.5, 0.f }, { 0.f, 1.f, 0.f, 1.f } });
-		vertices.Add({ { -0.5f, -0.5f, 0.5f, 0.f }, { 0.f, 0.f, 1.f, 1.f } });
-
-
-		CU::GrowingArray<int> indices(24);
-		indices.Add(0);
-		indices.Add(1);
-		indices.Add(2);
-
-		InitVertexBuffer(sizeof(VertexPosColor), D3D11_USAGE_IMMUTABLE, 0);
-		InitIndexBuffer();
-
-		SetupVertexBuffer(vertices.Size(), reinterpret_cast<char*>(&vertices[0]));
-		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
+		myChildren.Add(aModel);
+		myChildTransforms.Add(aModel->myOrientation);
 	}
 
-	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect& aEffect)
+	void Model::Init(Effect* aEffect)
 	{
+		if (myIsNullObject == false)
+		{
+			const int size = myVertexFormat.Size();
+			D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
+			for (int i = 0; i < myVertexFormat.Size(); ++i)
+			{
+				vertexDesc[i] = *myVertexFormat[i];
+			}
+
+			InitInputLayout(vertexDesc, size, aEffect);
+
+			InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
+			InitIndexBuffer();
+
+			SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
+			SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
+
+			for (Surface* surface : mySurfaces)
+			{
+				surface->GetShaderResources(aEffect);
+			}
+		}
+
+		for (Model* child : myChildren)
+		{
+			child->Init(aEffect);
+		}
+	}
+
+	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect)
+	{
+		myIsNullObject = false;
+
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
+
 		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), aEffect);
 
 #pragma region Vertices
@@ -123,16 +138,42 @@ namespace Frost
 		indices.Add(6);
 #pragma endregion
 
+		myIndexData = new IndexData();
+		myIndexData->myIndexData = reinterpret_cast<char*>(&indices[0]);
+		myIndexData->myNumberOfIndices = indices.Size();
 
-		InitVertexBuffer(sizeof(VertexPosColor), D3D11_USAGE_IMMUTABLE, 0);
+		myVertexData = new VertexData();
+		myVertexData->myVertexData = reinterpret_cast<char*>(&vertices[0]);
+		myVertexData->myStride = sizeof(VertexPosColor);
+		myVertexData->myNumberOfVertices = vertices.Size();
+
+		InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 		InitIndexBuffer();
 
-		SetupVertexBuffer(vertices.Size(), reinterpret_cast<char*>(&vertices[0]));
-		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
+		SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
+		SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
 	}
 
 	void Model::Render(Effect& aEffect)
 	{
-		BaseModel::Render(aEffect);
+		if (myIsNullObject == false)
+		{
+			if (mySurfaces.Size() > 0)
+			{
+				mySurfaces[0]->Activate();
+			}
+
+			BaseModel::Render(aEffect);
+
+			if (mySurfaces.Size() > 0)
+			{
+				mySurfaces[0]->Deactivate();
+			}
+		}
+
+		for (Model* child : myChildren)
+		{
+			child->Render(aEffect);
+		}
 	}
 }

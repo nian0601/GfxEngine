@@ -8,13 +8,21 @@ namespace Frost
 {
 	BaseModel::BaseModel()
 		: myVertexBuffer(nullptr)
+		, myVertexData(nullptr)
 		, myIndexBuffer(nullptr)
+		, myIndexData(nullptr)
+		, myIsNullObject(true)
+		, myVertexFormat(5)
 	{
 	}
 
 
 	BaseModel::~BaseModel()
 	{
+		SAFE_DELETE(myVertexBuffer);
+		SAFE_DELETE(myVertexData);
+		SAFE_DELETE(myIndexBuffer);
+		SAFE_DELETE(myIndexData);
 	}
 
 	void BaseModel::Render(Effect& aEffect)
@@ -33,21 +41,20 @@ namespace Frost
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
 			aEffect.GetTechnique("Render")->GetPassByIndex(i)->Apply(0, context);
-			context->DrawIndexed(36, 0, 0);
+			context->DrawIndexed(myIndexData->myNumberOfIndices, 0, 0);
 		}
 	}
 
-	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect& aEffect)
+	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect* aEffect)
 	{
 		D3DX11_PASS_DESC passDesc;
-		aEffect.GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
+		aEffect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myInputLayout);
 		if (FAILED(hr) != S_OK)
 		{
 			DL_MESSAGE_BOX("Failed to CreateInputLayout", "BaseModel::Init", MB_ICONWARNING);
 		}
-
 	}
 
 	void BaseModel::InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage)

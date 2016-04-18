@@ -42,15 +42,15 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\..\ThirdParty\DirectX\Include\;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Libs\;$(SolutionDir)\..\ThirdParty\DirectX\Lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\ThirdParty\FBX\Include\;$(SolutionDir)\..\ThirdParty\DirectX\Include\;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Libs\;$(SolutionDir)\..\ThirdParty\FBX\Lib\;$(SolutionDir)\..\ThirdParty\DirectX\Lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\..\ThirdParty\DirectX\Include\;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Libs\;$(SolutionDir)\..\ThirdParty\DirectX\Lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\ThirdParty\FBX\Include\;$(SolutionDir)\..\ThirdParty\DirectX\Include\;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Libs\;$(SolutionDir)\..\ThirdParty\FBX\Lib\;$(SolutionDir)\..\ThirdParty\DirectX\Lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -66,7 +66,7 @@
     <Lib>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;dxgi.lib;libfbxsdk-md_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -88,37 +88,52 @@
     <Lib>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;dxgi.lib;libfbxsdk-md_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AssetSystem.h" />
+    <ClInclude Include="AssetContainer.h" />
     <ClInclude Include="BaseModel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectContainer.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FBXFactory.h" />
+    <ClInclude Include="FBX\FbxLoader.h" />
     <ClInclude Include="GfxStructs.h" />
+    <ClInclude Include="IModelFactory.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelProxy.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Surface.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureContainer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetSystem.cpp" />
+    <ClCompile Include="AssetContainer.cpp" />
     <ClCompile Include="BaseModel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EffectContainer.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FBXFactory.cpp" />
+    <ClCompile Include="FBX\FbxLoader.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelProxy.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">

@@ -5,6 +5,7 @@
 #include "Effect.h"
 #include "Instance.h"
 
+#include "TextureContainer.h"
 
 namespace Frost
 {
@@ -12,6 +13,7 @@ namespace Frost
 		: myModel(aModel)
 		, myEffect(aEffect)
 	{
+		myCubemap = TextureContainer::GetInstance()->Get("Data/Texture/church_cubemap.dds");
 	}
 
 
@@ -24,6 +26,10 @@ namespace Frost
 		myEffect.SetViewMatrix(aCamera.GetView());
 		myEffect.SetProjectionMatrix(aCamera.GetProjection());
 		myEffect.SetWorldMatrix(myOrientation);
+
+		myEffect.SetCubemap(myCubemap);
+
+		myEffect.SetCameraPosition(aCamera.GetPosition());
 
 		myModel.Render(myEffect);
 	}
