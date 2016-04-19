@@ -32,5 +32,8 @@ private:
 	CU::GrowingArray<Frost::Instance*> myInstances;
 
 	CU::TimerManager* myTimerManager;
+
+	float myMetalness;
+	float myRoughness;
 };
 

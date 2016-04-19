@@ -15,6 +15,9 @@ Texture2D AOTexture;
 
 TextureCube Cubemap;
 
+float GlobalMetalness;
+float GlobalRoughness;
+
 
 SamplerState linearSampling
 {
@@ -43,6 +46,8 @@ PBLData CalculatePBLData(float2 aTexCoord, float3 aVertexNormal, float3 aVertexB
 	
 	output.Metalness = MetalnessTexture.Sample(linearSampling, aTexCoord);
 	output.Roughness = RoughnessTexture.Sample(linearSampling, aTexCoord);
+	output.Metalness = float3(GlobalMetalness, GlobalMetalness, GlobalMetalness);
+	output.Roughness = GlobalRoughness;
 	output.AmbientOcclusion = AOTexture.Sample(linearSampling, aTexCoord);
 
 	output.Substance = (0.04 - 0.04 * output.Metalness) + output.Albedo * output.Metalness;
@@ -53,6 +58,26 @@ PBLData CalculatePBLData(float2 aTexCoord, float3 aVertexNormal, float3 aVertexB
 	output.Normal = NormalTexture.Sample(linearSampling, aTexCoord) * 2 - 1;
 	float3x3 tangentSpaceMatrix = float3x3(normalize(aVertexTangent), normalize(aVertexBinormal), normalize(aVertexNormal));
 	output.Normal = normalize(mul(output.Normal, tangentSpaceMatrix));
+
+	return output;
+}
+
+PBLData CalculatePBLData_NoTextures(float2 aTexCoord, float3 aVertexNormal, float3 aVertexBinormal, float3 aVertexTangent)
+{
+	PBLData output;
+
+	output.Albedo = float3(1.f, 0.f, 0.f);
+	
+	output.Metalness = float3(GlobalMetalness, GlobalMetalness, GlobalMetalness);
+	output.Roughness = GlobalRoughness;
+	output.AmbientOcclusion = float3(1.f, 1.f, 1.f);
+
+	output.Substance = (0.04 - 0.04 * output.Metalness) + output.Albedo * output.Metalness;
+	output.MetalnessAlbedo = output.Albedo - output.Albedo * output.Metalness;
+
+	output.RoughnessOffsetted = pow(8192, output.Roughness);
+
+	output.Normal = aVertexNormal;
 
 	return output;
 }

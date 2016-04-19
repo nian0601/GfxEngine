@@ -33,7 +33,7 @@ namespace Frost
 	{
 		CU::Vector3<float> pos = myOrientation.GetPos();
 		myOrientation.SetPos(CU::Vector3<float>());
-		myOrientation = myOrientation * aRotation;
+		myOrientation = aRotation * myOrientation;
 		myOrientation.SetPos(pos);
 	}
 

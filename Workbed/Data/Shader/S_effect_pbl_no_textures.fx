@@ -20,7 +20,7 @@ PixelShader_Model VS(VertexShader_Model aInput)
 
 float4 PS(PixelShader_Model aInput) : SV_Target
 {
-	PBLData data = CalculatePBLData(aInput.Tex, aInput.Normal, aInput.BiNormal, aInput.Tangent);
+	PBLData data = CalculatePBLData_NoTextures(aInput.Tex, aInput.Normal, aInput.BiNormal, aInput.Tangent);
 
 	float3 ToEye = normalize(CameraPosition - aInput.WorldPosition.xyz);
 	float3 RefFresnel = ReflectionFresnel(data.Substance, data.Normal, ToEye, 1 - data.RoughnessOffsetted);
@@ -37,8 +37,8 @@ float4 PS(PixelShader_Model aInput) : SV_Target
 
 	float3 ambientSpecc = Cubemap.SampleLevel(linearSampling, ReflectionVector, LysMipLevel).xyz * data.AmbientOcclusion * RefFresnel;
 
-	float3 ambientColor = saturate(ambientDiffuse + ambientSpecc);
-
+	float3 ambientColor = saturate(ambientDiffuse * ambientSpecc);
+	return float4(ambientColor, 1.f);
 
 
 	//To test things we also do calculations for a faked directional light

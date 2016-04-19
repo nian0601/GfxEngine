@@ -3,6 +3,7 @@
 #include <AssetContainer.h>
 #include <Camera.h>
 #include <Effect.h>
+#include <EffectContainer.h>
 #include "Game.h"
 #include <Instance.h>
 #include <ModelProxy.h>
@@ -16,6 +17,7 @@ Game::Game()
 	myInstances.Init(16);
 
 	myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_pbl.fx"));
+	//myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/Sphere/Sphere.fbx", "Data/Shader/S_effect_pbl_no_textures.fx"));
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
 	myScene = new Frost::Scene();
@@ -27,6 +29,9 @@ Game::Game()
 	}
 
 	myTimerManager = new CU::TimerManager();
+
+	myMetalness = 0.f;
+	myRoughness = 0.f;
 }
 
 
@@ -42,6 +47,35 @@ void Game::Update()
 	float delta = myTimerManager->GetMasterTimer().GetTime().GetFrameTime();
 	myCamera->Update();
 	UpdateCamera(delta);
+
+	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
+
+	if (input->KeyIsPressed(DIK_1))
+	{
+		myMetalness -= 0.4f * delta;
+	}
+	if (input->KeyIsPressed(DIK_2))
+	{
+		myMetalness += 0.4f * delta;
+	}
+	if (input->KeyIsPressed(DIK_3))
+	{
+		myRoughness -= 0.4f * delta;
+	}
+	if (input->KeyIsPressed(DIK_4))
+	{
+		myRoughness += 0.4f * delta;
+	}
+
+	myMetalness = max(myMetalness, 0.f);
+	myMetalness = min(1.f, myMetalness);
+	myRoughness = max(myRoughness, 0.f);
+	myRoughness = min(1.f, myRoughness);
+
+	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
+	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
+	Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl.fx")->SetMetalness(myMetalness);
+	Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl.fx")->SetRoughness(myRoughness);
 }
 
 void Game::Render()

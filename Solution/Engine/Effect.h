@@ -5,6 +5,7 @@ struct ID3DX11EffectTechnique;
 struct ID3DX11EffectMatrixVariable;
 struct ID3DX11EffectShaderResourceVariable;
 struct ID3DX11EffectVectorVariable;
+struct ID3DX11EffectScalarVariable;
 
 namespace Frost
 {
@@ -31,10 +32,14 @@ namespace Frost
 
 		void SetCameraPosition(const CU::Vector3<float>& aVector);
 
+		void SetMetalness(float aValue);
+		void SetRoughness(float aValue);
+
 	private:
 		void LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind = true);
 		void LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind = true);
 		void LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind = true);
+		void LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const std::string& aVariableName, bool aForceFind = true);
 
 		ID3DX11Effect* myEffect;
 
@@ -46,6 +51,9 @@ namespace Frost
 		ID3DX11EffectShaderResourceVariable* myCubemap;
 
 		ID3DX11EffectVectorVariable* myCameraPosition;
+
+		ID3DX11EffectScalarVariable* myMetalness;
+		ID3DX11EffectScalarVariable* myRoughness;
 
 		std::string myFileName;
 		std::string myFilePath;

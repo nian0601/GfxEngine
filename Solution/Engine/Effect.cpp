@@ -80,6 +80,9 @@ namespace Frost
 		LoadShaderResource(myCubemap, "Cubemap", false);
 
 		LoadVector(myCameraPosition, "CameraPosition");
+
+		LoadScalar(myMetalness, "GlobalMetalness");
+		LoadScalar(myRoughness, "GlobalRoughness");
 	}
 
 	ID3DX11Effect* Effect::GetEffect() const
@@ -126,6 +129,16 @@ namespace Frost
 		myCameraPosition->SetFloatVector(&aVector.x);
 	}
 
+	void Effect::SetMetalness(float aValue)
+	{
+		myMetalness->SetFloat(aValue);
+	}
+
+	void Effect::SetRoughness(float aValue)
+	{
+		myRoughness->SetFloat(aValue);
+	}
+
 	void Effect::LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind)
 	{
 		aMatrix = myEffect->GetVariableByName(aVariableName.c_str())->AsMatrix();
@@ -158,6 +171,19 @@ namespace Frost
 		if (aVector->IsValid() == false)
 		{
 			aVector = nullptr;
+			if (aForceFind == true)
+			{
+				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+			}
+		}
+	}
+
+	void Effect::LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const std::string& aVariableName, bool aForceFind /*= true*/)
+	{
+		aScalar = myEffect->GetVariableByName(aVariableName.c_str())->AsScalar();
+		if (aScalar->IsValid() == false)
+		{
+			aScalar = nullptr;
 			if (aForceFind == true)
 			{
 				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
