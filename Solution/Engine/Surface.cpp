@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
-
+#include "AssetContainer.h"
 #include <d3dx11effect.h>
 #include "Effect.h"
-#include "TextureContainer.h"
 #include "Texture.h"
 #include "Surface.h"
 
@@ -24,7 +23,7 @@ namespace Frost
 
 	void Surface::AddTexture(const std::string& aTeturePath, const std::string& aResourceName)
 	{
-		Texture* tex = TextureContainer::GetInstance()->Get(aTeturePath);
+		Texture* tex = AssetContainer::GetInstance()->RequestTexture(aTeturePath);
 
 		myResourceViews.Add(tex->GetShaderView());
 		myShaderResourceNames.Add(aResourceName);

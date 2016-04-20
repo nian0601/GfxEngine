@@ -1,11 +1,10 @@
 #include "stdafx.h"
 
+#include "AssetContainer.h"
 #include "Camera.h"
 #include "ModelProxy.h"
 #include "Effect.h"
 #include "Instance.h"
-
-#include "TextureContainer.h"
 
 namespace Frost
 {
@@ -13,7 +12,7 @@ namespace Frost
 		: myModel(aModel)
 		, myEffect(aEffect)
 	{
-		myCubemap = TextureContainer::GetInstance()->Get("Data/Texture/church_cubemap.dds");
+		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
 	}
 
 

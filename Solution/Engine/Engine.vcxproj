@@ -98,7 +98,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Effect.h" />
-    <ClInclude Include="EffectContainer.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FBXFactory.h" />
     <ClInclude Include="FBX\FbxLoader.h" />
@@ -111,7 +110,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetContainer.cpp" />
@@ -119,7 +117,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="EffectContainer.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FBXFactory.cpp" />
     <ClCompile Include="FBX\FbxLoader.cpp" />
@@ -133,7 +130,6 @@
     </ClCompile>
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">

@@ -3,7 +3,6 @@
 #include <AssetContainer.h>
 #include <Camera.h>
 #include <Effect.h>
-#include <EffectContainer.h>
 #include "Game.h"
 #include <Instance.h>
 #include <ModelProxy.h>
@@ -74,8 +73,8 @@ void Game::Update()
 
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
-	Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl.fx")->SetMetalness(myMetalness);
-	Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl.fx")->SetRoughness(myRoughness);
+	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_pbl.fx")->SetMetalness(myMetalness);
+	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_pbl.fx")->SetRoughness(myRoughness);
 }
 
 void Game::Render()

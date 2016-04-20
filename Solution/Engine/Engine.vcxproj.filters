@@ -39,12 +39,6 @@
     <ClInclude Include="Texture.h">
       <Filter>AssetManagement\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="TextureContainer.h">
-      <Filter>AssetManagement\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectContainer.h">
-      <Filter>AssetManagement\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="FBX\FbxLoader.h">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
     </ClInclude>
@@ -81,12 +75,6 @@
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp">
       <Filter>AssetManagement\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureContainer.cpp">
-      <Filter>AssetManagement\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectContainer.cpp">
-      <Filter>AssetManagement\Effect</Filter>
     </ClCompile>
     <ClCompile Include="FBX\FbxLoader.cpp">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
