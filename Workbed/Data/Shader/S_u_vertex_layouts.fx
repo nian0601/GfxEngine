@@ -29,3 +29,15 @@ struct PixelShader_Model
 	float3 Tangent : TANGENT;
 	float4 WorldPosition : POSITION;
 };
+
+struct VertexShader_FullscreenQuad
+{
+	float4 Pos : POSITION;
+	float2 Tex : TEXCOORD;
+};
+
+struct PixelShader_FullscreenQuad
+{
+	float4 Pos : SV_POSITION;
+	float2 Tex : TEXCOORD;
+};

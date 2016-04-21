@@ -70,4 +70,10 @@ namespace Frost
 		CU::Vector4<float> myPos;
 		CU::Vector4<float> myCol;
 	};
+
+	struct VertexPosUV
+	{
+		CU::Vector3<float> myPos;
+		CU::Vector2<float> myUV;
+	};
 }

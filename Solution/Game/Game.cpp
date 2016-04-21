@@ -9,6 +9,8 @@
 #include <Scene.h>
 #include <TimerManager.h>
 
+#include <FullscreenQuad.h>
+
 Game::Game()
 {
 	myCamera = new Frost::Camera();
@@ -31,6 +33,9 @@ Game::Game()
 
 	myMetalness = 0.f;
 	myRoughness = 0.f;
+
+	myFullscreen = new Frost::FullscreenQuad();
+	myFullscreen->InitFullscreenQuad(Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen_quad.fx"));
 }
 
 
@@ -80,6 +85,9 @@ void Game::Update()
 void Game::Render()
 {
 	myScene->Render();
+
+	myFullscreen->ActiveFullscreenQuad();
+	myFullscreen->RenderFullscreenQuad(Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen_quad.fx"), "Render");
 }
 
 void Game::UpdateCamera(float aDelta)

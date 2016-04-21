@@ -16,9 +16,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Effect.h">
-      <Filter>AssetManagement\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="ModelProxy.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -36,12 +33,17 @@
       <Filter>AssetManagement\ModelLoaders</Filter>
     </ClInclude>
     <ClInclude Include="Surface.h" />
-    <ClInclude Include="Texture.h">
-      <Filter>AssetManagement\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="FBX\FbxLoader.h">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
     </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>AssetManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>AssetManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="FullscreenQuad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -56,9 +58,6 @@
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Effect.cpp">
-      <Filter>AssetManagement\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="ModelProxy.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -73,12 +72,17 @@
       <Filter>AssetManagement\ModelLoaders</Filter>
     </ClCompile>
     <ClCompile Include="Surface.cpp" />
-    <ClCompile Include="Texture.cpp">
-      <Filter>AssetManagement\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="FBX\FbxLoader.cpp">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>AssetManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>AssetManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="FullscreenQuad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -92,12 +96,6 @@
     </Filter>
     <Filter Include="AssetManagement\ModelLoaders">
       <UniqueIdentifier>{c1af0d62-40bc-46c2-aa71-6d3f4a1f84b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AssetManagement\Effect">
-      <UniqueIdentifier>{d0b6e00c-faa7-437b-935f-2073efb48f78}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AssetManagement\Texture">
-      <UniqueIdentifier>{8ed41e73-d45a-49a6-abad-3d29067c8f22}</UniqueIdentifier>
     </Filter>
     <Filter Include="AssetManagement\ModelLoaders\FBX">
       <UniqueIdentifier>{a06aad34-e3f4-4132-a2f3-458687353b4c}</UniqueIdentifier>

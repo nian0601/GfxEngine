@@ -6,6 +6,7 @@ namespace Frost
 {
 	class Camera;
 	class Instance;
+	class FullscreenQuad;
 	class Scene;
 }
 
@@ -28,6 +29,7 @@ private:
 
 	Frost::Camera* myCamera;
 	Frost::Scene* myScene;
+	Frost::FullscreenQuad* myFullscreen;
 
 	CU::GrowingArray<Frost::Instance*> myInstances;
 
