@@ -6,7 +6,6 @@ namespace Frost
 	class Camera;
 	class Effect;
 	class ModelProxy;
-	class Texture;
 
 	class Instance
 	{
@@ -24,6 +23,5 @@ namespace Frost
 		CU::Matrix44<float> myOrientation;
 		ModelProxy& myModel;
 		Effect& myEffect;
-		Texture* myCubemap;
 	};
 }

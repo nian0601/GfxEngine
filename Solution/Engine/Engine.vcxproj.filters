@@ -42,8 +42,15 @@
     <ClInclude Include="Texture.h">
       <Filter>AssetManagement</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="FullscreenQuad.h" />
+    <ClInclude Include="FullscreenQuad.h">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -81,8 +88,15 @@
     <ClCompile Include="Texture.cpp">
       <Filter>AssetManagement</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="FullscreenQuad.cpp" />
+    <ClCompile Include="FullscreenQuad.cpp">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -99,6 +113,9 @@
     </Filter>
     <Filter Include="AssetManagement\ModelLoaders\FBX">
       <UniqueIdentifier>{a06aad34-e3f4-4132-a2f3-458687353b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Fullscreen Rendering">
+      <UniqueIdentifier>{72ee9903-58f6-4ec8-bdab-e16d02a11869}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

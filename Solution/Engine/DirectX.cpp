@@ -76,6 +76,11 @@ namespace Frost
 	}
 
 
+	void DirectX::SetBackbufferAsRenderTarget()
+	{
+		myContext->OMSetRenderTargets(1, &myBackbufferTarget, myDepthStencilView);
+	}
+
 	void DirectX::SetupSwapChain(const HWND& aHWND, const CU::Vector2<float>& aScreenSize)
 	{
 		int numerator = 0;

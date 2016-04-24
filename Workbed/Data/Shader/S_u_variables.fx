@@ -2,16 +2,25 @@
 
 Matrix World;
 Matrix View;
+Matrix NotInvertedView;
 Matrix Projection;
+Matrix InvertedProjection;
 Matrix ViewProjection;
 float3 CameraPosition;
 
 
+//Model-Textures
 Texture2D AlbedoTexture;
 Texture2D NormalTexture;
 Texture2D RoughnessTexture;
 Texture2D MetalnessTexture;
 Texture2D AOTexture;
+
+//GBuffer-Textures
+Texture2D AlbedoMetalnessTexture;
+Texture2D NormalRoughnessTexture;
+Texture2D DepthTexture;
+
 
 TextureCube Cubemap;
 
@@ -26,16 +35,26 @@ SamplerState linearSampling
 	AddressV = Wrap;
 };
 
+SamplerState pointSampling
+{
+	Filter = MIN_MAG_MIP_POINT;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
 struct PBLData
 {
 	float3 Albedo;
-	float3 MetalnessAlbedo;
 	float3 Normal;
 	float3 Metalness;
-	float3 Substance;
-	float3 AmbientOcclusion;
 	float Roughness;
+	float3 AmbientOcclusion;
+
+	float3 MetalnessAlbedo;
+	float3 Substance;
 	float RoughnessOffsetted;
+
+	float4 WorldPosition;
 };
 
 PBLData CalculatePBLData(float2 aTexCoord, float3 aVertexNormal, float3 aVertexBinormal, float3 aVertexTangent)
@@ -58,6 +77,47 @@ PBLData CalculatePBLData(float2 aTexCoord, float3 aVertexNormal, float3 aVertexB
 	output.Normal = NormalTexture.Sample(linearSampling, aTexCoord) * 2 - 1;
 	float3x3 tangentSpaceMatrix = float3x3(normalize(aVertexTangent), normalize(aVertexBinormal), normalize(aVertexNormal));
 	output.Normal = normalize(mul(output.Normal, tangentSpaceMatrix));
+
+	return output;
+}
+
+PBLData CalculatePBLData_GBuffer(float2 aTexCoord)
+{
+	float4 AlbedoMetalness = AlbedoMetalnessTexture.Sample(pointSampling, aTexCoord);
+	float4 NormalRoughness = NormalRoughnessTexture.Sample(pointSampling, aTexCoord);
+	float Depth = DepthTexture.Sample(pointSampling, aTexCoord);
+
+
+	float3 Albedo = AlbedoMetalness.xyz;
+	float3 Metalness = float3(AlbedoMetalness.w, AlbedoMetalness.w, AlbedoMetalness.w);
+
+	float3 Normal = NormalRoughness.xyz;
+	Normal *= 2.f;
+	Normal -= 1.f;
+
+	float Roughness = NormalRoughness.w;
+
+	float x = aTexCoord.x * 2.f - 1.f;
+	float y = (1.f - aTexCoord.y) * 2.f - 1.f;
+	float z = Depth;
+
+	float4 WorldPosition = float4(x, y, z, 1.f);
+	WorldPosition = mul(WorldPosition, InvertedProjection);
+	WorldPosition /= WorldPosition.w;
+	WorldPosition = mul(WorldPosition, NotInvertedView);
+
+	PBLData output;
+	output.Albedo = Albedo;
+	output.Normal = Normal;
+	output.Metalness = Metalness;
+	output.Roughness = Roughness;
+	output.AmbientOcclusion = float3(1.f, 1.f, 1.f);
+
+	output.MetalnessAlbedo = output.Albedo - output.Albedo * output.Metalness;
+	output.Substance = (0.04f - 0.04f * output.Metalness) + output.Albedo * output.Metalness;
+	output.RoughnessOffsetted = pow(8192, output.Roughness);
+
+	output.WorldPosition = WorldPosition;
 
 	return output;
 }

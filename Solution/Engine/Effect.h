@@ -7,6 +7,8 @@ struct ID3DX11EffectShaderResourceVariable;
 struct ID3DX11EffectVectorVariable;
 struct ID3DX11EffectScalarVariable;
 
+struct ID3D11ShaderResourceView;
+
 namespace Frost
 {
 	class Texture;
@@ -28,7 +30,10 @@ namespace Frost
 		void SetProjectionMatrix(const CU::Matrix44<float>& aProjectionMatrix);
 		void SetViewProjectionMatrix(const CU::Matrix44<float>& aMatrix);
 
-		void SetCubemap(Texture* aTexture);
+		void SetAlbedoMetalness(ID3D11ShaderResourceView* aResource);
+		void SetNormalRoughness(ID3D11ShaderResourceView* aResource);
+		void SetDepth(ID3D11ShaderResourceView* aResource);
+		void SetCubemap(ID3D11ShaderResourceView* aResource);
 
 		void SetCameraPosition(const CU::Vector3<float>& aVector);
 
@@ -40,6 +45,7 @@ namespace Frost
 		void LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind = true);
 		void LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind = true);
 		void LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const std::string& aVariableName, bool aForceFind = true);
+		void CheckVariable(const std::string& aName, const void* aVariable);
 
 		ID3DX11Effect* myEffect;
 
@@ -48,6 +54,9 @@ namespace Frost
 		ID3DX11EffectMatrixVariable* myWorldMatrix;
 		ID3DX11EffectMatrixVariable* myViewProjectionMatrix;
 
+		ID3DX11EffectShaderResourceVariable* myAlbedoMetalness;
+		ID3DX11EffectShaderResourceVariable* myNormalRoughness;
+		ID3DX11EffectShaderResourceVariable* myDepth;
 		ID3DX11EffectShaderResourceVariable* myCubemap;
 
 		ID3DX11EffectVectorVariable* myCameraPosition;

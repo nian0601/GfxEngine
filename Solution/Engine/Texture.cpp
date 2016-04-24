@@ -24,6 +24,8 @@ namespace Frost
 
 	void Texture::InitForShader(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat)
 	{
+		myFormat = aFormat;
+
 		if ((aBindFlag & D3D11_BIND_SHADER_RESOURCE) > 0 || (aBindFlag & D3D11_BIND_RENDER_TARGET) > 0)
 		{
 			CreateShaderViewAndRenderTarget(aWidth, aHeight, aBindFlag, aFormat);
@@ -58,6 +60,31 @@ namespace Frost
 				DL_ASSERT("[Texture]: Failed to load MissingTexture-texture: Data/Resource/Texture/T_missing_texture.dds");
 			}
 		}
+	}
+
+	void Texture::Resize(float aWidth, float aHeight)
+	{
+		int bindFlag = 0;
+		if (myShaderView != nullptr)
+		{
+			bindFlag |= D3D11_BIND_SHADER_RESOURCE;
+			SAFE_RELEASE(myShaderView);
+		}
+
+		if (myRenderTarget != nullptr)
+		{
+			bindFlag |= D3D11_BIND_RENDER_TARGET;
+			SAFE_RELEASE(myRenderTarget);
+		}
+
+		if (myDepthStencil != nullptr)
+		{
+			bindFlag |= D3D11_BIND_DEPTH_STENCIL;
+			SAFE_RELEASE(myDepthStencil);
+			SAFE_RELEASE(myDepthShaderView);
+		}
+
+		InitForShader(aWidth, aHeight, bindFlag, myFormat);
 	}
 
 	void Texture::CreateShaderViewAndRenderTarget(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat)

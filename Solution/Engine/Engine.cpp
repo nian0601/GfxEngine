@@ -97,4 +97,10 @@ namespace Frost
 	{
 		return myDirectX->GetContext();
 	}
+
+	void Engine::SetBackbufferAsRenderTarget()
+	{
+		myDirectX->SetBackbufferAsRenderTarget();
+	}
+
 }

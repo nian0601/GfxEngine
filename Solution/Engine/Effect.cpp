@@ -78,6 +78,9 @@ namespace Frost
 		LoadMatrix(myViewProjectionMatrix, "ViewProjection");
 
 		LoadShaderResource(myCubemap, "Cubemap", false);
+		LoadShaderResource(myAlbedoMetalness, "AlbedoMetalnessTexture", false);
+		LoadShaderResource(myNormalRoughness, "NormalRoughnessTexture", false);
+		LoadShaderResource(myDepth, "DepthTexture", false);
 
 		LoadVector(myCameraPosition, "CameraPosition");
 
@@ -97,45 +100,68 @@ namespace Frost
 
 	void Effect::SetWorldMatrix(const CU::Matrix44<float>& aWorldMatrix)
 	{
+		CheckVariable("WorldMatrix", myWorldMatrix);
 		myWorldMatrix->SetMatrix(&aWorldMatrix.myMatrix[0]);
 	}
 
 	void Effect::SetViewMatrix(const CU::Matrix44<float>& aViewMatrix)
 	{
+		CheckVariable("ViewMatrix", myViewMatrix);
 		myViewMatrix->SetMatrix(&aViewMatrix.myMatrix[0]);
 	}
 
 	void Effect::SetProjectionMatrix(const CU::Matrix44<float>& aProjectionMatrix)
 	{
+		CheckVariable("ProjectionMatrix", myProjectionMatrix);
 		myProjectionMatrix->SetMatrix(&aProjectionMatrix.myMatrix[0]);
 	}
 
 	void Effect::SetViewProjectionMatrix(const CU::Matrix44<float>& aMatrix)
 	{
+		CheckVariable("ViewProjectionMatrix", myViewProjectionMatrix);
 		myViewProjectionMatrix->SetMatrix(&aMatrix.myMatrix[0]);
 	}
 
 
-	void Effect::SetCubemap(Texture* aTexture)
+	void Effect::SetAlbedoMetalness(ID3D11ShaderResourceView* aResource)
 	{
-		if (myCubemap)
-		{
-			myCubemap->SetResource(aTexture->GetShaderView());
-		}
+		CheckVariable("AlbedoMetalnessTexture", myAlbedoMetalness);
+		myAlbedoMetalness->SetResource(aResource);
+	}
+
+	void Effect::SetNormalRoughness(ID3D11ShaderResourceView* aResource)
+	{
+		CheckVariable("NormalRoughnessTexture", myNormalRoughness);
+		myNormalRoughness->SetResource(aResource);
+	}
+
+	void Effect::SetDepth(ID3D11ShaderResourceView* aResource)
+	{
+		CheckVariable("DepthTexture", myDepth);
+		myDepth->SetResource(aResource);
+	}
+
+	void Effect::SetCubemap(ID3D11ShaderResourceView* aResource)
+	{
+		CheckVariable("Cubemap", myCubemap);
+		myCubemap->SetResource(aResource);
 	}
 
 	void Effect::SetCameraPosition(const CU::Vector3<float>& aVector)
 	{
+		CheckVariable("CameraPosition", myCameraPosition);
 		myCameraPosition->SetFloatVector(&aVector.x);
 	}
 
 	void Effect::SetMetalness(float aValue)
 	{
+		CheckVariable("Metalness", myMetalness);
 		myMetalness->SetFloat(aValue);
 	}
 
 	void Effect::SetRoughness(float aValue)
 	{
+		CheckVariable("Roughness", myRoughness);
 		myRoughness->SetFloat(aValue);
 	}
 
@@ -191,4 +217,8 @@ namespace Frost
 		}
 	}
 
+	void Effect::CheckVariable(const std::string& aName, const void* aVariable)
+	{
+		DL_ASSERT_EXP(aVariable != nullptr, CU::Concatenate("Variable: %s not found in shader: %s", aName.c_str(), myFileName.c_str()).c_str());
+	}
 }

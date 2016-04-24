@@ -12,7 +12,6 @@ namespace Frost
 		: myModel(aModel)
 		, myEffect(aEffect)
 	{
-		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
 	}
 
 
@@ -25,8 +24,6 @@ namespace Frost
 		myEffect.SetViewMatrix(aCamera.GetView());
 		myEffect.SetProjectionMatrix(aCamera.GetProjection());
 		myEffect.SetWorldMatrix(myOrientation);
-
-		myEffect.SetCubemap(myCubemap);
 
 		myEffect.SetCameraPosition(aCamera.GetPosition());
 

@@ -32,6 +32,8 @@ namespace Frost
 		ID3D11Device* GetDevice() const;
 		ID3D11DeviceContext* GetContext() const;
 
+		void SetBackbufferAsRenderTarget();
+
 		const CU::Vector2<float>& GetWindowSize() const;
 
 	private:

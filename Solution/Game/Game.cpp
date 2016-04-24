@@ -10,6 +10,7 @@
 #include <TimerManager.h>
 
 #include <FullscreenQuad.h>
+#include <Renderer.h>
 
 Game::Game()
 {
@@ -17,7 +18,7 @@ Game::Game()
 
 	myInstances.Init(16);
 
-	myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_pbl.fx"));
+	myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
 	//myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/Sphere/Sphere.fbx", "Data/Shader/S_effect_pbl_no_textures.fx"));
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
@@ -34,8 +35,7 @@ Game::Game()
 	myMetalness = 0.f;
 	myRoughness = 0.f;
 
-	myFullscreen = new Frost::FullscreenQuad();
-	myFullscreen->InitFullscreenQuad(Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen_quad.fx"));
+	myRenderer = new Frost::Renderer();
 }
 
 
@@ -43,6 +43,7 @@ Game::~Game()
 {
 	myInstances.DeleteAll();
 	SAFE_DELETE(myTimerManager);
+	SAFE_DELETE(myRenderer);
 }
 
 void Game::Update()
@@ -78,16 +79,13 @@ void Game::Update()
 
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
-	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_pbl.fx")->SetMetalness(myMetalness);
-	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_pbl.fx")->SetRoughness(myRoughness);
+	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
+	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
 }
 
 void Game::Render()
 {
-	myScene->Render();
-
-	myFullscreen->ActiveFullscreenQuad();
-	myFullscreen->RenderFullscreenQuad(Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen_quad.fx"), "Render");
+	myRenderer->Render(myScene);
 }
 
 void Game::UpdateCamera(float aDelta)

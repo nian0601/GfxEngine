@@ -1,8 +1,8 @@
 #include "S_u_variables.fx"
 
-PixelShader_Model VS(VertexShader_Model aInput)
+Pixel_Model VertexShader_Model(Vertex_Model aInput)
 {
-	PixelShader_Model output = (PixelShader_Model)0;
+	Pixel_Model output = (Pixel_Model)0;
 	output.Position = mul(aInput.Position, World);
 	output.Position = mul(output.Position, View);
 	output.Position = mul(output.Position, Projection);
@@ -18,7 +18,7 @@ PixelShader_Model VS(VertexShader_Model aInput)
 	return output;
 }
 
-float4 PS(PixelShader_Model aInput) : SV_Target
+GBuffer PixelShader_Model(Pixel_Model aInput) : SV_Target
 {
 	float3 norm = NormalTexture.Sample(linearSampling, aInput.Tex) * 2 - 1;
 	
@@ -28,25 +28,27 @@ float4 PS(PixelShader_Model aInput) : SV_Target
 	
 	float3x3 tangentSpaceMatrix = float3x3(aInput.Tangent, aInput.BiNormal, aInput.Normal);
 	norm = normalize(mul(norm, tangentSpaceMatrix));
-
-	float ambient = 0.3f;
 	
+
 	float4 AlbedoColor = AlbedoTexture.Sample(linearSampling, aInput.Tex);
-	float4 finalColor = AlbedoColor * ambient;
 	float4 AmbientOcclusion = AOTexture.Sample(linearSampling, aInput.Tex);
+	float Metalness = MetalnessTexture.Sample(linearSampling, aInput.Tex).x;
+	float Roughness = RoughnessTexture.Sample(linearSampling, aInput.Tex).x;
 
-	finalColor *= AmbientOcclusion;
-	finalColor.a = 1.f;
+	GBuffer output;
+	output.AlbedoMetalness = float4(AlbedoColor.xyz, Metalness);
+	output.NormalRoughness = float4(norm, Roughness);
+	output.Depth = aInput.WorldPosition.z;
 	
-	return finalColor;
+	return output;
 }
 
 technique11 Render
 {
 	pass P0
 	{
-		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetVertexShader(CompileShader(vs_5_0, VertexShader_Model()));
 		SetGeometryShader(NULL);
-		SetPixelShader(CompileShader(ps_5_0, PS()));
+		SetPixelShader(CompileShader(ps_5_0, PixelShader_Model()));
 	}
 }
