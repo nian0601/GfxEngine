@@ -3,7 +3,6 @@
 float4 PixelShader_Deferred_Ambient(Pixel_FullscreenQuad aInput) : SV_Target
 {
 	PBLData data = CalculatePBLData_GBuffer(aInput.Tex);
-	return float4(data.Albedo, 1.f);
 	
 	float3 ToEye = normalize(CameraPosition - data.WorldPosition.xyz);
 	float3 RefFresnel = ReflectionFresnel(data.Substance, data.Normal, ToEye, 1 - data.RoughnessOffsetted);
