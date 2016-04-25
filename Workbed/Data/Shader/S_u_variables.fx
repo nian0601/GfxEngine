@@ -87,7 +87,6 @@ PBLData CalculatePBLData_GBuffer(float2 aTexCoord)
 	float4 NormalRoughness = NormalRoughnessTexture.Sample(pointSampling, aTexCoord);
 	float Depth = DepthTexture.Sample(pointSampling, aTexCoord);
 
-
 	float3 Albedo = AlbedoMetalness.xyz;
 	float3 Metalness = float3(AlbedoMetalness.w, AlbedoMetalness.w, AlbedoMetalness.w);
 

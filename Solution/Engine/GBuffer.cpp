@@ -15,12 +15,12 @@ namespace Frost
 		myAlbedoAndMetalness = new Texture();
 		myAlbedoAndMetalness->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			, DXGI_FORMAT_R32G32B32A32_FLOAT);
+			, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 		myNormalAndRoughness = new Texture();
 		myNormalAndRoughness->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			, DXGI_FORMAT_R32G32B32A32_FLOAT);
+			, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 		myDepth = new Texture();
 		myDepth->InitForShader(windowSize.x, windowSize.y

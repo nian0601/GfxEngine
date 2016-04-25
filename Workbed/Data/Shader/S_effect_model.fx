@@ -32,8 +32,8 @@ GBuffer PixelShader_Model(Pixel_Model aInput) : SV_Target
 
 	float4 AlbedoColor = AlbedoTexture.Sample(linearSampling, aInput.Tex);
 	float4 AmbientOcclusion = AOTexture.Sample(linearSampling, aInput.Tex);
-	float Metalness = MetalnessTexture.Sample(linearSampling, aInput.Tex).x;
-	float Roughness = RoughnessTexture.Sample(linearSampling, aInput.Tex).x;
+	float Metalness = MetalnessTexture.Sample(linearSampling, aInput.Tex).x * GlobalMetalness;
+	float Roughness = RoughnessTexture.Sample(linearSampling, aInput.Tex).x * GlobalRoughness;
 
 	GBuffer output;
 	output.AlbedoMetalness = float4(AlbedoColor.xyz, Metalness);
