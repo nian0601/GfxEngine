@@ -35,4 +35,9 @@ namespace Frost
 		myOrientation.SetPos(aPosition);
 	}
 
+	CU::Vector3<float> Instance::GetPosition() const
+	{
+		return myOrientation.GetPos();
+	}
+
 }

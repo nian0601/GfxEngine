@@ -135,15 +135,15 @@ namespace CU
 	{
 		if (aStringToReadFrom.rfind(aWordToFind) != std::string::npos)
 		{
-			if (aReadAfterChar == false)
+			if (aReadAfterChar == true)
 			{
 				return aStringToReadFrom.substr(0, aStringToReadFrom.rfind(aWordToFind));
 			}
-			else if (aReadAfterChar == true)
-			{
-				return aStringToReadFrom.substr(aStringToReadFrom.rfind(aWordToFind) + (someCharsToSkip - 1));
-			}
+
+			return aStringToReadFrom.substr(aStringToReadFrom.rfind(aWordToFind) + someCharsToSkip);
+
 		}
+
 		return aStringToReadFrom;
 	}
 

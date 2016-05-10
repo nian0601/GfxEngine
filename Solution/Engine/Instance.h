@@ -16,6 +16,7 @@ namespace Frost
 		void Render(const Camera& aCamera);
 
 		void SetPosition(const CU::Vector3<float>& aPosition);
+		CU::Vector3<float> GetPosition() const;
 
 	private:
 		void operator=(Instance&) = delete;

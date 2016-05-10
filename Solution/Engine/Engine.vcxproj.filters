@@ -51,6 +51,9 @@
     <ClInclude Include="GBuffer.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Rendering\Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -97,6 +100,9 @@
     <ClCompile Include="GBuffer.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Rendering\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -116,6 +122,9 @@
     </Filter>
     <Filter Include="Rendering\Fullscreen Rendering">
       <UniqueIdentifier>{72ee9903-58f6-4ec8-bdab-e16d02a11869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Lights">
+      <UniqueIdentifier>{f0286580-fa49-43c4-a3b2-6af500192480}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
