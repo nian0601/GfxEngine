@@ -2,7 +2,7 @@
 #include "Engine.h"
 #include "DirectX.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Engine* Engine::myInstance = nullptr;
 

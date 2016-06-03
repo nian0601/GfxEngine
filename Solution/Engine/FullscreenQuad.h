@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseModel.h"
 
-namespace Frost
+namespace Easy3D
 {
 	class Effect;
 

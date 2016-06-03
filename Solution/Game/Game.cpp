@@ -14,18 +14,18 @@
 
 Game::Game()
 {
-	myCamera = new Frost::Camera();
+	myCamera = new Easy3D::Camera();
 
 	myInstances.Init(16);
 
-	myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
+	myInstances.Add(Easy3D::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
 	//myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/Sphere/Sphere.fbx", "Data/Shader/S_effect_pbl_no_textures.fx"));
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
-	myScene = new Frost::Scene();
+	myScene = new Easy3D::Scene();
 	myScene->SetCamera(*myCamera);
 
-	for each (Frost::Instance* instance in myInstances)
+	for each (Easy3D::Instance* instance in myInstances)
 	{
 		myScene->AddInstance(instance);
 	}
@@ -35,7 +35,7 @@ Game::Game()
 	myMetalness = 0.f;
 	myRoughness = 0.f;
 
-	myRenderer = new Frost::Renderer();
+	myRenderer = new Easy3D::Renderer();
 }
 
 
@@ -79,8 +79,8 @@ void Game::Update()
 
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
-	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
-	Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
+	Easy3D::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
+	Easy3D::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
 }
 
 void Game::Render()

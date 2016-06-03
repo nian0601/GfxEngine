@@ -2,7 +2,7 @@
 
 #include <Matrix.h>
 
-namespace Frost
+namespace Easy3D
 {
 	class Camera
 	{

@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "ModelProxy.h"
 
-namespace Frost
+namespace Easy3D
 {
 	ModelProxy::ModelProxy()
 		: myModel(nullptr)

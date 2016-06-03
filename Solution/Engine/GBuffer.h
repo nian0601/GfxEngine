@@ -2,7 +2,7 @@
 
 #include <Vector.h>
 
-namespace Frost
+namespace Easy3D
 {
 	class Effect;
 	class Texture;

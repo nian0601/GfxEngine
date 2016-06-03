@@ -6,7 +6,7 @@
 #include "Effect.h"
 #include "Instance.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Instance::Instance(ModelProxy& aModel, Effect& aEffect)
 		: myModel(aModel)

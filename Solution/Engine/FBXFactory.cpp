@@ -10,7 +10,7 @@
 #include "Surface.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	FBXFactory::FBXFactory()
 	{

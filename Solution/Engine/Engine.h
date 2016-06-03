@@ -13,7 +13,7 @@
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 
-namespace Frost
+namespace Easy3D
 {
 	class DirectX;
 

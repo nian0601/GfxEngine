@@ -4,7 +4,7 @@
 #include <Matrix.h>
 #include <GrowingArray.h>
 
-namespace Frost
+namespace Easy3D
 {
 	class Surface;
 

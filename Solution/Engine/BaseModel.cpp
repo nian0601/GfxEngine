@@ -4,7 +4,7 @@
 #include <d3d11.h>
 #include "GfxStructs.h"
 
-namespace Frost
+namespace Easy3D
 {
 	BaseModel::BaseModel()
 		: myVertexBuffer(nullptr)

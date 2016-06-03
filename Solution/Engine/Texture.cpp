@@ -4,7 +4,7 @@
 #include "Texture.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	Texture::Texture()
 		: myTexture(nullptr)

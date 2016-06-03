@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace Frost
+namespace Easy3D
 {
 	class Effect;
 	class Model;

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Frost
+namespace Easy3D
 {
 	class Camera;
 	class Model;

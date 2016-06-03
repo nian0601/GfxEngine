@@ -8,13 +8,13 @@
 #include "Scene.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	Renderer::Renderer()
 	{
 		myGBuffer = new GBuffer();
 
-		myFullscreenEffect = Frost::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen.fx");
+		myFullscreenEffect = Easy3D::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen.fx");
 		InitFullscreenQuad(myFullscreenEffect);
 
 		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");

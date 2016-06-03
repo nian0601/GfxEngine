@@ -3,7 +3,7 @@
 #include <Matrix.h>
 #include <Vector.h>
 
-namespace Frost
+namespace Easy3D
 {
 	struct PointLightData
 	{

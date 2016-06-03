@@ -1,7 +1,7 @@
 #pragma once
 #include "FullscreenQuad.h"
 
-namespace Frost
+namespace Easy3D
 {
 	class Effect;
 	class GBuffer;

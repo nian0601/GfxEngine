@@ -7,7 +7,7 @@
 #include "FBXFactory.h"
 #include "Texture.h"
 
-namespace Frost
+namespace Easy3D
 {
 	AssetContainer* AssetContainer::myInstance = nullptr;
 	AssetContainer* AssetContainer::GetInstance()

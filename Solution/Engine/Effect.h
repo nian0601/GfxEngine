@@ -9,7 +9,7 @@ struct ID3DX11EffectScalarVariable;
 
 struct ID3D11ShaderResourceView;
 
-namespace Frost
+namespace Easy3D
 {
 	class Texture;
 

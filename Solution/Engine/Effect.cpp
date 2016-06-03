@@ -7,7 +7,7 @@
 #include "Effect.h"
 #include "Texture.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Effect::Effect()
 		: myEffect(nullptr)

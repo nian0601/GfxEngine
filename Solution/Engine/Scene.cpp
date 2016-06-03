@@ -3,7 +3,7 @@
 #include "Instance.h"
 #include "Scene.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Scene::Scene()
 		: myCamera(nullptr)

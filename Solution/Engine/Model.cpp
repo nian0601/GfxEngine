@@ -4,7 +4,7 @@
 #include <GrowingArray.h>
 #include "Surface.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Model::Model()
 		: myChildren(4)

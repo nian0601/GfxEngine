@@ -6,7 +6,7 @@
 #include "Texture.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	GBuffer::GBuffer()
 	{

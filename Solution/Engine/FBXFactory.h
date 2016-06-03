@@ -16,7 +16,7 @@ struct D3D11_INPUT_ELEMENT_DESC;
 class FBXLoader;
 class FbxModelData;
 
-namespace Frost
+namespace Easy3D
 {
 	class Model;
 	class Surface;

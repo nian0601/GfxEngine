@@ -2,7 +2,7 @@
 
 #include <GrowingArray.h>
 
-namespace Frost
+namespace Easy3D
 {
 	class Camera;
 	class Instance;
@@ -27,11 +27,11 @@ public:
 private:
 	void UpdateCamera(float aDelta);
 
-	Frost::Camera* myCamera;
-	Frost::Scene* myScene;
-	Frost::Renderer* myRenderer;
+	Easy3D::Camera* myCamera;
+	Easy3D::Scene* myScene;
+	Easy3D::Renderer* myRenderer;
 
-	CU::GrowingArray<Frost::Instance*> myInstances;
+	CU::GrowingArray<Easy3D::Instance*> myInstances;
 
 	CU::TimerManager* myTimerManager;
 

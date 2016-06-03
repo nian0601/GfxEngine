@@ -1,7 +1,7 @@
 #pragma once
 #include <GrowingArray.h>
 
-namespace Frost
+namespace Easy3D
 {
 	class Camera;
 	class Instance;

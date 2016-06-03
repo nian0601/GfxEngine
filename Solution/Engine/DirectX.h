@@ -13,7 +13,7 @@ struct ID3D11Texture2D;
 struct ID3D11ShaderResourceView;
 struct IDXGISwapChain;
 
-namespace Frost
+namespace Easy3D
 {
 	class DirectX
 	{

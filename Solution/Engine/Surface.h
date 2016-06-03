@@ -6,7 +6,7 @@
 struct ID3D11ShaderResourceView;
 struct ID3DX11EffectShaderResourceVariable;
 
-namespace Frost
+namespace Easy3D
 {
 	class Effect;
 

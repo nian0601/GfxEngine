@@ -5,7 +5,7 @@
 #include "GfxStructs.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	FullscreenQuad::FullscreenQuad()
 	{

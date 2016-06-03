@@ -7,7 +7,7 @@ namespace std
 	class thread;
 }
 
-namespace Frost
+namespace Easy3D
 {
 	class Instance;
 	class Effect;

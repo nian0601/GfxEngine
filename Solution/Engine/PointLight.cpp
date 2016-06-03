@@ -4,7 +4,7 @@
 #include "PointLight.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	PointLight::PointLight(const CU::Vector3<float>& aPosition, const CU::Vector4<float>& aColor, float aRange)
 	{

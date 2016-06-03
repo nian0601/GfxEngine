@@ -7,7 +7,7 @@
 #include "Surface.h"
 
 
-namespace Frost
+namespace Easy3D
 {
 	Surface::Surface()
 		: myResourceViews(5)

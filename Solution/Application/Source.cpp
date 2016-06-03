@@ -16,9 +16,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 	DL_Debug::Debug::Create();
 
 	HWND hwnd;
-	Frost::Engine::Create();
-	Frost::Engine::GetInstance()->CreateWindow(hwnd, WndProc, { 1280.f, 720.f }, "Test");
-	Frost::Engine::GetInstance()->CreateDirectX(hwnd);
+	Easy3D::Engine::Create();
+	Easy3D::Engine::GetInstance()->CreateWindow(hwnd, WndProc, { 1280.f, 720.f }, "Test");
+	Easy3D::Engine::GetInstance()->CreateDirectX(hwnd);
 
 	globalGame = new Game();
 
@@ -44,14 +44,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 
 			globalGame->Update();
 			globalGame->Render();
-			Frost::Engine::GetInstance()->Render();
+			Easy3D::Engine::GetInstance()->Render();
 		}
 	}
 
 	delete globalGame;
 	globalGame = nullptr;
 
-	Frost::Engine::Destroy();
+	Easy3D::Engine::Destroy();
 
 	DL_Debug::Debug::Destroy();
 	return 0;

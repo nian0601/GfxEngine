@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-namespace Frost
+namespace Easy3D
 {
 	Camera::Camera()
 	{

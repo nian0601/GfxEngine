@@ -4,7 +4,7 @@
 struct ID3D11Buffer;
 struct D3D11_BUFFER_DESC;
 
-namespace Frost
+namespace Easy3D
 {
 	struct VertexBuffer
 	{

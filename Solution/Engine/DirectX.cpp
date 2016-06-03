@@ -2,7 +2,7 @@
 #include "DirectX.h"
 #include <d3d11.h>
 
-namespace Frost
+namespace Easy3D
 {
 	DirectX::DirectX()
 		: myDevice(nullptr)
