@@ -45,14 +45,14 @@
     <ClInclude Include="FullscreenQuad.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Rendering\Fullscreen Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="GBuffer.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>Rendering\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderer.h">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -94,14 +94,14 @@
     <ClCompile Include="FullscreenQuad.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Rendering\Fullscreen Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="GBuffer.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Rendering\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderer.cpp">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

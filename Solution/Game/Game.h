@@ -6,7 +6,7 @@ namespace Easy3D
 {
 	class Camera;
 	class Instance;
-	class Renderer;
+	class DeferredRenderer;
 	class Scene;
 }
 
@@ -29,7 +29,7 @@ private:
 
 	Easy3D::Camera* myCamera;
 	Easy3D::Scene* myScene;
-	Easy3D::Renderer* myRenderer;
+	Easy3D::DeferredRenderer* myRenderer;
 
 	CU::GrowingArray<Easy3D::Instance*> myInstances;
 

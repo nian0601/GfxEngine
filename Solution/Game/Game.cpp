@@ -10,7 +10,7 @@
 #include <TimerManager.h>
 
 #include <FullscreenQuad.h>
-#include <Renderer.h>
+#include <DeferredRenderer.h>
 
 Game::Game()
 {
@@ -35,7 +35,7 @@ Game::Game()
 	myMetalness = 0.f;
 	myRoughness = 0.f;
 
-	myRenderer = new Easy3D::Renderer();
+	myRenderer = new Easy3D::DeferredRenderer();
 }
 
 

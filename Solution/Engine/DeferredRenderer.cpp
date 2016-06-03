@@ -4,13 +4,13 @@
 #include <d3d11.h>
 #include "GBuffer.h"
 #include "Texture.h"
-#include "Renderer.h"
+#include "DeferredRenderer.h"
 #include "Scene.h"
 
 
 namespace Easy3D
 {
-	Renderer::Renderer()
+	DeferredRenderer::DeferredRenderer()
 	{
 		myGBuffer = new GBuffer();
 
@@ -21,12 +21,12 @@ namespace Easy3D
 	}
 
 
-	Renderer::~Renderer()
+	DeferredRenderer::~DeferredRenderer()
 	{
 		SAFE_DELETE(myGBuffer);
 	}
 
-	void Renderer::Render(Scene* aScene)
+	void DeferredRenderer::Render(Scene* aScene)
 	{
 		RenderToGBuffer(aScene);
 		Engine::GetInstance()->SetBackbufferAsRenderTarget();
@@ -35,12 +35,12 @@ namespace Easy3D
 		RenderAmbientPass();
 	}
 
-	void Renderer::Resize(float aWidth, float aHeight)
+	void DeferredRenderer::Resize(float aWidth, float aHeight)
 	{
 		myGBuffer->Resize(aWidth, aHeight);
 	}
 
-	void Renderer::RenderToGBuffer(Scene* aScene)
+	void DeferredRenderer::RenderToGBuffer(Scene* aScene)
 	{
 		myGBuffer->Clear({ 0.4f, 0.4f, 0.4f, 1.f });
 
@@ -58,7 +58,7 @@ namespace Easy3D
 		aScene->Render();
 	}
 
-	void Renderer::RenderAmbientPass()
+	void DeferredRenderer::RenderAmbientPass()
 	{
 		myGBuffer->Set(myFullscreenEffect);
 		myFullscreenEffect->SetCubemap(myCubemap->GetShaderView());

@@ -8,11 +8,11 @@ namespace Easy3D
 	class Scene;
 	class Texture;
 
-	class Renderer : public FullscreenQuad
+	class DeferredRenderer : public FullscreenQuad
 	{
 	public:
-		Renderer();
-		~Renderer();
+		DeferredRenderer();
+		~DeferredRenderer();
 
 		void Render(Scene* aScene);
 

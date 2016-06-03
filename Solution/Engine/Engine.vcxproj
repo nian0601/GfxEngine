@@ -109,7 +109,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelProxy.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Surface.h" />
@@ -130,7 +130,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelProxy.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
