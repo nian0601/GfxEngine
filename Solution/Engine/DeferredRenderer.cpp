@@ -6,7 +6,7 @@
 #include "Texture.h"
 #include "DeferredRenderer.h"
 #include "Scene.h"
-
+#include "Renderer.h"
 
 namespace Easy3D
 {
@@ -18,12 +18,15 @@ namespace Easy3D
 		InitFullscreenQuad(myFullscreenEffect);
 
 		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
+
+		myRenderer = new Renderer();
 	}
 
 
 	DeferredRenderer::~DeferredRenderer()
 	{
 		SAFE_DELETE(myGBuffer);
+		SAFE_DELETE(myRenderer);
 	}
 
 	void DeferredRenderer::Render(Scene* aScene)
@@ -51,9 +54,7 @@ namespace Easy3D
 
 		ID3D11DepthStencilView* depth = myGBuffer->myDepthStencil->GetDepthStencil();
 
-		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
-
-		context->OMSetRenderTargets(3, renderTargets, depth);
+		myRenderer->SetRenderTarget(3, renderTargets, depth);
 
 		aScene->Render();
 	}

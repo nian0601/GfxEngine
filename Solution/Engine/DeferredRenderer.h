@@ -7,6 +7,7 @@ namespace Easy3D
 	class GBuffer;
 	class Scene;
 	class Texture;
+	class Renderer;
 
 	class DeferredRenderer : public FullscreenQuad
 	{
@@ -25,5 +26,7 @@ namespace Easy3D
 		Effect* myFullscreenEffect;
 		GBuffer* myGBuffer;
 		Texture* myCubemap;
+
+		Renderer* myRenderer;
 	};
 }

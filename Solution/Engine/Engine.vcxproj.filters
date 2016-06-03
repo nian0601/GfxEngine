@@ -54,6 +54,9 @@
     <ClInclude Include="DeferredRenderer.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -101,6 +104,9 @@
       <Filter>Rendering\Lights</Filter>
     </ClCompile>
     <ClCompile Include="DeferredRenderer.cpp">
+      <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClCompile>
   </ItemGroup>
