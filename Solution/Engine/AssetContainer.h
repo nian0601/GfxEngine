@@ -1,4 +1,5 @@
 #pragma once
+#include <CUString.h>
 #include <GrowingArray.h>
 #include <Vector.h>
 
@@ -22,11 +23,10 @@ namespace Easy3D
 		static void Destroy();
 
 
-		Instance* RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const std::string& aEffectPath);
-		Instance* RequestModel(const std::string& aModelPath, const std::string& aEffectPath);
+		Instance* RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const CU::String<50>& aEffectPath);
+		Instance* RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath);
 
-		Effect* RequestEffect(const std::string& aFilePath);
-		Texture* RequestTexture(const std::string& aFilePath);
+		
 
 	private:
 		AssetContainer();
@@ -36,9 +36,6 @@ namespace Easy3D
 
 		CU::GrowingArray<Model*> myNonDGFXModels;
 		IModelFactory* myModelFactory;
-
-		std::unordered_map<std::string, Effect*> myEffects;
-		std::unordered_map<std::string, Texture*> myTextures;
 
 		static AssetContainer* myInstance;
 	};

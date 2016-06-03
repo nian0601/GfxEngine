@@ -26,7 +26,7 @@ namespace Easy3D
 		SAFE_RELEASE(myEffect);
 	}
 
-	void Effect::Init(const std::string& aFilePath)
+	void Effect::Init(const CU::String<50>& aFilePath)
 	{
 		myFileName = CU::GetFileNameFromFilePath(aFilePath);
 		myFilePath = aFilePath;
@@ -43,7 +43,7 @@ namespace Easy3D
 
 		if (FAILED(result))
 		{
-			std::string errorMessage = "";
+			CU::String<100> errorMessage = "";
 
 			if (compilerMsg != nullptr)
 			{
@@ -53,7 +53,8 @@ namespace Easy3D
 			}
 			else
 			{
-				errorMessage = "[Effect]: Could not find the effect " + myFileName;
+				errorMessage = "[Effect]: Could not find the effect ";
+				errorMessage += myFileName.c_str();
 			}
 
 			DL_ASSERT(errorMessage.c_str());
@@ -93,7 +94,7 @@ namespace Easy3D
 		return myEffect;
 	}
 
-	ID3DX11EffectTechnique* Effect::GetTechnique(const std::string& aTechniqueName) const
+	ID3DX11EffectTechnique* Effect::GetTechnique(const CU::String<30>& aTechniqueName) const
 	{
 		return myEffect->GetTechniqueByName(aTechniqueName.c_str());
 	}
@@ -165,7 +166,7 @@ namespace Easy3D
 		myRoughness->SetFloat(aValue);
 	}
 
-	void Effect::LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind)
+	void Effect::LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const CU::String<30>& aVariableName, bool aForceFind)
 	{
 		aMatrix = myEffect->GetVariableByName(aVariableName.c_str())->AsMatrix();
 		if (aMatrix->IsValid() == false)
@@ -178,7 +179,7 @@ namespace Easy3D
 		}
 	}
 
-	void Effect::LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind)
+	void Effect::LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const CU::String<30>& aVariableName, bool aForceFind)
 	{
 		aResource = myEffect->GetVariableByName(aVariableName.c_str())->AsShaderResource();
 		if (aResource->IsValid() == false)
@@ -191,7 +192,7 @@ namespace Easy3D
 		}
 	}
 
-	void Effect::LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind /*= true*/)
+	void Effect::LoadVector(ID3DX11EffectVectorVariable*& aVector, const CU::String<30>& aVariableName, bool aForceFind /*= true*/)
 	{
 		aVector = myEffect->GetVariableByName(aVariableName.c_str())->AsVector();
 		if (aVector->IsValid() == false)
@@ -204,7 +205,7 @@ namespace Easy3D
 		}
 	}
 
-	void Effect::LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const std::string& aVariableName, bool aForceFind /*= true*/)
+	void Effect::LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const CU::String<30>& aVariableName, bool aForceFind /*= true*/)
 	{
 		aScalar = myEffect->GetVariableByName(aVariableName.c_str())->AsScalar();
 		if (aScalar->IsValid() == false)
@@ -217,7 +218,7 @@ namespace Easy3D
 		}
 	}
 
-	void Effect::CheckVariable(const std::string& aName, const void* aVariable)
+	void Effect::CheckVariable(const CU::String<30>& aName, const void* aVariable)
 	{
 		DL_ASSERT_EXP(aVariable != nullptr, CU::Concatenate("Variable: %s not found in shader: %s", aName.c_str(), myFileName.c_str()).c_str());
 	}

@@ -77,6 +77,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="CommonHelper.h" />
+    <ClInclude Include="CUString.h" />
     <ClInclude Include="DL_Assert.h" />
     <ClInclude Include="DL_Debug.h" />
     <ClInclude Include="DL_StackWalker.h" />
@@ -94,12 +95,14 @@
     <ClInclude Include="LineSegment3D.h" />
     <ClInclude Include="LineVolume.h" />
     <ClInclude Include="Macros.h" />
+    <ClInclude Include="CUMap.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Matrix33.h" />
     <ClInclude Include="Matrix33decl.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="Matrix44decl.h" />
+    <ClInclude Include="Murmur.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PlaneVolume.h" />
     <ClInclude Include="Quaternion.h" />

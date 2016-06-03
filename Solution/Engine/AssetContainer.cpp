@@ -7,6 +7,8 @@
 #include "FBXFactory.h"
 #include "Texture.h"
 
+#include "GPUContainer.h"
+
 namespace Easy3D
 {
 	AssetContainer* AssetContainer::myInstance = nullptr;
@@ -25,9 +27,9 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Instance* AssetContainer::RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const std::string& aEffectPath)
+	Instance* AssetContainer::RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const CU::String<50>& aEffectPath)
 	{
-		Effect* effect = RequestEffect(aEffectPath);
+		Effect* effect = GPUContainer::GetInstance()->RequestEffect(aEffectPath);
 
 		myNonDGFXModels.Add(new Model());
 		myNonDGFXModels.GetLast()->InitCube(aSize, aColor, effect);
@@ -39,40 +41,15 @@ namespace Easy3D
 		return instance;
 	}
 
-	Instance* AssetContainer::RequestModel(const std::string& aModelPath, const std::string& aEffectPath)
+	Instance* AssetContainer::RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
 	{
-		Effect* effect = RequestEffect(aEffectPath);
+		Effect* effect = GPUContainer::GetInstance()->RequestEffect(aEffectPath);
 
 		ModelProxy* proxy = new ModelProxy();
 		proxy->myModel = myModelFactory->LoadModel(aModelPath, effect);
 
 		Instance* instance = new Instance(*proxy, *effect);
 		return instance;
-	}
-
-	Effect* AssetContainer::RequestEffect(const std::string& aFilePath)
-	{
-		if (myEffects.find(aFilePath) == myEffects.end())
-		{
-			Effect* effect = new Effect();
-			effect->Init(aFilePath);
-
-			myEffects[aFilePath] = effect;
-		}
-
-		return myEffects[aFilePath];
-	}
-
-	Texture* AssetContainer::RequestTexture(const std::string& aFilePath)
-	{
-		if (myTextures.find(aFilePath) == myTextures.end())
-		{
-			Texture* newTex = new Texture();
-			newTex->LoadTexture(aFilePath);
-			myTextures[aFilePath] = newTex;
-		}
-
-		return myTextures[aFilePath];
 	}
 
 	AssetContainer::AssetContainer()
@@ -85,17 +62,5 @@ namespace Easy3D
 	AssetContainer::~AssetContainer()
 	{
 		SAFE_DELETE(myModelFactory);
-
-		for (auto it = myEffects.begin(); it != myEffects.end(); ++it)
-		{
-			SAFE_DELETE(it->second);
-		}
-		myEffects.clear();
-
-		for (auto it = myTextures.begin(); it != myTextures.end(); ++it)
-		{
-			SAFE_DELETE(it->second);
-		}
-		myTextures.clear();
 	}
 }

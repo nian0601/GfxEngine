@@ -60,7 +60,7 @@ namespace Easy3D
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
-	void FullscreenQuad::RenderFullscreenQuad(Effect* aEffect, const std::string& aTechnique)
+	void FullscreenQuad::RenderFullscreenQuad(Effect* aEffect, const CU::String<30>& aTechnique)
 	{
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
 

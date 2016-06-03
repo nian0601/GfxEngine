@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string.h>
+#include <CUString.h>
 
 struct ID3D11DepthStencilView;
 struct ID3D11RenderTargetView;
@@ -17,7 +17,7 @@ namespace Easy3D
 
 		void InitForShader(float aWidth, float aHeight, unsigned int aBindFlag
 			, unsigned int aFormat);
-		void LoadTexture(const std::string& aPath);
+		void LoadTexture(const CU::String<50>& aPath);
 		void Resize(float aWidth, float aHeight);
 
 		ID3D11ShaderResourceView* GetShaderView();
@@ -31,7 +31,7 @@ namespace Easy3D
 			, unsigned int aFormat);
 		void CreateDepthStencil(float aWidth, float aHeight);
 
-		std::string myFilePath;
+		CU::String<50> myFilePath;
 		unsigned int myFormat;
 
 		ID3D11Texture2D* myTexture;

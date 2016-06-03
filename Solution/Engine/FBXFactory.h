@@ -3,10 +3,7 @@
 #include "IModelFactory.h"
 #include "GfxStructs.h"
 #include <GrowingArray.h>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <Vector.h>
+#include <CUMap.h>
 
 struct AnimationData;
 struct Bone;
@@ -27,7 +24,7 @@ namespace Easy3D
 		FBXFactory();
 		~FBXFactory();
 
-		Model* LoadModel(const std::string& aFilePath, Effect* aEffect) override;
+		Model* LoadModel(const CU::String<50>& aFilePath, Effect* aEffect) override;
 		
 	private:
 		Model* CreateModel(FbxModelData* someModelData);
@@ -39,6 +36,6 @@ namespace Easy3D
 
 		FBXLoader *myLoader;
 
-		std::unordered_map<std::string, Model*> myModels;
+		CU::Map<CU::String<50>, Model*> myModels;
 	};
 }

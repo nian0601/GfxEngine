@@ -19,18 +19,20 @@ namespace Easy3D
 
 	FBXFactory::~FBXFactory()
 	{
+		int DeleteFromMapHere = 5;
+		/*
 		for (auto it = myModels.begin(); it != myModels.end(); ++it)
 		{
 			SAFE_DELETE(it->second);
 		}
 		myModels.clear();
-
+		*/
 		SAFE_DELETE(myLoader);
 	}
 
-	Model* FBXFactory::LoadModel(const std::string& aFilePath, Effect* aEffect)
+	Model* FBXFactory::LoadModel(const CU::String<50>& aFilePath, Effect* aEffect)
 	{
-		if (myModels.find(aFilePath) != myModels.end())
+		if (myModels.KeyExists(aFilePath) == true)
 		{
 			return myModels[aFilePath];
 		}
@@ -177,7 +179,7 @@ namespace Easy3D
 				resourceName = "EmissiveTexture";
 			}
 
-			aSurface.AddTexture(currentTexture.myFileName, resourceName);
+			aSurface.AddTexture(currentTexture.myFileName.c_str(), resourceName.c_str());
 		}
 	}
 }

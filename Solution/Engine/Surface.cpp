@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "AssetContainer.h"
+#include "GPUContainer.h"
 #include <d3dx11effect.h>
 #include "Effect.h"
 #include "Texture.h"
@@ -21,9 +21,9 @@ namespace Easy3D
 	{
 	}
 
-	void Surface::AddTexture(const std::string& aTeturePath, const std::string& aResourceName)
+	void Surface::AddTexture(const CU::String<50>& aTeturePath, const CU::String<30>& aResourceName)
 	{
-		Texture* tex = AssetContainer::GetInstance()->RequestTexture(aTeturePath);
+		Texture* tex = GPUContainer::GetInstance()->RequestTexture(aTeturePath);
 
 		myResourceViews.Add(tex->GetShaderView());
 		myShaderResourceNames.Add(aResourceName);
@@ -31,7 +31,7 @@ namespace Easy3D
 
 	void Surface::GetShaderResources(Effect* aEffect)
 	{
-		for each (const std::string& resourceName in myShaderResourceNames)
+		for each (const CU::String<30>& resourceName in myShaderResourceNames)
 		{
 			myShaderVariables.Add(aEffect->GetEffect()->GetVariableByName(resourceName.c_str())->AsShaderResource());
 		}

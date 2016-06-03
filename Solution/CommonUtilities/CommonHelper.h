@@ -1,7 +1,9 @@
 #pragma once
 #include <algorithm>
+#include "CUString.h"
 #include "DL_Debug.h"
 #include "Matrix.h"
+#include "Murmur.h"
 #include <string>
 #include "Vector.h"
 #include <ShlObj.h>
@@ -16,6 +18,11 @@ namespace CU
 	const std::string game("");
 
 	static bool canSave;
+	
+	inline unsigned int StringHash(char* aKey)
+	{
+		return Murmur::Hash(aKey);
+	}
 
 	inline bool dirExists(const std::string& dirName_in)
 	{
@@ -284,6 +291,14 @@ namespace CU
 		int index = aFilePath.rfind('/');
 
 		std::string result(aFilePath.begin() + index + 1, aFilePath.end());
+		return result;
+	}
+
+	inline CU::String<50> GetFileNameFromFilePath(const CU::String<50>& aFilePath)
+	{
+		int index = aFilePath.RFind("/") + 1;
+
+		CU::String<50> result = aFilePath.SubStr(index, aFilePath.Size());
 		return result;
 	}
 }

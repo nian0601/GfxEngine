@@ -57,6 +57,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="GPUContainer.h">
+      <Filter>AssetManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -108,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUContainer.cpp">
+      <Filter>AssetManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

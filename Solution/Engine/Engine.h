@@ -1,6 +1,6 @@
 #pragma once
 #include <windef.h>
-#include <string>
+#include <CUString.h>
 #include <WinUser.h>
 #include <Vector.h>
 
@@ -24,7 +24,7 @@ namespace Easy3D
 		static void Destroy();
 		static Engine* GetInstance();
 
-		void CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const std::string& aTitle);
+		void CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const CU::String<30>& aTitle);
 		void CreateDirectX(const HWND& aHwnd);
 
 		void Render();

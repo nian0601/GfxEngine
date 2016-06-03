@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <Effect.h>
 #include "Game.h"
+#include <GPUContainer.h>
 #include <Instance.h>
 #include <ModelProxy.h>
 #include <Scene.h>
@@ -11,6 +12,9 @@
 
 #include <FullscreenQuad.h>
 #include <DeferredRenderer.h>
+
+#include <CUString.h>
+#include <CUMap.h>
 
 Game::Game()
 {
@@ -79,8 +83,8 @@ void Game::Update()
 
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
-	Easy3D::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
-	Easy3D::AssetContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
+	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
+	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
 }
 
 void Game::Render()

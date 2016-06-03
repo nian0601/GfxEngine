@@ -33,7 +33,7 @@ namespace Easy3D
 		SAFE_DELETE(myDirectX);
 	}
 
-	void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const std::string& aTitle)
+	void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const CU::String<30>& aTitle)
 	{
 		myWindowSize = aSize;
 

@@ -37,7 +37,7 @@ namespace Easy3D
 		}
 	}
 
-	void Texture::LoadTexture(const std::string& aPath)
+	void Texture::LoadTexture(const CU::String<50>& aPath)
 	{
 		myFilePath = aPath;
 

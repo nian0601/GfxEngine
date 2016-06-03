@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <CUString.h>
 
 namespace Easy3D
 {
@@ -11,7 +11,7 @@ namespace Easy3D
 	public:
 		virtual ~IModelFactory(){};
 
-		virtual Model* LoadModel(const std::string& aFilePath, Effect* aEffect) = 0;
+		virtual Model* LoadModel(const CU::String<50>& aFilePath, Effect* aEffect) = 0;
 
 	protected:
 		IModelFactory(){};

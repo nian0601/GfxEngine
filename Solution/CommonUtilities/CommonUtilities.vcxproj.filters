@@ -131,6 +131,9 @@
     <ClInclude Include="StackWalker.h">
       <Filter>DL_Debug</Filter>
     </ClInclude>
+    <ClInclude Include="CUString.h" />
+    <ClInclude Include="Murmur.h" />
+    <ClInclude Include="CUMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileWatcher.cpp" />

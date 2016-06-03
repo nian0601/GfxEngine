@@ -16,14 +16,14 @@ namespace Easy3D
 		Surface();
 		~Surface();
 
-		void AddTexture(const std::string& aTeturePath, const std::string& aResourceName);
+		void AddTexture(const CU::String<50>& aTeturePath, const CU::String<30>& aResourceName);
 		void GetShaderResources(Effect* aEffect);
 
 		void Activate();
 		void Deactivate();
 
 	private:
-		CU::GrowingArray<std::string> myShaderResourceNames;
+		CU::GrowingArray<CU::String<30>> myShaderResourceNames;
 		CU::GrowingArray<ID3D11ShaderResourceView*> myResourceViews;
 		CU::GrowingArray<ID3DX11EffectShaderResourceVariable*> myShaderVariables;
 	};

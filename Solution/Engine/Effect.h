@@ -1,5 +1,7 @@
 #pragma once
 
+#include <CUString.h>
+
 struct ID3DX11Effect;
 struct ID3DX11EffectTechnique;
 struct ID3DX11EffectMatrixVariable;
@@ -19,10 +21,10 @@ namespace Easy3D
 		Effect();
 		~Effect();
 
-		void Init(const std::string& aFilePath);
+		void Init(const CU::String<50>& aFilePath);
 
 		ID3DX11Effect* GetEffect() const;
-		ID3DX11EffectTechnique* GetTechnique(const std::string& aTechniqueName) const;
+		ID3DX11EffectTechnique* GetTechnique(const CU::String<30>& aTechniqueName) const;
 
 
 		void SetWorldMatrix(const CU::Matrix44<float>& aWorldMatrix);
@@ -41,11 +43,11 @@ namespace Easy3D
 		void SetRoughness(float aValue);
 
 	private:
-		void LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const std::string& aVariableName, bool aForceFind = true);
-		void LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const std::string& aVariableName, bool aForceFind = true);
-		void LoadVector(ID3DX11EffectVectorVariable*& aVector, const std::string& aVariableName, bool aForceFind = true);
-		void LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const std::string& aVariableName, bool aForceFind = true);
-		void CheckVariable(const std::string& aName, const void* aVariable);
+		void LoadMatrix(ID3DX11EffectMatrixVariable*& aMatrix, const CU::String<30>& aVariableName, bool aForceFind = true);
+		void LoadShaderResource(ID3DX11EffectShaderResourceVariable*& aResource, const CU::String<30>& aVariableName, bool aForceFind = true);
+		void LoadVector(ID3DX11EffectVectorVariable*& aVector, const CU::String<30>& aVariableName, bool aForceFind = true);
+		void LoadScalar(ID3DX11EffectScalarVariable*& aScalar, const CU::String<30>& aVariableName, bool aForceFind = true);
+		void CheckVariable(const CU::String<30>& aName, const void* aVariable);
 
 		ID3DX11Effect* myEffect;
 
@@ -64,7 +66,7 @@ namespace Easy3D
 		ID3DX11EffectScalarVariable* myMetalness;
 		ID3DX11EffectScalarVariable* myRoughness;
 
-		std::string myFileName;
-		std::string myFilePath;
+		CU::String<50> myFileName;
+		CU::String<50> myFilePath;
 	};
 }
