@@ -31,8 +31,6 @@ namespace Easy3D
 		void SetBackbufferAsRenderTarget();
 
 	private:
-
-		void Cleanup();
 		void SetupSwapChain(const HWND& aHWND, const CU::Vector2<float>& aScreenSize);
 		void SetupDebugInterface();
 		void SetupBackbuffer(const CU::Vector2<float>& aScreenSize);

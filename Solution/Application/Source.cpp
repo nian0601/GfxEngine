@@ -26,7 +26,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
 	MSG msg;
-	for (;;)
+	bool isRunning = true;
+	while (isRunning == true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -42,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		{
 			CU::InputWrapper::GetInstance()->Update();
 
-			globalGame->Update();
+			isRunning = globalGame->Update();
 			globalGame->Render();
 			Easy3D::Engine::GetInstance()->Render();
 		}

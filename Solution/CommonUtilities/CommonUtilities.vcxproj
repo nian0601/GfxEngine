@@ -77,6 +77,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="CommonHelper.h" />
+    <ClInclude Include="CUMapIterator.h" />
     <ClInclude Include="CUString.h" />
     <ClInclude Include="CUStringDecl.h" />
     <ClInclude Include="DL_Assert.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="FuzzySet.cpp" />
     <ClCompile Include="InputWrapper.cpp" />
     <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="Murmur.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StackWalker.cpp" />

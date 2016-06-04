@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CUMapIterator.h"
 #include "Murmur.h"
 #include "GrowingArray.h"
 
@@ -18,6 +19,12 @@ namespace CU
 		bool KeyExists(const Key &aKey);
 		Value& operator[](const Key &aKey);
 
+		MapIterator<Key, Value> Begin();
+		MapIterator<Key, Value> Next(MapIterator<Key, Value>& aCurrent);
+		MapIterator<Key, Value> End();
+
+		void Clear();
+
 	private:
 		struct KeyValuePair
 		{
@@ -25,7 +32,7 @@ namespace CU
 			Value myValue;
 		};
 
-		int Hash(const Key &aKey);
+		int OwnHash(const Key &aKey);
 		GrowingArray<GrowingArray<KeyValuePair, int>, int> myBuckets;
 	};
 
@@ -64,7 +71,7 @@ namespace CU
 			return;
 		}
 
-		int index = Hash(aKey);
+		int index = OwnHash(aKey);
 
 		KeyValuePair pair;
 		pair.myKey = aKey;
@@ -81,14 +88,14 @@ namespace CU
 	{
 		assert(KeyExists(aKey) == true && "[CUMap]: Tried to get an nonexisting Key.");
 
-		int index = Hash(aKey);
+		int index = OwnHash(aKey);
 		for (int i = 0; i < myBuckets[index].Size(); ++i)
 		{
 			if (myBuckets[index][i].myKey == aKey)
 				return myBuckets[index][i].myValue;
 		}
 
-		assert(false && "[CUMap]: Get() failed to find a Key, should NEVER happen...");
+		//assert(false && "[CUMap]: Get() failed to find a Key, should NEVER happen...");
 		return myBuckets[0][0].myValue;
 	}
 
@@ -101,7 +108,7 @@ namespace CU
 	{
 		assert(KeyExists(aKey) == true && "[CUMap]: Tried to delete an nonexisting Key.");
 
-		int index = Hash(aKey);
+		int index = OwnHash(aKey);
 
 		for (int i = 0; i < myBuckets[index].Size(); ++i)
 		{
@@ -119,7 +126,7 @@ namespace CU
 	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
 	bool Map<Key, Value, StartSize, BucketSize>::KeyExists(const Key &aKey)
 	{
-		int index = Hash(aKey);
+		int index = OwnHash(aKey);
 
 		for (int i = 0; i < myBuckets[index].Size(); ++i)
 		{
@@ -145,12 +152,89 @@ namespace CU
 		return Get(aKey);
 	}
 
+	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
+	MapIterator<Key, Value> Map<Key, Value, StartSize, BucketSize>::Begin()
+	{
+		int first = -1;
+		int second = -1;
+		Key* key = nullptr;
+		Value* value = nullptr;
+
+		for (int i = 0; i < myBuckets.Size(); ++i)
+		{
+			if (myBuckets[i].Size() > 0)
+			{
+				first = i;
+				second = 0;
+
+				key = &myBuckets[first][second].myKey;
+				value = &myBuckets[first][second].myValue;
+				break;
+			}
+		}
+
+		return MapIterator<Key, Value>(first, second, key, value);
+	}
+
+	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
+	MapIterator<Key, Value> Map<Key, Value, StartSize, BucketSize>::Next(MapIterator<Key, Value>& aCurrent)
+	{
+		int first = -1;
+		int second = -1;
+		Key* key = nullptr;
+		Value* value = nullptr;
+
+		int innerIndex = aCurrent.mySecondIndex + 1;
+
+		for (int i = aCurrent.myFirstIndex; i < myBuckets.Size(); ++i)
+		{
+			GrowingArray<KeyValuePair, int>& bucket = myBuckets[i];
+			for (int j = innerIndex; j < bucket.Size(); ++j)
+			{
+				first = i;
+				second = j;
+
+				key = &myBuckets[first][second].myKey;
+				value = &myBuckets[first][second].myValue;
+				break;
+			}
+
+			if (key != nullptr)
+			{
+				break;
+			}
+
+			innerIndex = 0;
+		}
+
+		return MapIterator<Key, Value>(first, second, key, value);
+	}
+
+	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
+	MapIterator<Key, Value> Map<Key, Value, StartSize, BucketSize>::End()
+	{
+		return MapIterator<Key, Value>(-1, -1, nullptr, nullptr);
+	}
+
+	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
+	void Map<Key, Value, StartSize, BucketSize>::Clear()
+	{
+		for (int i = 0; i < myBuckets.Size(); ++i)
+		{
+			myBuckets[i].RemoveAll();
+		}
+		myBuckets.RemoveAll();
+	}
 
 	//----- HASH -----
 	//----------------
 	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
-	int Map<Key, Value, StartSize, BucketSize>::Hash(const Key &aKey)
+	int Map<Key, Value, StartSize, BucketSize>::OwnHash(const Key &aKey)
 	{
-		return Murmur::Hash(aKey.c_str()) % StartSize;
+		unsigned int out = 0;
+		MurmurHash3_x86_32(aKey.c_str(), aKey.Size(), 2654435761, &out);
+
+		return out % StartSize;
+		//return Murmur::Hash(aKey.c_str()) % StartSize;
 	}
 }

@@ -16,11 +16,6 @@ namespace CU
 
 	static bool canSave;
 	
-	inline unsigned int StringHash(char* aKey)
-	{
-		return Murmur::Hash(aKey);
-	}
-
 	inline bool dirExists(const CU::String<80>& dirName_in)
 	{
 		DWORD ftyp = GetFileAttributesA(dirName_in.c_str());

@@ -55,18 +55,17 @@ namespace Easy3D
 
 	GPUContainer::~GPUContainer()
 	{
-		/*
-		for (auto it = myEffects.begin(); it != myEffects.end(); ++it)
+		for (auto it = myEffects.Begin(); it != myEffects.End(); it = myEffects.Next(it))
 		{
-			SAFE_DELETE(it->second);
+			SAFE_DELETE(it.Second());
 		}
-		myEffects.clear();
+		myEffects.Clear();
 
-		for (auto it = myTextures.begin(); it != myTextures.end(); ++it)
+		for (auto it = myTextures.Begin(); it != myTextures.End(); it = myTextures.Next(it))
 		{
-		SAFE_DELETE(it->second);
+			SAFE_DELETE(it.Second());
 		}
-		myTextures.clear();
-		*/
+		myTextures.Clear();
+		
 	}
 }

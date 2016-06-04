@@ -20,13 +20,13 @@ namespace Easy3D
 	FBXFactory::~FBXFactory()
 	{
 		int DeleteFromMapHere = 5;
-		/*
-		for (auto it = myModels.begin(); it != myModels.end(); ++it)
+
+		for (auto it = myModels.Begin(); it != myModels.End(); it = myModels.Next(it))
 		{
-			SAFE_DELETE(it->second);
+			SAFE_DELETE(it.Second());
 		}
-		myModels.clear();
-		*/
+		myModels.Clear();
+
 		SAFE_DELETE(myLoader);
 	}
 

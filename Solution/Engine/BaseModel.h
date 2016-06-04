@@ -18,7 +18,7 @@ namespace Easy3D
 	{
 	public:
 		BaseModel();
-		~BaseModel();
+		virtual ~BaseModel();
 
 		virtual void Render(Effect& aEffect);
 

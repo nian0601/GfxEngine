@@ -48,9 +48,12 @@ Game::~Game()
 	myInstances.DeleteAll();
 	SAFE_DELETE(myTimerManager);
 	SAFE_DELETE(myRenderer);
+
+	Easy3D::AssetContainer::Destroy();
+	Easy3D::GPUContainer::Destroy();
 }
 
-void Game::Update()
+bool Game::Update()
 {
 	myTimerManager->Update();
 	float delta = myTimerManager->GetMasterTimer().GetTime().GetFrameTime();
@@ -58,6 +61,11 @@ void Game::Update()
 	UpdateCamera(delta);
 
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
+
+	if (input->KeyIsPressed(DIK_ESCAPE))
+	{
+		return false;
+	}
 
 	if (input->KeyIsPressed(DIK_1))
 	{
@@ -85,6 +93,8 @@ void Game::Update()
 	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
 	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
 	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
+
+	return true;
 }
 
 void Game::Render()

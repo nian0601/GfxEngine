@@ -47,7 +47,7 @@ namespace CU
 	private:
 		void UpdateHash();
 		int myCurrentSize;
-		int myHash;
+		unsigned int myHash;
 		char myData[MaxSize];
 	};
 
@@ -409,6 +409,8 @@ namespace CU
 	template<unsigned int MaxSize = 30>
 	void String<MaxSize>::UpdateHash()
 	{
-		myHash = Murmur::Hash(myData);
+		MurmurHash3_x86_32(myData, myCurrentSize, 1000, &myHash);
+
+		//myHash = Murmur::Hash(myData);
 	}
 }
