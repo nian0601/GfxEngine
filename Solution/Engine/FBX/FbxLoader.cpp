@@ -520,7 +520,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", albedoInfo.myFileName.c_str(), aFilePath));
 				}
 
-				someData->myTextures.push_back(albedoInfo);
+				someData->myTextures.Add(albedoInfo);
 			}
 
 			TextureInfo normalInfo;
@@ -534,7 +534,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", normalInfo.myFileName.c_str(), aFilePath));
 				}
 
-				someData->myTextures.push_back(normalInfo);
+				someData->myTextures.Add(normalInfo);
 				hasNormalMap = true;
 			}
 
@@ -548,7 +548,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", roughnessInfo.myFileName.c_str(), aFilePath));
 				}
 
-				someData->myTextures.push_back(roughnessInfo);
+				someData->myTextures.Add(roughnessInfo);
 			}
 
 			TextureInfo metalnessInfo;
@@ -561,7 +561,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", metalnessInfo.myFileName.c_str(), aFilePath));
 				}
 			
-				someData->myTextures.push_back(metalnessInfo);
+				someData->myTextures.Add(metalnessInfo);
 			}
 
 			TextureInfo ambientInfo;
@@ -574,7 +574,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", ambientInfo.myFileName.c_str(), aFilePath));
 				}
 				
-				someData->myTextures.push_back(ambientInfo);
+				someData->myTextures.Add(ambientInfo);
 			}
 
 			TextureInfo emissiveInfo;
@@ -587,7 +587,7 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", emissiveInfo.myFileName.c_str(), aFilePath));
 				}
 
-				someData->myTextures.push_back(emissiveInfo);
+				someData->myTextures.Add(emissiveInfo);
 			}
 		}
 	}
@@ -1363,6 +1363,8 @@ void LoadAnimation(const char* aFilePath, AnimationData& aAnimation, FbxNode* aN
 		if (lNodeAttribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 		{
 			Bone newBone;
+			newBone.myChilds.Init(32);
+			newBone.myFrames.Init(32);
 			newBone.myAnimationTime = GetAnimationTime(aNode, aCurrentAnimLayer);
 			float oneFrameTime = 1.0f / 24.0f;
 
@@ -1398,7 +1400,7 @@ void LoadAnimation(const char* aFilePath, AnimationData& aAnimation, FbxNode* aN
 				FbxTime time;
 				time.SetSecondDouble(currentFrameTime);
 				keyFrame.myMatrix = fixMatrix * CreateMatrix(aNode->EvaluateLocalTransform(time)) * fixMatrix;
-				newBone.myFrames.push_back(keyFrame);
+				newBone.myFrames.Add(keyFrame);
 			}
 			FbxAMatrix animationMatrix;
 
@@ -1406,17 +1408,17 @@ void LoadAnimation(const char* aFilePath, AnimationData& aAnimation, FbxNode* aN
 			if (skeleton->IsSkeletonRoot())
 			{
 				aAnimation.myBindMatrix = CU::Matrix44<float>();
-				aAnimation.myRootBone = aAnimation.myBones.size();
+				aAnimation.myRootBone = aAnimation.myBones.Size();
 			}
-			boneId = aAnimation.myBones.size();
+			boneId = aAnimation.myBones.Size();
 			aNode->SetUserDataPtr((void*)boneId);
 
 			if (parentBone != -1)
 			{
-				aAnimation.myBones[parentBone].myChilds.push_back(boneId);
+				aAnimation.myBones[parentBone].myChilds.Add(boneId);
 			}
 			newBone.myId = boneId;
-			aAnimation.myBones.push_back(newBone);
+			aAnimation.myBones.Add(newBone);
 		}
 	}
 
@@ -1502,6 +1504,8 @@ void LoadNodeRecursive(const char* aFilePath, FbxModelData* aModel, AnimationDat
 		{
 			aModel->myData = new ModelData();
 			aModel->myData->myLayout.Init(8);
+			aModel->myData->myTextures.Init(8);
+			aModel->myData->mSubMeshes.Init(8);
 
 			// Geometry offset.
 			// it is not inherited by the children.
@@ -1603,6 +1607,7 @@ FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<CU::Strin
 	//DL_PRINT("Success!");
 	//DL_PRINT("FBXLoader Creating TextureData...");
 	myLoadingModel->myTextureData = new TextureData();
+	myLoadingModel->myTextureData->myTextures.Init(8);
 	//DL_PRINT("Success!");
 	//DL_PRINT("FBXLoader Loading Scene...");
 	auto scene = LoadScene(aFile);
@@ -1629,7 +1634,7 @@ FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<CU::Strin
 
 			TextureInfo info;
 			info.myFileName = str;
-			myLoadingModel->myTextureData->myTextures.push_back(info);
+			myLoadingModel->myTextureData->myTextures.Add(info);
 			lFileTexture->SetFileName(str.c_str());
 		}
 	}

@@ -9,8 +9,6 @@
 #include <Matrix33.h>
 #include "../LodStructs.h"
 
-#define FBXLoaderArray CU::GrowingArray
-
 enum FBXTextureType
 {
 	ALBEDO,
@@ -41,8 +39,8 @@ struct Bone
 	int myId;
 	CU::Matrix44<float> myBaseOrientation;
 	CU::Matrix44<float> myBindMatrix;
-	std::vector<KeyFrame> myFrames;
-	std::vector<int> myChilds;
+	CU::GrowingArray<KeyFrame> myFrames;
+	CU::GrowingArray<int> myChilds;
 };
 
 struct AnimationData
@@ -51,7 +49,7 @@ struct AnimationData
 
 	CU::Matrix44<float> myBindMatrix;
 	int myRootBone;
-	std::vector<Bone> myBones;
+	CU::GrowingArray<Bone> myBones;
 };
 
 struct ModelData
@@ -106,9 +104,9 @@ struct ModelData
 	int myIndexCount;
 	float myRadius;
 
-	std::vector<TextureInfo> myTextures;
-	FBXLoaderArray<Layout> myLayout;
-	FBXLoaderArray<SubMesh*> mSubMeshes;
+	CU::GrowingArray<TextureInfo> myTextures;
+	CU::GrowingArray<Layout> myLayout;
+	CU::GrowingArray<SubMesh*> mSubMeshes;
 
 	bool myHasBiNormal;
 	bool myHasSkinweights;
@@ -123,7 +121,7 @@ struct ModelData
 
 struct TextureData
 {
-	std::vector<TextureInfo> myTextures;
+	CU::GrowingArray<TextureInfo> myTextures;
 };
 
 struct AnimationCurves
@@ -193,10 +191,10 @@ public:
 	AnimationData* myAnimation;
 	TextureData* myTextureData;
 	AnimationCurves* myAnimationCurves;
-	FBXLoaderArray<	KeyFrame > myAnimatedOrientation;
+	CU::GrowingArray<KeyFrame> myAnimatedOrientation;
 	CU::Matrix44<float> myOrientation;
 	CU::Matrix44<float> myRotationPivot;
-	FBXLoaderArray<FbxModelData*> myChildren;
+	CU::GrowingArray<FbxModelData*> myChildren;
 	float myFPS;
 	float myRadius;
 };
