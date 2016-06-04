@@ -6,7 +6,6 @@
 #include <cmath>
 #include <cstring>
 #include "GrowingArray.h"
-#include <string>
 #include "tinyxml2.h"
 #include "Vector.h"
 #include "MathHelper.h"

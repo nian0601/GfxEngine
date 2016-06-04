@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GrowingArray.h>
-#include <string>
 
 struct ID3D11ShaderResourceView;
 struct ID3DX11EffectShaderResourceVariable;

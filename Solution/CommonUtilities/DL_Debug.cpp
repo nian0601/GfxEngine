@@ -2,7 +2,6 @@
 #include "DL_Debug.h"
 #include <cassert>
 #include <cstdarg>
-#include <sstream>
 #include <ctime>
 #include "DL_StackWalker.h"
 #include <sys/types.h>

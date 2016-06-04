@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseModel.h"
-#include <string>
 
 namespace Easy3D
 {

@@ -4,10 +4,8 @@
 #include "DL_Debug.h"
 #include "Matrix.h"
 #include "Murmur.h"
-#include <string>
 #include "Vector.h"
 #include <ShlObj.h>
-#include <sstream>
 #include <fstream>
 #include <streambuf>
 

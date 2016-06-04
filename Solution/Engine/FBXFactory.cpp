@@ -149,7 +149,7 @@ namespace Easy3D
 			someInputElements.Add(desc);
 		}
 
-		for (unsigned int i = 0; i < someData->myTextures.Size(); ++i)
+		for (int i = 0; i < someData->myTextures.Size(); ++i)
 		{
 			auto& currentTexture = someData->myTextures[i];
 
