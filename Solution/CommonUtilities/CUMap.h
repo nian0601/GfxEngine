@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CUMapIterator.h"
-#include "Murmur.h"
+#include "HashHelper.h"
 #include "GrowingArray.h"
 
 namespace CU
@@ -95,7 +95,7 @@ namespace CU
 				return myBuckets[index][i].myValue;
 		}
 
-		//assert(false && "[CUMap]: Get() failed to find a Key, should NEVER happen...");
+		assert(!"[CUMap]: Get() failed to find a Key, should NEVER happen...");
 		return myBuckets[0][0].myValue;
 	}
 
@@ -231,10 +231,6 @@ namespace CU
 	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
 	int Map<Key, Value, StartSize, BucketSize>::OwnHash(const Key &aKey)
 	{
-		unsigned int out = 0;
-		MurmurHash3_x86_32(aKey.c_str(), aKey.Size(), 2654435761, &out);
-
-		return out % StartSize;
-		//return Murmur::Hash(aKey.c_str()) % StartSize;
+		return Murmur(aKey) % StartSize;
 	}
 }

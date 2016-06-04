@@ -136,6 +136,7 @@
     <ClInclude Include="CUStringDecl.h" />
     <ClInclude Include="CUString.h" />
     <ClInclude Include="CUMapIterator.h" />
+    <ClInclude Include="HashHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileWatcher.cpp" />

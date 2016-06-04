@@ -88,6 +88,7 @@
     <ClInclude Include="FuzzySet.h" />
     <ClInclude Include="Greater.h" />
     <ClInclude Include="GrowingArray.h" />
+    <ClInclude Include="HashHelper.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="InputWrapper.h" />
     <ClInclude Include="Intersection.h" />
