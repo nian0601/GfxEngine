@@ -10,7 +10,6 @@ namespace CU
 	{
 	public:
 		LineVolume(GrowingArray<Line<T>> aLineList);
-		LineVolume(std::vector<Line<T>> aLineList);
 		~LineVolume();
 		void AddLine(Line<T > aLine);
 		void RemoveLine(Line<T> aLine);
@@ -26,16 +25,6 @@ namespace CU
 	LineVolume<T>::LineVolume(GrowingArray<Line<T>> aLineList)
 	{
 		myLines = aLineList;
-	}
-
-	template <typename T>
-	LineVolume<T>::LineVolume(std::vector<Line<T>> aLineList)
-	{
-		myLines.Init(aLineList.size() + 1);
-		for (unsigned int i = 0; i < aLineList.size(); ++i)
-		{
-			myLines.Add(aLineList[i]);
-		}
 	}
 
 	template <typename T>

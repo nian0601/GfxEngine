@@ -10,7 +10,6 @@ namespace CU
 	{
 	public:
 		PlaneVolume(GrowingArray<Plane<T>> aPlaneList);
-		PlaneVolume(std::vector<Plane<T>> aPlaneList);
 		~PlaneVolume();
 		void AddPlane(Plane<T > aPlane);
 		void RemovePlane(Plane<T> aPlane);
@@ -31,16 +30,6 @@ namespace CU
 	PlaneVolume<T>::PlaneVolume(GrowingArray<Plane<T>> aPlaneList)
 	{
 		myPlanes = aPlaneList;
-	}
-
-	template <typename T>
-	PlaneVolume<T>::PlaneVolume(std::vector<Plane<T>> aPlaneList)
-	{
-		myPlanes.Init(aPlaneList.size() + 1);
-		for (unsigned int i = 0; i < aPlaneList.size(); ++i)
-		{
-			myPlanes.Add(aPlaneList[i]);
-		}
 	}
 
 	template <typename T>
