@@ -1,8 +1,7 @@
 #pragma once
 
+#include "Murmur.h"
 #include "GrowingArray.h"
-#include <string>
-#include "CommonHelper.h"
 
 namespace CU
 {
@@ -27,7 +26,7 @@ namespace CU
 		};
 
 		int Hash(const Key &aKey);
-		CU::GrowingArray<CU::GrowingArray<KeyValuePair, int>, int> myBuckets;
+		GrowingArray<GrowingArray<KeyValuePair, int>, int> myBuckets;
 	};
 
 
