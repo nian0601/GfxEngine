@@ -2,7 +2,6 @@
 #include "DL_Debug.h"
 #include <cassert>
 #include <cstdarg>
-//#include <cstdio>
 #include <sstream>
 #include <ctime>
 #include "DL_StackWalker.h"
@@ -16,7 +15,7 @@ DL_Debug::Debug* DL_Debug::Debug::ourInstance = nullptr;
 
 DL_Debug::Debug::Debug()
 {
-	std::pair<bool, std::string> logSetting;
+	std::pair<bool, CU::String<256>> logSetting;
 	logSetting.first = false;
 
 	logSetting.second = "Engine";
@@ -52,7 +51,7 @@ DL_Debug::Debug::~Debug()
 {
 }
 
-bool DL_Debug::Debug::Create(std::string aFile)
+bool DL_Debug::Debug::Create(CU::String<256> aFile)
 {
 	assert(ourInstance == nullptr && "Debugobject already created");
 	ourInstance = new Debug();
@@ -64,26 +63,14 @@ bool DL_Debug::Debug::Create(std::string aFile)
 
 	strftime(buf, sizeof(buf), "%Y-%m-%d_%H_%M_%S", &tstruct);
 
-	std::string logFolder = "log\\";
-#ifdef RELEASE_BUILD
-#ifndef DLL_EXPORT
-	char documents[MAX_PATH];
-	HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, documents);
-	std::stringstream documentPath;
-	documentPath << documents;
-	logFolder = documentPath.str() + "\\Distortion Games\\Machina";
-	CreateDirectory(logFolder.c_str(), NULL);
-	logFolder += "\\log\\";
-	CreateDirectory(logFolder.c_str(), NULL);
-#else
+	CU::String<256> logFolder = "log\\";
+
 	CreateDirectory("log", NULL);
-#endif
-#else
-	CreateDirectory("log", NULL);
-#endif
-	std::stringstream ss;
-	ss << logFolder << buf << "_" << aFile;
-	ourInstance->myDebugFile.open(ss.str().c_str());
+
+	logFolder += buf;
+	logFolder += "_";
+	logFolder += aFile;
+	ourInstance->myDebugFile.open(logFolder.c_str());
 	if (ourInstance == nullptr)
 	{
 		return(false);
@@ -115,7 +102,7 @@ void DL_Debug::Debug::WriteLog(const eFilterLog aFilter, const char* aFormattedS
 	if (myFilterLogStatus[aFilter].first == false)
 		return;
 
-	std::string logPrefix = myFilterLogStatus[aFilter].second;
+	CU::String<256> logPrefix = myFilterLogStatus[aFilter].second;
 
 
 	//Get time and store as string in buf
@@ -142,11 +129,15 @@ void DL_Debug::Debug::WriteLog(const eFilterLog aFilter, const char* aFormattedS
 	va_end(args);
 
 
-	//Merge time and VA_ARGS into string and print to log-file
-	std::stringstream ss;
-	ss << "[" << buf << tstructMilli.millitm << "][" << logPrefix << "]: " << buffer;
+	CU::String<256> output("[");
+	output += buf;
+	output += tstructMilli.millitm;
+	output += "][";
+	output += logPrefix;
+	output += "]:";
+	output += buffer;
 
-	ourInstance->myDebugFile << ss.str().c_str() << std::endl;
+	ourInstance->myDebugFile << output.c_str() << std::endl;
 	ourInstance->myDebugFile.flush();
 }
 
@@ -169,7 +160,19 @@ void DL_Debug::Debug::PrintMessageVA(const char *aFormattedString, ...)
 	ourInstance->myDebugFile.flush();
 }
 
-void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const char *aString)
+void DL_Debug::Debug::AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aFormattedString, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, aFormattedString);
+	vsprintf_s(buffer, aFormattedString.c_str(), args);
+	perror(buffer);
+	va_end(args);
+
+	AssertMessage(aFileName, aLine, aFunctionName, buffer);
+}
+
+void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aString)
 {
 	if (aAssertExpression == false)
 	{
@@ -177,43 +180,32 @@ void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileNam
 	}
 }
 
-void DL_Debug::Debug::AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...)
+void DL_Debug::Debug::AssertMessage(const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aString)
 {
-	char buffer[1024];
-	va_list args;
-	va_start(args, aFormattedString);
-	vsprintf_s(buffer, aFormattedString, args);
-	perror(buffer);
-	va_end(args);
+	CU::String<256> output("\nError Message: ");
+	output += aString;
+	output += "\n\n";
+	output += "File: ";
+	output += aFileName;
+	output += "\n\n";
+	output += "Line: ";
+	output += aLine;
+	output += "\n";
+	output += "Function: ";
+	output += aFunctionName;
+	output += "\n\n";
 
-	AssertMessage(aFileName, aLine, aFunctionName, buffer);
-}
-
-void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString)
-{
-	AssertMessage(aAssertExpression, aFileName, aLine, aFunctionName, aString.c_str());
-}
-
-void DL_Debug::Debug::AssertMessage(const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString)
-{
-	std::stringstream ss;
-	ss << std::endl << std::endl <<
-		"Error message: " << aString << std::endl << std::endl <<
-		"File: " << aFileName << std::endl <<
-		"Line: " << aLine << std::endl <<
-		"Function: " << aFunctionName << std::endl <<std::endl;
-
-	ourInstance->myDebugFile << ss.str().c_str();
+	ourInstance->myDebugFile << output.c_str();
 	ourInstance->myDebugFile << std::endl << std::endl << "Callstack" << std::endl;
 
 	DL_Debug::StackWalker sw;
 	sw.ShowCallstack();
 	ourInstance->myDebugFile.flush();
 
-	const size_t cSize = strlen(ss.str().c_str()) + 1;
+	const size_t cSize = strlen(output.c_str()) + 1;
 	wchar_t* wc = new wchar_t[cSize];
 	size_t tempSize;
-	mbstowcs_s(&tempSize, wc, cSize, ss.str().c_str(), cSize);
+	mbstowcs_s(&tempSize, wc, cSize, output.c_str(), cSize);
 
 	//_wassert(wc, 0, aLine);
 
@@ -237,11 +229,6 @@ void DL_Debug::Debug::DebugMessage(const char *aFileName, int aLine, const char 
 
 void DL_Debug::Debug::ShowMessageBox(HWND aHwnd, LPCSTR aText, LPCSTR aTitle, UINT aType)
 {
-	//std::string msg = "[";
-	//msg += aTitle;
-	//msg += "] ";
-	//msg += aText;
-	//DL_PRINT(msg.c_str());
 	MessageBox(aHwnd, aText, aTitle, aType);
 }
 

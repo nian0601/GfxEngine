@@ -13,9 +13,8 @@
 
 namespace CU
 {
-	const std::string group("/Distortion Games/");
-	//const std::string game("/Patrick of the Caribbean/");
-	const std::string game("");
+	const CU::String<80> group("/Distortion GamesEasy3D/");
+	const CU::String<80> game("");
 
 	static bool canSave;
 	
@@ -24,7 +23,7 @@ namespace CU
 		return Murmur::Hash(aKey);
 	}
 
-	inline bool dirExists(const std::string& dirName_in)
+	inline bool dirExists(const CU::String<80>& dirName_in)
 	{
 		DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
 		if (ftyp == INVALID_FILE_ATTRIBUTES)
@@ -36,19 +35,19 @@ namespace CU
 		return false;    // this is not a directory!
 	}
 
-	inline void BuildFoldersInPath(const std::string& aPath)
+	inline void BuildFoldersInPath(const CU::String<80>& aPath)
 	{
-		unsigned int slashIndex = aPath.find_first_of("/");
+		unsigned int slashIndex = aPath.Find("/");
 
-		while (slashIndex != std::string::npos)
+		while (slashIndex != aPath.NotFound)
 		{
-			std::string folder(aPath.begin(), aPath.begin() + slashIndex);
+			CU::String<80> folder = aPath.SubStr(0, slashIndex);
 			CreateDirectory(folder.c_str(), NULL);
-			slashIndex = aPath.find_first_of("/", slashIndex + 1);
+			slashIndex = aPath.Find("/", slashIndex + 1);
 		}
 	}
 
-	inline bool FileExists(const std::string& name) {
+	inline bool FileExists(const CU::String<80>& name) {
 		std::ifstream f(name.c_str());
 		if (f.good()) {
 			f.close();
@@ -68,13 +67,16 @@ namespace CU
 			DL_ASSERT("Can't get document folder!");
 		}
 
-		if (dirExists(documents + group + game) == false)
+		CU::String<80> directory(documents);
+		directory += group;
+		directory += game;
+		if (dirExists(directory) == false)
 		{
-			BuildFoldersInPath(documents + group + game);
+			BuildFoldersInPath(directory);
 		}
 	}
 
-	inline void CreateFileIfNotExists(const std::string& aFilePath)
+	inline void CreateFileIfNotExists(const CU::String<80>& aFilePath)
 	{
 		if (FileExists(aFilePath) == false)
 		{
@@ -84,7 +86,7 @@ namespace CU
 		}
 	}
 
-	inline std::string GetMyDocumentFolderPath()
+	inline CU::String<80> GetMyDocumentFolderPath()
 	{
 		char documents[MAX_PATH];
 		HRESULT hr = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, documents);
@@ -92,24 +94,10 @@ namespace CU
 		{
 			DL_ASSERT("Can't get document folder!");
 		}
-		std::stringstream ss;
-		ss << documents;
-		ss << group << game;
-		return ss.str();
-	}
 
-	inline std::string ToLower(const std::string& aString)
-	{
-		std::string data = aString;
-		std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-		return data;
-	}
-
-	inline std::string ToLower(const char* aString)
-	{
-		std::string data = aString;
-		std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-		return data;
+		CU::String<80> output(documents);
+		output += group + game;
+		return output;
 	}
 
 	inline float Clip(float aNumber, float aLower, float aUpper)
@@ -122,33 +110,35 @@ namespace CU
 		return max(aLower, min(aNumber, aUpper));
 	}
 
-	inline std::string GetSubString(std::string aStringToReadFrom, char aCharToFind, bool aReadAfterChar)
+	template<unsigned int MaxSize = 80>
+	inline CU::String<80> GetSubString(const CU::String<MaxSize>& aStringToReadFrom, char aCharToFind, bool aReadAfterChar)
 	{
-		std::string toReturn;
+		CU::String<MaxSize> toReturn;
 		if (aReadAfterChar == false)
 		{
-			toReturn = aStringToReadFrom.substr(0, aStringToReadFrom.find(aCharToFind));
+			toReturn = aStringToReadFrom.SubStr(0, aStringToReadFrom.Find(aCharToFind)-1);
 		}
 		else if (aReadAfterChar == true)
 		{
-			toReturn = aStringToReadFrom.substr(aStringToReadFrom.find_first_of(aCharToFind) + 1);
+			toReturn = aStringToReadFrom.SubStr(aStringToReadFrom.Find(aCharToFind), aStringToReadFrom.Size());
 		}
 
 		return toReturn;
 	}
 
-	inline std::string GetSubString(const std::string& aStringToReadFrom, const std::string& aWordToFind, bool aReadAfterChar
+	template<unsigned int MaxSize = 80>
+	inline CU::String<MaxSize> GetSubString(const CU::String<MaxSize>& aStringToReadFrom, const CU::String<MaxSize>& aWordToFind, bool aReadAfterChar
 		, int someCharsToSkip = 0)
 	{
-		if (aStringToReadFrom.rfind(aWordToFind) != std::string::npos)
+		int index = aStringToReadFrom.RFind(aWordToFind);
+		if (index != aStringToReadFrom.NotFound)
 		{
 			if (aReadAfterChar == true)
 			{
-				return aStringToReadFrom.substr(0, aStringToReadFrom.rfind(aWordToFind));
+				return aStringToReadFrom.SubStr(0, index);
 			}
 
-			return aStringToReadFrom.substr(aStringToReadFrom.rfind(aWordToFind) + someCharsToSkip);
-
+			return aStringToReadFrom.SubStr(index + someCharsToSkip, aStringToReadFrom.Size());
 		}
 
 		return aStringToReadFrom;
@@ -156,18 +146,19 @@ namespace CU
 
 	//If OptionalExtension is blank, the outputstring will have the same extension as the input string
 	//OptionalExtension needs to be entered without a period, "xml", NOT ".xml"
-	inline std::string GetGeneratedDataFolderFilePath(const std::string& aFilePath, const std::string& anOptionalNewExtension = "")
+	inline CU::String<80> GetGeneratedDataFolderFilePath(const CU::String<80>& aFilePath, const CU::String<80>& anOptionalNewExtension = "")
 	{
-		std::string pathWithoutData(aFilePath.begin() + 5, aFilePath.end());
+		CU::String<80> pathWithoutData = aFilePath.SubStr(5, aFilePath.Size());
 
-		if (anOptionalNewExtension != "")
+		if (anOptionalNewExtension.Empty() == false)
 		{
-			int extensionIndex = pathWithoutData.find_last_of(".");
-			pathWithoutData = std::string(pathWithoutData.begin(), pathWithoutData.begin() + extensionIndex + 1);
+			int extensionIndex = pathWithoutData.RFind(".");
+			pathWithoutData = pathWithoutData.SubStr(0, extensionIndex + 1);
+
 			pathWithoutData += anOptionalNewExtension;
 		}
 
-		std::string generatedDataFilePath = "GeneratedData/";
+		CU::String<80> generatedDataFilePath = "GeneratedData/";
 		generatedDataFilePath += pathWithoutData;
 
 		return generatedDataFilePath;
@@ -175,24 +166,26 @@ namespace CU
 
 	//If OptionalExtension is blank, the outputstring will have the same extension as the input string
 	//OptionalExtension needs to be entered without a period, "xml", NOT ".xml"
-	inline std::string GetRealDataFolderFilePath(const std::string& aFilePath, const std::string& anOptionalNewExtension = "")
+	inline CU::String<80> GetRealDataFolderFilePath(const CU::String<80>& aFilePath, const CU::String<80>& anOptionalNewExtension = "")
 	{
-		std::string pathWithoutData(aFilePath.begin() + 14, aFilePath.end());
+		CU::String<80> pathWithoutData = aFilePath.SubStr(14, aFilePath.Size());
 
-		if (anOptionalNewExtension != "")
+		if (anOptionalNewExtension.Empty() == false)
 		{
-			int extensionIndex = pathWithoutData.find_last_of(".");
-			pathWithoutData = std::string(pathWithoutData.begin(), pathWithoutData.begin() + extensionIndex + 1);
+			int extensionIndex = pathWithoutData.RFind(".");
+			pathWithoutData = pathWithoutData.SubStr(0, extensionIndex + 1);
+
 			pathWithoutData += anOptionalNewExtension;
 		}
 
-		std::string realDataFilePath = "Data/";
-		realDataFilePath += pathWithoutData;
+		CU::String<80> generatedDataFilePath = "Data/";
+		generatedDataFilePath += pathWithoutData;
 
-		return realDataFilePath;
+		return generatedDataFilePath;
 	}
 	
-	inline std::string Concatenate(const char* aFormattedString, ...)
+	template<unsigned int MaxSize = 30>
+	inline CU::String<MaxSize> Concatenate(const char* aFormattedString, ...)
 	{
 		char buffer[1024];
 		va_list args;
@@ -204,40 +197,20 @@ namespace CU
 		return buffer;
 	}
 
-	inline float StringToFloat(const std::string& aString)
+	inline void TrimWhiteSpacesAtBeginAndEnd(CU::String<80>& aString)
 	{
-		const char* value = aString.c_str();
-		char* end;
-		float floatValue = strtof(value, &end);
-
-		DL_ASSERT_EXP(value != end, "Error reading float value: " + aString);
-		return floatValue;
-	}
-
-	inline int StringToInt(const std::string& aString)
-	{
-		const char* value = aString.c_str();
-		char* end;
-		int intValue = strtol(value, &end, 10);
-
-		DL_ASSERT_EXP(value != end, "Error reading int value: " + aString);
-		return intValue;
-	}
-
-	inline void TrimWhiteSpacesAtBeginAndEnd(std::string& aString)
-	{
-		if (aString.length() <= 0)
+		if (aString.Empty() == true)
 		{
 			return;
 		}
 
-		unsigned int begin = 0;
+		int begin = 0;
 		while (aString[begin] == ' ')
 		{
 			++begin;
 		}
 
-		unsigned int end = aString.length();
+		int end = aString.Size();
 		if (end > begin)
 		{
 			while (aString[end-1] == ' ')
@@ -245,9 +218,9 @@ namespace CU
 				--end;
 			}
 		}
-		if (begin != 0 || end != aString.length())
+		if (begin != 0 || end != aString.Size())
 		{
-			aString = std::string(aString.begin() + begin, aString.begin() + end);
+			aString = aString.SubStr(begin, end);
 		}
 	}
 
@@ -270,28 +243,6 @@ namespace CU
 		return aValue == 2 || aValue == 4 || aValue == 8 || aValue == 16 || aValue == 32 || aValue == 64 || aValue == 128
 			|| aValue == 256 || aValue == 512 || aValue == 1024 || aValue == 2048 || aValue == 4096 || aValue == 8192
 			|| aValue == 1024 * 6;
-	}
-
-	inline const std::string ReadFileToString(const std::string& aFilePath)
-	{
-		std::string toReturn;
-		std::ifstream file(aFilePath);
-
-		file.seekg(0, std::ios::end);
-		toReturn.reserve(static_cast<unsigned int>(file.tellg()));
-		file.seekg(0, std::ios::beg);
-
-		toReturn.assign(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
-		file.close();
-		return toReturn;
-	}
-
-	inline std::string GetFileNameFromFilePath(const std::string& aFilePath)
-	{
-		int index = aFilePath.rfind('/');
-
-		std::string result(aFilePath.begin() + index + 1, aFilePath.end());
-		return result;
 	}
 
 	inline CU::String<50> GetFileNameFromFilePath(const CU::String<50>& aFilePath)

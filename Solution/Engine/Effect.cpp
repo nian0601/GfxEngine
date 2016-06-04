@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <CommonHelper.h>
 #include <d3dx11effect.h>
 #include <D3D10effect.h>
 #include <D3DX11async.h>
@@ -174,7 +175,7 @@ namespace Easy3D
 			aMatrix = nullptr;
 			if (aForceFind == true)
 			{
-				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+				DL_ASSERT(CU::Concatenate<256>("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
 			}
 		}
 	}
@@ -187,7 +188,7 @@ namespace Easy3D
 			aResource = nullptr;
 			if (aForceFind == true)
 			{
-				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+				DL_ASSERT(CU::Concatenate<256>("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
 			}
 		}
 	}
@@ -200,7 +201,7 @@ namespace Easy3D
 			aVector = nullptr;
 			if (aForceFind == true)
 			{
-				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+				DL_ASSERT(CU::Concatenate<256>("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
 			}
 		}
 	}
@@ -213,13 +214,13 @@ namespace Easy3D
 			aScalar = nullptr;
 			if (aForceFind == true)
 			{
-				DL_ASSERT(CU::Concatenate("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
+				DL_ASSERT(CU::Concatenate<256>("Shader: Failed to find variable: %s, in file: %s", aVariableName.c_str(), myFileName.c_str()));
 			}
 		}
 	}
 
 	void Effect::CheckVariable(const CU::String<30>& aName, const void* aVariable)
 	{
-		DL_ASSERT_EXP(aVariable != nullptr, CU::Concatenate("Variable: %s not found in shader: %s", aName.c_str(), myFileName.c_str()).c_str());
+		DL_ASSERT_EXP(aVariable != nullptr, CU::Concatenate<256>("Variable: %s not found in shader: %s", aName.c_str(), myFileName.c_str()).c_str());
 	}
 }

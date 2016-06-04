@@ -75,7 +75,7 @@
 #endif
 
 
-#include <string>
+#include "CUString.h"
 #include <fstream>
 #include "DL_Assert.h"
 #include "DL_StackWalker.h"
@@ -101,7 +101,7 @@ namespace DL_Debug
 	{
 	public:
 
-		static bool Create(std::string aFile = "DebugLogger.txt");
+		static bool Create(CU::String<256> aFile = "DebugLogger.txt");
 		static bool Destroy();
 		static Debug* GetInstance();
 
@@ -109,10 +109,9 @@ namespace DL_Debug
 		void PrintMessage(const char* aString);
 		void PrintMessageVA(const char *aFormattedString, ...);
 		void DebugMessage(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...);
-		void AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const char *aString);
-		void AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...);
-		void AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString);
-		void AssertMessage(const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString);
+		void AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aFormattedString, ...);
+		void AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aString);
+		void AssertMessage(const char *aFileName, int aLine, const char *aFunctionName, const CU::String<256>& aString);
 		void ShowMessageBox(HWND aHwnd, LPCSTR aText, LPCSTR aTitle, UINT aType);
 
 		void ActivateFilterLog(const eFilterLog aFilter);
@@ -122,6 +121,6 @@ namespace DL_Debug
 		~Debug();
 		static Debug* ourInstance;
 		std::ofstream myDebugFile;
-		std::unordered_map<eFilterLog, std::pair<bool, std::string>> myFilterLogStatus;
+		std::unordered_map<eFilterLog, std::pair<bool, CU::String<256>>> myFilterLogStatus;
 	};
 }

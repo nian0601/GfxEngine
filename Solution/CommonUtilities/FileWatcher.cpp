@@ -32,13 +32,13 @@ namespace CU
 
 		myFileChanged.swap(myFileChangedThreaded);
 
-		for (std::string& theString : myFileChanged)
+		for (CU::String<128>& theString : myFileChanged)
 		{
-			std::string directoryOfFile(theString);
-			directoryOfFile = directoryOfFile.substr(0, directoryOfFile.find_last_of("\\/"));
+			CU::String<128> directoryOfFile(theString);
+			directoryOfFile = directoryOfFile.SubStr(0, directoryOfFile.RFind("\\/"));
 
-			std::string theFile(theString);
-			theFile = theFile.substr(theFile.find_last_of("\\/") + 1, theFile.size());
+			CU::String<128> theFile(theString);
+			theFile = theFile.SubStr(theFile.RFind("\\/") + 1, theFile.Size());
 
 			std::vector<callback_function_file> callbacks = myCallbacks[theFile];
 			for (unsigned int i = 0; i < callbacks.size(); i++)
@@ -56,7 +56,7 @@ namespace CU
 
 	}
 
-	void FileWatcher::UpdateChanges(const std::string& aDir)
+	void FileWatcher::UpdateChanges(const CU::String<128>& aDir)
 	{
 		const DWORD timeOut = 1000;
 		while (!myShouldEndThread)
@@ -76,7 +76,7 @@ namespace CU
 		myThreadIsDone = true;
 	}
 
-	void FileWatcher::OnFolderChange(const std::string& aDir)
+	void FileWatcher::OnFolderChange(const CU::String<128>& aDir)
 	{
 		std::vector<WIN32_FIND_DATA> currentFolderFiles = GetAllFilesInFolder(aDir);
 		std::vector<WIN32_FIND_DATA>& savedFolderFiles = myFolders[aDir];
@@ -85,7 +85,7 @@ namespace CU
 		{
 			for (WIN32_FIND_DATA& savedFile : savedFolderFiles)
 			{
-				if (std::string(currentFile.cFileName).compare(savedFile.cFileName) == 0)
+				if (strcmp(currentFile.cFileName, savedFile.cFileName) == 0)
 				{
 					ULARGE_INTEGER currentFileTime;
 					SYSTEMTIME currentFileTimeSystem;
@@ -103,12 +103,12 @@ namespace CU
 
 					if (currentFileTime64 != savedFileTime64)
 					{
-						std::string fileThatChangedPath = aDir + "/" + std::string(currentFile.cFileName);
-						bool isDependency = myDependencies.find(fileThatChangedPath) != myDependencies.end();
+						CU::String<128> fileThatChangedPath = aDir + "/" + CU::String<128>(currentFile.cFileName);
+						bool isDependency = myDependencies.KeyExists(fileThatChangedPath);
 						if (isDependency)
 						{
-							std::vector<std::string>& deps = myDependencies[fileThatChangedPath];
-							for (std::string& file : deps)
+							const std::vector<CU::String<128>>& deps = myDependencies[fileThatChangedPath];
+							for (const CU::String<128>& file : deps)
 							{
 								OnFileChange(file);
 							}
@@ -128,11 +128,11 @@ namespace CU
 		}
 	}
 
-	void FileWatcher::OnFileChange(std::string& aFile)
+	void FileWatcher::OnFileChange(const CU::String<128>& aFile)
 	{
 		for (unsigned int i = 0; i < myFileChangedThreaded.size(); i++)
 		{
-			if (myFileChangedThreaded[i].compare(aFile) == 0)
+			if (myFileChangedThreaded[i] == aFile)
 			{
 				return;
 			}
@@ -141,31 +141,33 @@ namespace CU
 
 	}
 
-	bool FileWatcher::WatchFileChangeWithDependencies(std::string aFile, callback_function_file aFunctionToCallOnChange)
+	bool FileWatcher::WatchFileChangeWithDependencies(const CU::String<128>& aFile, callback_function_file aFunctionToCallOnChange)
 	{
-		std::ifstream stream(aFile);
+		std::ifstream stream(aFile.c_str());
 		if (!stream.good())
 		{
 			stream.close();
 			return false;
 		}
 
-		std::string directoryOfFile(aFile);
-		directoryOfFile = directoryOfFile.substr(0, directoryOfFile.find_last_of("\\/"));
+		CU::String<128> directoryOfFile(aFile);
+		directoryOfFile = directoryOfFile.SubStr(0, directoryOfFile.RFind("\\/"));
 
-		std::string line;
-		const std::string includeString = "include";
-		while (getline(stream, line))
+		char fileLine[128];
+		const CU::String<128> includeString = "include";
+		while (stream.getline(fileLine, 128))
 		{
-			std::size_t found = line.find(includeString);
-			if (found != std::string::npos)
+			CU::String<128> line(fileLine);
+			int found = line.Find(includeString);
+			if (found != line.NotFound)
 			{
-				std::string foundFile(line);
-				foundFile = foundFile.substr(foundFile.find_first_of("\"") + 1, foundFile.size());
-				foundFile = foundFile.substr(0, foundFile.find_last_of("\""));
-				if (!foundFile.empty())
+				CU::String<128> foundFile(line);
+				foundFile = foundFile.SubStr(foundFile.Find("\"") + 1, foundFile.Size());
+				foundFile = foundFile.SubStr(0, foundFile.RFind("\""));
+
+				if (!foundFile.Empty())
 				{
-					std::string depFile = directoryOfFile + "/" + foundFile;
+					CU::String<128> depFile = directoryOfFile + "/" + foundFile;
 					WatchFileChange(depFile, aFunctionToCallOnChange);
 					myDependencies[depFile].push_back(aFile);
 				}
@@ -176,9 +178,9 @@ namespace CU
 		return WatchFileChange(aFile, aFunctionToCallOnChange);
 	}
 
-	bool FileWatcher::WatchFileChange(std::string aFile, callback_function_file aFunctionToCallOnChange)
+	bool FileWatcher::WatchFileChange(const CU::String<128>& aFile, callback_function_file aFunctionToCallOnChange)
 	{
-		std::ifstream stream(aFile);
+		std::ifstream stream(aFile.c_str());
 		if (!stream.good())
 		{
 			stream.close();
@@ -186,20 +188,19 @@ namespace CU
 		}
 		stream.close();
 
-		std::string directoryOfFile(aFile);
-		directoryOfFile = directoryOfFile.substr(0, directoryOfFile.find_last_of("\\/"));
+		CU::String<128> directoryOfFile(aFile);
+		directoryOfFile = directoryOfFile.SubStr(0, directoryOfFile.RFind("\\/"));
 
-		std::string theFile(aFile);
-		theFile = theFile.substr(theFile.find_last_of("\\/") + 1, theFile.size());
+		CU::String<128> theFile(aFile);
+		theFile = theFile.SubStr(theFile.RFind("\\/") + 1, theFile.Size());
 
 		myCallbacks[theFile].push_back(aFunctionToCallOnChange);
 		return WatchDirectory(directoryOfFile);
 	}
 
-	bool FileWatcher::WatchDirectory(const std::string& aDir)
+	bool FileWatcher::WatchDirectory(const CU::String<128>& aDir)
 	{
-		FolderMap::iterator iter = myFolders.find(aDir);
-		if (iter != myFolders.end())
+		if (myFolders.KeyExists(aDir) == true)
 		{
 			//Already in our watch list
 			return true;
@@ -211,13 +212,14 @@ namespace CU
 		return true;
 	}
 
-	std::vector<WIN32_FIND_DATA> FileWatcher::GetAllFilesInFolder(std::string aDir)
+	std::vector<WIN32_FIND_DATA> FileWatcher::GetAllFilesInFolder(const CU::String<128>& aDir)
 	{
 		std::vector<WIN32_FIND_DATA> filesInFolder;
-		aDir += "/*.*";
+		CU::String<128> searchDir(aDir);
+		searchDir += "/*.*";
 		WIN32_FIND_DATA fd;
 
-		HANDLE hFind = ::FindFirstFile(aDir.c_str(), &fd);
+		HANDLE hFind = ::FindFirstFile(searchDir.c_str(), &fd);
 		if (hFind != INVALID_HANDLE_VALUE) {
 			do {
 				// read all (real) files in current folder

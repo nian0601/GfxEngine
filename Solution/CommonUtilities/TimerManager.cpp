@@ -31,7 +31,7 @@ void CU::TimerManager::Update()
 	myLastTime += time;
 }
 
-void CU::TimerManager::StartTimer(const std::string& aName)
+void CU::TimerManager::StartTimer(const CU::String<80>& aName)
 {
 	LARGE_INTEGER current;
 	QueryPerformanceCounter(&current);
@@ -39,9 +39,9 @@ void CU::TimerManager::StartTimer(const std::string& aName)
 	myTimers[aName] = current.QuadPart * 1000000 / myFrequency;
 }
 
-CU::Time CU::TimerManager::StopTimer(const std::string& aName)
+CU::Time CU::TimerManager::StopTimer(const CU::String<80>& aName)
 {
-	if (myTimers.find(aName) == myTimers.end())
+	if (myTimers.KeyExists(aName) == false)
 		return Time(0, 0);
 
 	LARGE_INTEGER current;

@@ -36,10 +36,6 @@ namespace CU
 	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
 	Map<Key, Value, StartSize, BucketSize>::Map()
 	{
-		/*const std::type_info* info = &typeid(Key);
-
-		assert(typeid(std::string) == *info && "[CUMap]: Tried to create a CUMap with a non-string key, we cant do that because reasons.");
-*/
 		myBuckets.Reserve(StartSize);
 
 		for (int i = 0; i < myBuckets.Size(); ++i)

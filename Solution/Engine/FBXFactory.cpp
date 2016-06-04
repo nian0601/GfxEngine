@@ -37,7 +37,7 @@ namespace Easy3D
 			return myModels[aFilePath];
 		}
 
-		CU::GrowingArray<std::string> errors(16);
+		CU::GrowingArray<CU::String<80>> errors(16);
 		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath.c_str(), errors);
 
 		Model* returnModel = CreateModel(fbxModelData);
@@ -153,7 +153,7 @@ namespace Easy3D
 		{
 			auto& currentTexture = someData->myTextures[i];
 
-			std::string resourceName;
+			CU::String<80> resourceName;
 			if (currentTexture.myType == ALBEDO)
 			{
 				resourceName = "AlbedoTexture";
@@ -179,7 +179,10 @@ namespace Easy3D
 				resourceName = "EmissiveTexture";
 			}
 
-			aSurface.AddTexture(currentTexture.myFileName.c_str(), resourceName.c_str());
+			int dataIndex = currentTexture.myFileName.RFind("Data\\");
+			CU::String<256> fromData = currentTexture.myFileName.SubStr(dataIndex, currentTexture.myFileName.Size());
+
+			aSurface.AddTexture(fromData.c_str(), resourceName.c_str());
 		}
 	}
 }

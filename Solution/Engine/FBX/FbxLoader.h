@@ -1,8 +1,8 @@
 #pragma once
 
+#include <CUString.h>
 #include <fbxsdk.h>
 #include <vector>
-#include <string>
 #include <GrowingArray.h>
 #include <Vector.h>
 #include <Matrix44.h>
@@ -24,7 +24,7 @@ enum FBXTextureType
 
 struct TextureInfo
 {
-	std::string myFileName;
+	CU::String<256> myFileName;
 	FBXTextureType myType;
 };
 
@@ -36,7 +36,7 @@ struct KeyFrame
 
 struct Bone 
 {
-	std::string myName;
+	CU::String<80> myName;
 	float myAnimationTime;
 	int myId;
 	CU::Matrix44<float> myBaseOrientation;
@@ -47,7 +47,7 @@ struct Bone
 
 struct AnimationData
 {
-	std::string myName;
+	CU::String<80> myName;
 
 	CU::Matrix44<float> myBindMatrix;
 	int myRootBone;
@@ -207,7 +207,7 @@ public:
 	FBXLoader();
 	~FBXLoader();
 
-	FbxModelData* loadModel(const char* aFile, CU::GrowingArray<std::string>& someOutErrors);
+	FbxModelData* loadModel(const char* aFile, CU::GrowingArray<CU::String<80>>& someOutErrors);
 private:
 	FbxScene* LoadScene(const char* aFile);
 	FbxModelData* myLoadingModel;

@@ -6,9 +6,9 @@
 
 #pragma warning(disable : 4239 4244)
 
-bool CheckFileExists(const std::string& aFile)
+bool CheckFileExists(const CU::String<256>& aFile)
 {
-	std::ifstream stream(aFile);
+	std::ifstream stream(aFile.c_str());
 	bool found = false;
 	if (stream.good())
 	{
@@ -44,7 +44,9 @@ FbxScene* FBXLoader::LoadScene(const char* aFile)
 	{
 		printf("Call to FbxImporter::Initialize() failed.\n");
 		printf("Error returned: %s\n\n", lImporter->GetStatus().GetErrorString());
-		std::string errorMessage = "Could not find fbx file: " + std::string(aFile);
+		CU::String<80> errorMessage = "Could not find fbx file: ";
+		errorMessage += aFile;
+
 		DL_PRINT(errorMessage.c_str());
 		MessageBoxA(nullptr, errorMessage.c_str(), "ERROR", 0);
 		//DL_ASSERT("Fbx file not found. Check the debug logger!");
@@ -105,7 +107,7 @@ FbxAMatrix GetRotaionPivot(FbxNode* pNode)
 FbxDouble3 GetMaterialProperty(const FbxSurfaceMaterial * pMaterial,
 	const char * pPropertyName,
 	const char * pFactorPropertyName,
-	std::string & pTextureName)
+	CU::String<256> & pTextureName)
 {
 	FbxDouble3 lResult(0, 0, 0);
 	const FbxProperty lProperty = pMaterial->FindProperty(pPropertyName);
@@ -328,7 +330,7 @@ void ComputeLinearDeformation(FbxAMatrix& pGlobalPosition,
 			if (!lCluster->GetLink())
 				continue;
 
-			std::string boneName = lCluster->GetLink()->GetName();
+			CU::String<80> boneName = lCluster->GetLink()->GetName();
 
 			int boneId = (int)lCluster->GetLink()->GetUserDataPtr();
 			FbxAMatrix lVertexTransformMatrix;
@@ -428,7 +430,7 @@ void ComputeLinearDeformation(FbxAMatrix& pGlobalPosition,
 }
 
 
-bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, AnimationData* aAnimation, CU::GrowingArray<std::string>& someOutErrors)
+bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, AnimationData* aAnimation, CU::GrowingArray<CU::String<80>>& someOutErrors)
 {
 	FbxMesh* mesh = aNode->GetMesh();
 	if (mesh == nullptr || !aNode)
@@ -511,44 +513,25 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 			TextureInfo albedoInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sDiffuse, nullptr, albedoInfo.myFileName);
 			albedoInfo.myType = FBXTextureType::ALBEDO;
-			if (albedoInfo.myFileName.empty() == false)
+			if (albedoInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(albedoInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", albedoInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", albedoInfo.myFileName.c_str(), aFilePath));
 				}
 
 				someData->myTextures.push_back(albedoInfo);
-
-				int index = albedoInfo.myFileName.find("_neutral.dds");
-				if (index != std::string::npos)
-				{
-					std::string playerAlbedo(albedoInfo.myFileName.begin(), albedoInfo.myFileName.begin() + index);
-					playerAlbedo += "_player.dds";
-
-					std::string enemyAlbedo(albedoInfo.myFileName.begin(), albedoInfo.myFileName.begin() + index);
-					enemyAlbedo += "_enemy.dds";
-
-					if (CheckFileExists(playerAlbedo) == false)
-					{
-						someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", playerAlbedo.c_str(), aFilePath));
-					}
-					if (CheckFileExists(enemyAlbedo) == false)
-					{
-						someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", enemyAlbedo.c_str(), aFilePath));
-					}
-				}
 			}
 
 			TextureInfo normalInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sNormalMap, nullptr, normalInfo.myFileName);
 			hasNormalMap = false;
 			normalInfo.myType = FBXTextureType::NORMAL;
-			if (normalInfo.myFileName.empty() == false)
+			if (normalInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(normalInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", normalInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", normalInfo.myFileName.c_str(), aFilePath));
 				}
 
 				someData->myTextures.push_back(normalInfo);
@@ -558,11 +541,11 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 			TextureInfo roughnessInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sSpecular, nullptr, roughnessInfo.myFileName);
 			roughnessInfo.myType = FBXTextureType::ROUGHNESS;
-			if (roughnessInfo.myFileName.empty() == false)
+			if (roughnessInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(roughnessInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", roughnessInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", roughnessInfo.myFileName.c_str(), aFilePath));
 				}
 
 				someData->myTextures.push_back(roughnessInfo);
@@ -571,11 +554,11 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 			TextureInfo metalnessInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sReflection, nullptr, metalnessInfo.myFileName);
 			metalnessInfo.myType = FBXTextureType::METALNESS;
-			if (metalnessInfo.myFileName.empty() == false)
+			if (metalnessInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(metalnessInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", metalnessInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", metalnessInfo.myFileName.c_str(), aFilePath));
 				}
 			
 				someData->myTextures.push_back(metalnessInfo);
@@ -584,11 +567,11 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 			TextureInfo ambientInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sAmbient, nullptr, ambientInfo.myFileName);
 			ambientInfo.myType = FBXTextureType::AMBIENT;
-			if (ambientInfo.myFileName.empty() == false)
+			if (ambientInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(ambientInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", ambientInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", ambientInfo.myFileName.c_str(), aFilePath));
 				}
 				
 				someData->myTextures.push_back(ambientInfo);
@@ -597,11 +580,11 @@ bool FillData(const char* aFilePath, ModelData* someData, FbxNode* aNode, Animat
 			TextureInfo emissiveInfo;
 			GetMaterialProperty(lMaterial, FbxSurfaceMaterial::sEmissive, nullptr, emissiveInfo.myFileName);
 			emissiveInfo.myType = FBXTextureType::EMISSIVE;
-			if (emissiveInfo.myFileName.empty() == false)
+			if (emissiveInfo.myFileName.Empty() == false)
 			{
 				if (CheckFileExists(emissiveInfo.myFileName) == false)
 				{
-					someOutErrors.Add(CU::Concatenate("Failed to find texture: %s (FBX: %s)", emissiveInfo.myFileName.c_str(), aFilePath));
+					someOutErrors.Add(CU::Concatenate<80>("Failed to find texture: %s (FBX: %s)", emissiveInfo.myFileName.c_str(), aFilePath));
 				}
 
 				someData->myTextures.push_back(emissiveInfo);
@@ -1370,7 +1353,7 @@ CU::Matrix44<float> GetAnimationMatrix(FbxNode* aNode, FbxAnimLayer* aCurrentAni
 }
 
 void LoadAnimation(const char* aFilePath, AnimationData& aAnimation, FbxNode* aNode, FbxAMatrix& aParentOrientation, FbxPose* aPose, FbxAnimLayer* aCurrentAnimLayer, int parentBone
-	, CU::GrowingArray<std::string>& someOutErrors)
+	, CU::GrowingArray<CU::String<80>>& someOutErrors)
 {
 	FbxAMatrix lGlobalPosition = GetGlobalPosition(aNode, 0.0f, aPose, &aParentOrientation);
 	FbxNodeAttribute* lNodeAttribute = aNode->GetNodeAttribute();
@@ -1488,7 +1471,7 @@ void SetLodGroup(FbxModelData* aModel, FbxNode* aNode)
 }
 
 void LoadNodeRecursive(const char* aFilePath, FbxModelData* aModel, AnimationData& aAnimation, FbxNode* aNode, FbxAMatrix& aParentOrientation
-	, FbxPose* aPose, FbxAnimLayer* aCurrentAnimLayer, int parentBone, CU::GrowingArray<std::string>& someOutErrors)
+	, FbxPose* aPose, FbxAnimLayer* aCurrentAnimLayer, int parentBone, CU::GrowingArray<CU::String<80>>& someOutErrors)
 {
 	parentBone;
 
@@ -1612,7 +1595,7 @@ void LoadNodeRecursive(const char* aFilePath, FbxModelData* aModel, AnimationDat
 	}
 }
 
-FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<std::string>& someOutErrors)
+FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<CU::String<80>>& someOutErrors)
 {
 	//DL_PRINT("FBXLoader Creating ModelData...");
 	myLoadingModel = new FbxModelData;
@@ -1641,8 +1624,8 @@ FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<std::stri
 			bool lStatus = false;
 			lStatus;
 
-			std::string str = lFileTexture->GetFileName();
-			str = CU::GetSubString(str, "Data", false);
+			CU::String<256> str = lFileTexture->GetFileName();
+			str = CU::GetSubString<256>(str, "Data", false);
 
 			TextureInfo info;
 			info.myFileName = str;
@@ -1680,13 +1663,8 @@ FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<std::stri
 	LoadNodeRecursive(aFile, myLoadingModel, *myLoadingModel->myAnimation, scene->GetRootNode(), FbxAMatrix(), pose, lCurrentAnimLayer, -1
 		, someOutErrors);
 
-	//DL_PRINT("Success!");
 
-
-	/*std::string xmlPath(aFile, strlen(aFile) - 4);
-	xmlPath += ".xml";*/
-
-	std::string xmlPath = CU::GetGeneratedDataFolderFilePath(aFile, "xml");
+	CU::String<80> xmlPath = CU::GetGeneratedDataFolderFilePath(aFile, "xml");
 	if (CU::FileExists(xmlPath))
 	{
 		XMLReader reader;
