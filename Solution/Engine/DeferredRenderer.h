@@ -9,7 +9,7 @@ namespace Easy3D
 	class Texture;
 	class Renderer;
 
-	class DeferredRenderer : public FullscreenQuad
+	class DeferredRenderer
 	{
 	public:
 		DeferredRenderer();
@@ -23,7 +23,7 @@ namespace Easy3D
 		void RenderToGBuffer(Scene* aScene);
 		void RenderAmbientPass();
 
-		Effect* myFullscreenEffect;
+		EffectID myFullscreenEffect;
 		GBuffer* myGBuffer;
 		Texture* myCubemap;
 

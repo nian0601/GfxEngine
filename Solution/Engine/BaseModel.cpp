@@ -3,6 +3,7 @@
 #include <d3dx11effect.h>
 #include <d3d11.h>
 #include "GfxStructs.h"
+#include "GPUContainer.h"
 
 namespace Easy3D
 {
@@ -45,10 +46,12 @@ namespace Easy3D
 		}
 	}
 
-	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect* aEffect)
+	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect)
 	{
+		Effect* effect = GPUContainer::GetInstance()->GetEffect(aEffect);
+
 		D3DX11_PASS_DESC passDesc;
-		aEffect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
+		effect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myData.myInputLayout);
 		if (FAILED(hr) != S_OK)

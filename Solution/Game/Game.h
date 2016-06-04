@@ -34,8 +34,5 @@ private:
 	CU::GrowingArray<Easy3D::Instance*> myInstances;
 
 	CU::TimerManager* myTimerManager;
-
-	float myMetalness;
-	float myRoughness;
 };
 

@@ -62,6 +62,7 @@
     <ClInclude Include="ModelData.h">
       <Filter>Models</Filter>
     </ClInclude>
+    <ClInclude Include="EngineTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />

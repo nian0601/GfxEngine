@@ -26,7 +26,7 @@ namespace Easy3D
 		myChildTransforms.Add(aModel->myOrientation);
 	}
 
-	void Model::Init(Effect* aEffect)
+	void Model::Init(EffectID aEffect)
 	{
 		if (myIsNullObject == false)
 		{
@@ -52,7 +52,7 @@ namespace Easy3D
 		}
 	}
 
-	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect)
+	void Model::InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, EffectID aEffect)
 	{
 		myIsNullObject = false;
 

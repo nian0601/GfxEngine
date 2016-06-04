@@ -27,7 +27,7 @@ namespace Easy3D
 		FBXFactory();
 		~FBXFactory();
 
-		Model* LoadModel(const CU::String<50>& aFilePath, Effect* aEffect) override;
+		Model* LoadModel(const CU::String<50>& aFilePath, EffectID aEffect) override;
 		
 	private:
 		Model* CreateModel(FBX::FbxModelData* someModelData);

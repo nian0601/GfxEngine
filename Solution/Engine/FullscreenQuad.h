@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseModel.h"
+#include "EngineTypes.h"
 
 namespace Easy3D
 {
@@ -11,9 +12,9 @@ namespace Easy3D
 		FullscreenQuad();
 		~FullscreenQuad();
 
-		void InitFullscreenQuad(Effect* aEffect);
+		void InitFullscreenQuad(EffectID aEffect);
 		void ActivateFullscreenQuad();
-		void RenderFullscreenQuad(Effect* aEffect, const CU::String<30>& aTechnique);
+		void RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique);
 	protected:
 	};
 }

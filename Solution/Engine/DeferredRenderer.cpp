@@ -14,12 +14,11 @@ namespace Easy3D
 	{
 		myGBuffer = new GBuffer();
 
-		myFullscreenEffect = GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen.fx");
-		InitFullscreenQuad(myFullscreenEffect);
+		myFullscreenEffect = GPUContainer::GetInstance()->LoadEffect("Data/Shader/S_effect_fullscreen.fx");
 
 		myCubemap = GPUContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
 
-		myRenderer = new Renderer();
+		myRenderer = new Renderer(myFullscreenEffect);
 	}
 
 
@@ -34,7 +33,6 @@ namespace Easy3D
 		RenderToGBuffer(aScene);
 		Engine::GetInstance()->SetBackbufferAsRenderTarget();
 
-		ActivateFullscreenQuad();
 		RenderAmbientPass();
 	}
 

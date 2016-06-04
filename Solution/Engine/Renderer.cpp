@@ -10,9 +10,9 @@
 
 namespace Easy3D
 {
-	Renderer::Renderer()
+	Renderer::Renderer(EffectID aFullscreenEffect)
 	{
-		InitFullscreenQuad(GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_fullscreen.fx"));
+		InitFullscreenQuad(aFullscreenEffect);
 	}
 
 
@@ -20,7 +20,7 @@ namespace Easy3D
 	{
 	}
 
-	void Renderer::SetEffect(Effect* aEffect)
+	void Renderer::SetEffect(EffectID aEffect)
 	{
 		myCurrentEffect = aEffect;
 	}
@@ -100,19 +100,22 @@ namespace Easy3D
 		context->IASetIndexBuffer(aData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(aData.myIndexBuffer->myIndexBufferFormat), byteOffset);
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(aData.myPrimitiveTopology));
 
+		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
 		D3DX11_TECHNIQUE_DESC techDesc;
-		myCurrentEffect->GetTechnique(aTechnique)->GetDesc(&techDesc);
+		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
-			myCurrentEffect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
+			effect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
 			context->DrawIndexed(aData.myIndexData->myNumberOfIndices, 0, 0);
 		}
 	}
 
 	ID3DX11EffectVariable* Renderer::GetEffectVariable(const CU::String<50>& aName)
 	{
-		DL_ASSERT_EXP(myCurrentEffect != nullptr, "Cant GetEffectVariable without an Effect");
-		ID3DX11EffectVariable* var = myCurrentEffect->GetEffect()->GetVariableByName(aName.c_str());
+		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
+
+		DL_ASSERT_EXP(effect != nullptr, "Cant GetEffectVariable without an Effect");
+		ID3DX11EffectVariable* var = effect->GetEffect()->GetVariableByName(aName.c_str());
 		DL_ASSERT_EXP(var->IsValid() == TRUE, CU::Concatenate<256>("ShaderVar: %s not found", aName.c_str()));
 		return var;
 	}

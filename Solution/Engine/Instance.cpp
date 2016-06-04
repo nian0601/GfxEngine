@@ -9,7 +9,7 @@
 
 namespace Easy3D
 {
-	Instance::Instance(ModelProxy& aModel, Effect& aEffect)
+	Instance::Instance(ModelProxy& aModel, EffectID aEffect)
 		: myModel(aModel)
 		, myEffect(aEffect)
 	{
@@ -24,7 +24,7 @@ namespace Easy3D
 	{
 		if (myModel.IsLoaded() == true)
 		{
-			aRenderer->SetEffect(&myEffect);
+			aRenderer->SetEffect(myEffect);
 			aRenderer->SetMatrix("View", aCamera.GetView());
 			aRenderer->SetMatrix("Projection", aCamera.GetProjection());
 			aRenderer->SetMatrix("World", myOrientation);

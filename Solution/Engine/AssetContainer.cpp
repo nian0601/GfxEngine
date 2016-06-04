@@ -29,7 +29,7 @@ namespace Easy3D
 
 	Instance* AssetContainer::RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const CU::String<50>& aEffectPath)
 	{
-		Effect* effect = GPUContainer::GetInstance()->RequestEffect(aEffectPath);
+		EffectID effect = GPUContainer::GetInstance()->LoadEffect(aEffectPath);
 
 		myNonDGFXModels.Add(new Model());
 		myNonDGFXModels.GetLast()->InitCube(aSize, aColor, effect);
@@ -37,18 +37,18 @@ namespace Easy3D
 		ModelProxy* proxy = new ModelProxy();
 		proxy->myModel = myNonDGFXModels.GetLast();
 
-		Instance* instance = new Instance(*proxy, *effect);
+		Instance* instance = new Instance(*proxy, effect);
 		return instance;
 	}
 
 	Instance* AssetContainer::RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
 	{
-		Effect* effect = GPUContainer::GetInstance()->RequestEffect(aEffectPath);
+		EffectID effect = GPUContainer::GetInstance()->LoadEffect(aEffectPath);
 
 		ModelProxy* proxy = new ModelProxy();
 		proxy->myModel = myModelFactory->LoadModel(aModelPath, effect);
 
-		Instance* instance = new Instance(*proxy, *effect);
+		Instance* instance = new Instance(*proxy, effect);
 		return instance;
 	}
 

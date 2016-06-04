@@ -23,20 +23,33 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Easy3D::Effect* GPUContainer::RequestEffect(const CU::String<50>& aFilePath)
+	EffectID GPUContainer::LoadEffect(const CU::String<50>& aFilePath)
 	{
-		if (myEffects.KeyExists(aFilePath) == false)
+		if (myEffectsID.KeyExists(aFilePath) == false)
 		{
 			Effect* effect = new Effect();
 			effect->Init(aFilePath);
 
-			myEffects[aFilePath] = effect;
+			myEffects[myNextEffectID] = effect;
+			myEffectsID[aFilePath] = myNextEffectID;
+			++myNextEffectID;
 		}
 
-		return myEffects[aFilePath];
+		return myEffectsID[aFilePath];
 	}
 
-	Easy3D::Texture* GPUContainer::RequestTexture(const CU::String<50>& aFilePath)
+	Effect* GPUContainer::GetEffect(EffectID aID)
+	{
+		if (myEffects.KeyExists(aID) == true)
+		{
+			return myEffects[aID];
+		}
+
+		DL_ASSERT("Tried to Get an Invalid effect");
+		return nullptr;
+	}
+
+	Texture* GPUContainer::RequestTexture(const CU::String<50>& aFilePath)
 	{
 		if (myTextures.KeyExists(aFilePath) == false)
 		{

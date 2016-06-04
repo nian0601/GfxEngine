@@ -3,6 +3,7 @@
 #include <d3dx11effect.h>
 #include "FullscreenQuad.h"
 #include "GfxStructs.h"
+#include "GPUContainer.h"
 
 
 namespace Easy3D
@@ -16,7 +17,7 @@ namespace Easy3D
 	{
 	}
 
-	void FullscreenQuad::InitFullscreenQuad(Effect* aEffect)
+	void FullscreenQuad::InitFullscreenQuad(EffectID aEffect)
 	{
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
@@ -62,15 +63,16 @@ namespace Easy3D
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myData.myPrimitiveTopology));
 	}
 
-	void FullscreenQuad::RenderFullscreenQuad(Effect* aEffect, const CU::String<30>& aTechnique)
+	void FullscreenQuad::RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique)
 	{
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
+		Effect* effect = GPUContainer::GetInstance()->GetEffect(aEffect);
 
 		D3DX11_TECHNIQUE_DESC techDesc;
-		aEffect->GetTechnique(aTechnique)->GetDesc(&techDesc);
+		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
-			aEffect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
+			effect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
 			context->DrawIndexed(6, 0, 0);
 		}
 	}

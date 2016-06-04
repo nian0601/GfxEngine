@@ -23,7 +23,6 @@ Game::Game()
 	myInstances.Init(16);
 
 	myInstances.Add(Easy3D::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
-	//myInstances.Add(Frost::AssetContainer::GetInstance()->RequestModel("Data/Model/Sphere/Sphere.fbx", "Data/Shader/S_effect_pbl_no_textures.fx"));
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
 	myScene = new Easy3D::Scene();
@@ -36,8 +35,6 @@ Game::Game()
 
 	myTimerManager = new CU::TimerManager();
 
-	myMetalness = 0.f;
-	myRoughness = 0.f;
 
 	myRenderer = new Easy3D::DeferredRenderer();
 }
@@ -66,33 +63,6 @@ bool Game::Update()
 	{
 		return false;
 	}
-
-	if (input->KeyIsPressed(DIK_1))
-	{
-		myMetalness -= 0.4f * delta;
-	}
-	if (input->KeyIsPressed(DIK_2))
-	{
-		myMetalness += 0.4f * delta;
-	}
-	if (input->KeyIsPressed(DIK_3))
-	{
-		myRoughness -= 0.4f * delta;
-	}
-	if (input->KeyIsPressed(DIK_4))
-	{
-		myRoughness += 0.4f * delta;
-	}
-
-	myMetalness = max(myMetalness, 0.f);
-	myMetalness = min(1.f, myMetalness);
-	myRoughness = max(myRoughness, 0.f);
-	myRoughness = min(1.f, myRoughness);
-
-	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetMetalness(myMetalness);
-	//Frost::EffectContainer::GetInstance()->Get("Data/Shader/S_effect_pbl_no_textures.fx")->SetRoughness(myRoughness);
-	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetMetalness(myMetalness);
-	Easy3D::GPUContainer::GetInstance()->RequestEffect("Data/Shader/S_effect_model.fx")->SetRoughness(myRoughness);
 
 	return true;
 }

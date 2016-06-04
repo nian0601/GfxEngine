@@ -16,10 +16,10 @@ namespace Easy3D
 	class Renderer : public FullscreenQuad
 	{
 	public:
-		Renderer();
+		Renderer(EffectID aFullscreenEffect);
 		~Renderer();
 
-		void SetEffect(Effect* aEffect);
+		void SetEffect(EffectID aEffect);
 		void SetTexture(const CU::String<50>& aName, Texture* aTexture);
 		void SetMatrix(const CU::String<50>& aName, const CU::Matrix44<float>& aMatrix);
 		void SetVector(const CU::String<50>& aName, const CU::Vector3<float>& aVector);
@@ -37,7 +37,7 @@ namespace Easy3D
 	private:
 		ID3DX11EffectVariable* GetEffectVariable(const CU::String<50>& aName);
 
-		Effect* myCurrentEffect;
+		EffectID myCurrentEffect;
 
 		int myRenderTargetCount;
 		ID3D11RenderTargetView* myRenderTargets[4];

@@ -4,14 +4,13 @@
 namespace Easy3D
 {
 	class Camera;
-	class Effect;
 	class ModelProxy;
 	class Renderer;
 
 	class Instance
 	{
 	public:
-		Instance(ModelProxy& aModel, Effect& aEffect);
+		Instance(ModelProxy& aModel, EffectID aEffect);
 		~Instance();
 
 		void Render(Renderer* aRenderer, const Camera& aCamera);
@@ -24,6 +23,6 @@ namespace Easy3D
 
 		CU::Matrix44<float> myOrientation;
 		ModelProxy& myModel;
-		Effect& myEffect;
+		EffectID myEffect;
 	};
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "EngineTypes.h"
 #include <GrowingArray.h>
 #include "ModelData.h"
 
@@ -19,7 +20,7 @@ namespace Easy3D
 		const ModelData& GetData() const;
 
 	protected:
-		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect* aEffect);
+		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect);
 		void InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage);
 		void InitIndexBuffer();
 
