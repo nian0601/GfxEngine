@@ -15,42 +15,12 @@ DL_Debug::Debug* DL_Debug::Debug::ourInstance = nullptr;
 
 DL_Debug::Debug::Debug()
 {
-	std::pair<bool, CU::String<256>> logSetting;
-	logSetting.first = false;
-
-	logSetting.second = "Engine";
-	myFilterLogStatus[eFilterLog::ENGINE] = logSetting;
-
-	logSetting.second = "Game";
-	myFilterLogStatus[eFilterLog::GAME] = logSetting;
-
-	logSetting.second = "Resource";
-	myFilterLogStatus[eFilterLog::RESOURCE] = logSetting;
-
-	logSetting.second = "DirectX";
-	myFilterLogStatus[eFilterLog::DIRECTX] = logSetting;
-
-	logSetting.second = "FBX";
-	myFilterLogStatus[eFilterLog::FBX] = logSetting;
-
-	logSetting.second = "FunctionTimer";
-	myFilterLogStatus[eFilterLog::FUNCTION_TIMER] = logSetting;
-
-	logSetting.second = "Entity";
-	myFilterLogStatus[eFilterLog::ENTITY] = logSetting;
-
-	logSetting.second = "PowerUp";
-	myFilterLogStatus[eFilterLog::POWERUP_L] = logSetting;
-
-	logSetting.second = "Component";
-	myFilterLogStatus[eFilterLog::COMPONENT] = logSetting;
 }
 
 
 DL_Debug::Debug::~Debug()
 {
 }
-
 bool DL_Debug::Debug::Create(CU::String<256> aFile)
 {
 	assert(ourInstance == nullptr && "Debugobject already created");
@@ -95,50 +65,6 @@ bool DL_Debug::Debug::Destroy()
 DL_Debug::Debug* DL_Debug::Debug::GetInstance()
 {
 	return(ourInstance);
-}
-
-void DL_Debug::Debug::WriteLog(const eFilterLog aFilter, const char* aFormattedString, ...)
-{
-	if (myFilterLogStatus[aFilter].first == false)
-		return;
-
-	CU::String<256> logPrefix = myFilterLogStatus[aFilter].second;
-
-
-	//Get time and store as string in buf
-	time_t now = time(0);
-	struct tm tstruct;
-	char buf[30];
-	localtime_s(&tstruct, &now);
-
-	strftime(buf, sizeof(buf), "%H:%M:%S:", &tstruct);
-
-	//Get Miliseconds and store in tStructMilli
-	struct _timeb tstructMilli;
-	char bufMilli[128];
-
-	_strtime_s(bufMilli);
-	_ftime_s(&tstructMilli);
-
-	//Get VA_ARGS and store as string in buffer
-	char buffer[4096];
-	va_list args;
-	va_start(args, aFormattedString);
-	vsprintf_s(buffer, aFormattedString, args);
-	perror(buffer);
-	va_end(args);
-
-
-	CU::String<256> output("[");
-	output += buf;
-	output += tstructMilli.millitm;
-	output += "][";
-	output += logPrefix;
-	output += "]:";
-	output += buffer;
-
-	ourInstance->myDebugFile << output.c_str() << "\n";
-	ourInstance->myDebugFile.flush();
 }
 
 void DL_Debug::Debug::PrintMessage(const char* aString)
@@ -230,34 +156,4 @@ void DL_Debug::Debug::DebugMessage(const char *aFileName, int aLine, const char 
 void DL_Debug::Debug::ShowMessageBox(HWND aHwnd, LPCSTR aText, LPCSTR aTitle, UINT aType)
 {
 	MessageBox(aHwnd, aText, aTitle, aType);
-}
-
-void DL_Debug::Debug::ActivateFilterLog(const eFilterLog aFilter)
-{
-	if (aFilter == eFilterLog::ALL)
-	{
-		for (auto it = myFilterLogStatus.begin(); it != myFilterLogStatus.end(); ++it)
-		{
-			it->second.first = true;
-		}
-	}
-	else
-	{
-		myFilterLogStatus[aFilter].first = true;
-	}
-}
-
-void DL_Debug::Debug::DeactiveFilterLog(const eFilterLog aFilter)
-{
-	if (aFilter == eFilterLog::ALL)
-	{
-		for (auto it = myFilterLogStatus.begin(); it != myFilterLogStatus.end(); ++it)
-		{
-			it->second.first = false;
-		}
-	}
-	else
-	{
-		myFilterLogStatus[aFilter].first = false;
-	}
 }
