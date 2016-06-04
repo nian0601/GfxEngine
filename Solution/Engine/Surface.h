@@ -8,6 +8,7 @@ struct ID3DX11EffectShaderResourceVariable;
 namespace Easy3D
 {
 	class Effect;
+	class Texture;
 
 	class Surface
 	{
@@ -15,15 +16,29 @@ namespace Easy3D
 		Surface();
 		~Surface();
 
-		void AddTexture(const CU::String<50>& aTeturePath, const CU::String<30>& aResourceName);
-		void GetShaderResources(Effect* aEffect);
+		void AddTexture(const CU::String<50>& aTexturePath, const CU::String<50>& aResourceName);
 
-		void Activate();
-		void Deactivate();
+		int TextureCount() const;
+		Texture* GetTexture(int aIndex) const;
+		const CU::String<50>& GetResourceName(int aIndex) const;
 
 	private:
-		CU::GrowingArray<CU::String<30>> myShaderResourceNames;
-		CU::GrowingArray<ID3D11ShaderResourceView*> myResourceViews;
-		CU::GrowingArray<ID3DX11EffectShaderResourceVariable*> myShaderVariables;
+		CU::GrowingArray<CU::String<50>> myShaderResourceNames;
+		CU::GrowingArray<Texture*> myTextures;
 	};
+
+	inline int Surface::TextureCount() const
+	{
+		return myTextures.Size();
+	}
+
+	inline Texture* Surface::GetTexture(int aIndex) const
+	{
+		return myTextures[aIndex];
+	}
+
+	inline const CU::String<50>& Surface::GetResourceName(int aIndex) const
+	{
+		return myShaderResourceNames[aIndex];
+	}
 }

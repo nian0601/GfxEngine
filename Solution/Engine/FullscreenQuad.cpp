@@ -48,16 +48,18 @@ namespace Easy3D
 
 		SetupVertexBuffer(vertices.Size(), reinterpret_cast<char*>(&vertices[0]));
 		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
+
+		myData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	}
 
-	void FullscreenQuad::ActiveFullscreenQuad()
+	void FullscreenQuad::ActivateFullscreenQuad()
 	{
 		const unsigned int byteOffset = 0;
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
-		context->IASetInputLayout(myInputLayout);
-		context->IASetVertexBuffers(0, 1, &myVertexBuffer->myVertexBuffer, &myVertexBuffer->myStride, &byteOffset);
-		context->IASetIndexBuffer(myIndexBuffer->myIndexBuffer, DXGI_FORMAT(myIndexBuffer->myIndexBufferFormat), byteOffset);
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		context->IASetInputLayout(myData.myInputLayout);
+		context->IASetVertexBuffers(0, 1, &myData.myVertexBuffer->myVertexBuffer, &myData.myVertexBuffer->myStride, &byteOffset);
+		context->IASetIndexBuffer(myData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(myData.myIndexBuffer->myIndexBufferFormat), byteOffset);
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myData.myPrimitiveTopology));
 	}
 
 	void FullscreenQuad::RenderFullscreenQuad(Effect* aEffect, const CU::String<30>& aTechnique)

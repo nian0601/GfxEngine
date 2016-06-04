@@ -5,6 +5,7 @@ namespace Easy3D
 {
 	class Camera;
 	class Instance;
+	class Renderer;
 	
 	class Scene
 	{
@@ -12,7 +13,7 @@ namespace Easy3D
 		Scene();
 		~Scene();
 
-		void Render();
+		void Render(Renderer* aRenderer);
 
 		void SetCamera(Camera& aCamera);
 

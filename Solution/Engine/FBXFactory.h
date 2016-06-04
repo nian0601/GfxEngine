@@ -5,13 +5,17 @@
 #include <GrowingArray.h>
 #include <CUMap.h>
 
-struct AnimationData;
-struct Bone;
-struct ModelData;
 struct D3D11_INPUT_ELEMENT_DESC;
 
-class FBXLoader;
-class FbxModelData;
+namespace FBX
+{
+	struct AnimationData;
+	struct Bone;
+	struct ModelData;
+
+	class FBXLoader;
+	class FbxModelData;
+}
 
 namespace Easy3D
 {
@@ -27,14 +31,14 @@ namespace Easy3D
 		Model* LoadModel(const CU::String<50>& aFilePath, Effect* aEffect) override;
 		
 	private:
-		Model* CreateModel(FbxModelData* someModelData);
+		Model* CreateModel(FBX::FbxModelData* someModelData);
 		void LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
 			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
-			, ModelData* someData);
+			, FBX::ModelData* someData);
 
 		
 
-		FBXLoader *myLoader;
+		FBX::FBXLoader *myLoader;
 
 		CU::Map<CU::String<50>, Model*> myModels;
 	};

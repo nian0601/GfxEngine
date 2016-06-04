@@ -3,6 +3,7 @@
 #include <d3dx11effect.h>
 #include <GrowingArray.h>
 #include "Surface.h"
+#include "Renderer.h"
 
 namespace Easy3D
 {
@@ -37,16 +38,11 @@ namespace Easy3D
 
 			InitInputLayout(vertexDesc, size, aEffect);
 
-			InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
+			InitVertexBuffer(myData.myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 			InitIndexBuffer();
 
-			SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
-			SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
-
-			for (Surface* surface : mySurfaces)
-			{
-				surface->GetShaderResources(aEffect);
-			}
+			SetupVertexBuffer(myData.myVertexData->myNumberOfVertices, myData.myVertexData->myVertexData);
+			SetupIndexBuffer(myData.myIndexData->myNumberOfIndices, myData.myIndexData->myIndexData);
 		}
 
 		for (Model* child : myChildren)
@@ -138,42 +134,38 @@ namespace Easy3D
 		indices.Add(6);
 #pragma endregion
 
-		myIndexData = new IndexData();
-		myIndexData->myIndexData = reinterpret_cast<char*>(&indices[0]);
-		myIndexData->myNumberOfIndices = indices.Size();
+		myData.myIndexData = new IndexData();
+		myData.myIndexData->myIndexData = reinterpret_cast<char*>(&indices[0]);
+		myData.myIndexData->myNumberOfIndices = indices.Size();
 
-		myVertexData = new VertexData();
-		myVertexData->myVertexData = reinterpret_cast<char*>(&vertices[0]);
-		myVertexData->myStride = sizeof(VertexPosColor);
-		myVertexData->myNumberOfVertices = vertices.Size();
+		myData.myVertexData = new VertexData();
+		myData.myVertexData->myVertexData = reinterpret_cast<char*>(&vertices[0]);
+		myData.myVertexData->myStride = sizeof(VertexPosColor);
+		myData.myVertexData->myNumberOfVertices = vertices.Size();
 
-		InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
+		InitVertexBuffer(myData.myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 		InitIndexBuffer();
 
-		SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
-		SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
+		SetupVertexBuffer(myData.myVertexData->myNumberOfVertices, myData.myVertexData->myVertexData);
+		SetupIndexBuffer(myData.myIndexData->myNumberOfIndices, myData.myIndexData->myIndexData);
 	}
 
-	void Model::Render(Effect& aEffect)
+	void Model::Render(Renderer* aRenderer)
 	{
 		if (myIsNullObject == false)
 		{
-			if (mySurfaces.Size() > 0)
+			for (int i = 0; i < mySurfaces[0]->TextureCount(); ++i)
 			{
-				mySurfaces[0]->Activate();
+				aRenderer->SetTexture(mySurfaces[0]->GetResourceName(i), mySurfaces[0]->GetTexture(i));
 			}
 
-			BaseModel::Render(aEffect);
-
-			if (mySurfaces.Size() > 0)
-			{
-				mySurfaces[0]->Deactivate();
-			}
+			aRenderer->RenderModel(myData, "Render");
 		}
 
 		for (Model* child : myChildren)
 		{
-			child->Render(aEffect);
+			child->Render(aRenderer);
 		}
 	}
+
 }

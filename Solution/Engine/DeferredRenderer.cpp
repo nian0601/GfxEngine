@@ -34,7 +34,7 @@ namespace Easy3D
 		RenderToGBuffer(aScene);
 		Engine::GetInstance()->SetBackbufferAsRenderTarget();
 
-		ActiveFullscreenQuad();
+		ActivateFullscreenQuad();
 		RenderAmbientPass();
 	}
 
@@ -45,29 +45,29 @@ namespace Easy3D
 
 	void DeferredRenderer::RenderToGBuffer(Scene* aScene)
 	{
-		myGBuffer->Clear({ 0.4f, 0.4f, 0.4f, 1.f });
+		myRenderer->ClearRenderTarget(myGBuffer->myAlbedoAndMetalness, { 0.4f, 0.4f, 0.4f, 1.f });
+		myRenderer->ClearRenderTarget(myGBuffer->myNormalAndRoughness, { 0.4f, 0.4f, 0.4f, 1.f });
+		myRenderer->ClearRenderTarget(myGBuffer->myDepth, { 0.4f, 0.4f, 0.4f, 1.f });
+		myRenderer->ClearDepthStencil(myGBuffer->myDepthStencil);
 
-		ID3D11RenderTargetView* renderTargets[3];
-		renderTargets[0] = myGBuffer->myAlbedoAndMetalness->GetRenderTarget();
-		renderTargets[1] = myGBuffer->myNormalAndRoughness->GetRenderTarget();
-		renderTargets[2] = myGBuffer->myDepth->GetRenderTarget();
+		myRenderer->AddRenderTarget(myGBuffer->myAlbedoAndMetalness);
+		myRenderer->AddRenderTarget(myGBuffer->myNormalAndRoughness);
+		myRenderer->AddRenderTarget(myGBuffer->myDepth);
+		myRenderer->SetDepthStencil(myGBuffer->myDepthStencil);
+		myRenderer->ApplyRenderTargetAndDepthStencil();
 
-		ID3D11DepthStencilView* depth = myGBuffer->myDepthStencil->GetDepthStencil();
-
-		myRenderer->SetRenderTarget(3, renderTargets, depth);
-
-		aScene->Render();
+		aScene->Render(myRenderer);
 	}
 
 	void DeferredRenderer::RenderAmbientPass()
 	{
-		myGBuffer->Set(myFullscreenEffect);
-		myFullscreenEffect->SetCubemap(myCubemap->GetShaderView());
+		myRenderer->SetEffect(myFullscreenEffect);
+		myRenderer->SetTexture("AlbedoMetalnessTexture", myGBuffer->myAlbedoAndMetalness);
+		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
+		myRenderer->SetTexture("DepthTexture", myGBuffer->myDepth);
+		myRenderer->SetTexture("Cubemap", myCubemap);
 
-		RenderFullscreenQuad(myFullscreenEffect, "Deferred_Ambient");
-
-		myFullscreenEffect->SetCubemap(nullptr);
-		myGBuffer->UnSet(myFullscreenEffect);
+		myRenderer->RenderFullScreen("Deferred_Ambient");
 	}
 
 }

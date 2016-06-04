@@ -15,11 +15,18 @@ namespace Easy3D
 	{
 	}
 
-	void ModelProxy::Render(Effect& aEffect)
+	void ModelProxy::Render(Renderer* aRenderer)
 	{
-		if (IsLoaded())
+		if (IsLoaded() == true)
 		{
-			myModel->Render(aEffect);
+			myModel->Render(aRenderer);
 		}
 	}
+
+	const Easy3D::ModelData& ModelProxy::GetData() const
+	{
+		DL_ASSERT_EXP(IsLoaded() == true, "Model needs to be loaded before you can GetData");
+		return myModel->GetData();
+	}
+
 }

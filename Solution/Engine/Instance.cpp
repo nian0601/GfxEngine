@@ -5,6 +5,7 @@
 #include "ModelProxy.h"
 #include "Effect.h"
 #include "Instance.h"
+#include "Renderer.h"
 
 namespace Easy3D
 {
@@ -19,15 +20,18 @@ namespace Easy3D
 	{
 	}
 
-	void Instance::Render(const Camera& aCamera)
+	void Instance::Render(Renderer* aRenderer, const Camera& aCamera)
 	{
-		myEffect.SetViewMatrix(aCamera.GetView());
-		myEffect.SetProjectionMatrix(aCamera.GetProjection());
-		myEffect.SetWorldMatrix(myOrientation);
+		if (myModel.IsLoaded() == true)
+		{
+			aRenderer->SetEffect(&myEffect);
+			aRenderer->SetMatrix("View", aCamera.GetView());
+			aRenderer->SetMatrix("Projection", aCamera.GetProjection());
+			aRenderer->SetMatrix("World", myOrientation);
+			aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
 
-		myEffect.SetCameraPosition(aCamera.GetPosition());
-
-		myModel.Render(myEffect);
+			myModel.Render(aRenderer);
+		}
 	}
 
 	void Instance::SetPosition(const CU::Vector3<float>& aPosition)

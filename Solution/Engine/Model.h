@@ -7,6 +7,7 @@
 namespace Easy3D
 {
 	class Surface;
+	class Renderer;
 
 	class Model : public BaseModel
 	{
@@ -20,7 +21,7 @@ namespace Easy3D
 		void Init(Effect* aEffect);
 		void InitCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, Effect* aEffect);
 
-		void Render(Effect& aEffect) override;
+		void Render(Renderer* aRenderer);
 
 	private:
 		CU::GrowingArray<Model*> myChildren;

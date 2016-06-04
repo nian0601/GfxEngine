@@ -6,6 +6,7 @@ namespace Easy3D
 	class Camera;
 	class Effect;
 	class ModelProxy;
+	class Renderer;
 
 	class Instance
 	{
@@ -13,7 +14,7 @@ namespace Easy3D
 		Instance(ModelProxy& aModel, Effect& aEffect);
 		~Instance();
 
-		void Render(const Camera& aCamera);
+		void Render(Renderer* aRenderer, const Camera& aCamera);
 
 		void SetPosition(const CU::Vector3<float>& aPosition);
 		CU::Vector3<float> GetPosition() const;

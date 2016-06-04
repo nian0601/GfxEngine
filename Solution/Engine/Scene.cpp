@@ -16,13 +16,13 @@ namespace Easy3D
 	{
 	}
 
-	void Scene::Render()
+	void Scene::Render(Renderer* aRenderer)
 	{
 		DL_ASSERT_EXP(myCamera != nullptr, "Cant render without a Camera");
 
 		for (Instance* instance : myInstances)
 		{
-			instance->Render(*myCamera);
+			instance->Render(aRenderer, *myCamera);
 		}
 	}
 

@@ -7,22 +7,22 @@
 namespace Easy3D
 {
 	BaseModel::BaseModel()
-		: myVertexBuffer(nullptr)
-		, myVertexData(nullptr)
-		, myIndexBuffer(nullptr)
-		, myIndexData(nullptr)
+		: myVertexFormat(5)
 		, myIsNullObject(true)
-		, myVertexFormat(5)
 	{
+		myData.myVertexBuffer = nullptr;
+		myData.myVertexData = nullptr;
+		myData.myIndexBuffer = nullptr;
+		myData.myIndexData = nullptr;
 	}
 
 
 	BaseModel::~BaseModel()
 	{
-		SAFE_DELETE(myVertexBuffer);
-		SAFE_DELETE(myVertexData);
-		SAFE_DELETE(myIndexBuffer);
-		SAFE_DELETE(myIndexData);
+		SAFE_DELETE(myData.myVertexBuffer);
+		SAFE_DELETE(myData.myVertexData);
+		SAFE_DELETE(myData.myIndexBuffer);
+		SAFE_DELETE(myData.myIndexData);
 	}
 
 	void BaseModel::Render(Effect& aEffect)
@@ -31,17 +31,17 @@ namespace Easy3D
 
 		const unsigned int byteOffset = 0;
 
-		context->IASetInputLayout(myInputLayout);
-		context->IASetVertexBuffers(0, 1, &myVertexBuffer->myVertexBuffer, &myVertexBuffer->myStride, &byteOffset);
-		context->IASetIndexBuffer(myIndexBuffer->myIndexBuffer, DXGI_FORMAT(myIndexBuffer->myIndexBufferFormat), byteOffset);
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		context->IASetInputLayout(myData.myInputLayout);
+		context->IASetVertexBuffers(0, 1, &myData.myVertexBuffer->myVertexBuffer, &myData.myVertexBuffer->myStride, &byteOffset);
+		context->IASetIndexBuffer(myData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(myData.myIndexBuffer->myIndexBufferFormat), byteOffset);
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myData.myPrimitiveTopology));
 
 		D3DX11_TECHNIQUE_DESC techDesc;
 		aEffect.GetTechnique("Render")->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
 			aEffect.GetTechnique("Render")->GetPassByIndex(i)->Apply(0, context);
-			context->DrawIndexed(myIndexData->myNumberOfIndices, 0, 0);
+			context->DrawIndexed(myData.myIndexData->myNumberOfIndices, 0, 0);
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace Easy3D
 		D3DX11_PASS_DESC passDesc;
 		aEffect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
-			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myInputLayout);
+			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myData.myInputLayout);
 		if (FAILED(hr) != S_OK)
 		{
 			DL_MESSAGE_BOX("Failed to CreateInputLayout", "BaseModel::Init", MB_ICONWARNING);
@@ -59,60 +59,60 @@ namespace Easy3D
 
 	void BaseModel::InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage)
 	{
-		myVertexBuffer = new VertexBuffer();
-		myVertexBuffer->myStride = aVertexSize;
+		myData.myVertexBuffer = new VertexBuffer();
+		myData.myVertexBuffer->myStride = aVertexSize;
 
-		myVertexBuffer->myBufferDesc = new D3D11_BUFFER_DESC();
-		ZeroMemory(myVertexBuffer->myBufferDesc, sizeof(*myVertexBuffer->myBufferDesc));
-		myVertexBuffer->myBufferDesc->Usage = D3D11_USAGE(aBufferUsage);
-		myVertexBuffer->myBufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		myVertexBuffer->myBufferDesc->CPUAccessFlags = aCPUUsage;
-		myVertexBuffer->myBufferDesc->MiscFlags = 0;
-		myVertexBuffer->myBufferDesc->StructureByteStride = 0;
+		myData.myVertexBuffer->myBufferDesc = new D3D11_BUFFER_DESC();
+		ZeroMemory(myData.myVertexBuffer->myBufferDesc, sizeof(*myData.myVertexBuffer->myBufferDesc));
+		myData.myVertexBuffer->myBufferDesc->Usage = D3D11_USAGE(aBufferUsage);
+		myData.myVertexBuffer->myBufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		myData.myVertexBuffer->myBufferDesc->CPUAccessFlags = aCPUUsage;
+		myData.myVertexBuffer->myBufferDesc->MiscFlags = 0;
+		myData.myVertexBuffer->myBufferDesc->StructureByteStride = 0;
 	}
 
 	void BaseModel::InitIndexBuffer()
 	{
-		myIndexBuffer = new IndexBuffer();
-		myIndexBuffer->myIndexBufferFormat = DXGI_FORMAT_R32_UINT;
+		myData.myIndexBuffer = new IndexBuffer();
+		myData.myIndexBuffer->myIndexBufferFormat = DXGI_FORMAT_R32_UINT;
 
-		myIndexBuffer->myBufferDesc = new D3D11_BUFFER_DESC();
-		ZeroMemory(myIndexBuffer->myBufferDesc, sizeof(*myIndexBuffer->myBufferDesc));
-		myIndexBuffer->myBufferDesc->Usage = D3D11_USAGE_IMMUTABLE;
-		myIndexBuffer->myBufferDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
-		myIndexBuffer->myBufferDesc->CPUAccessFlags = 0;
-		myIndexBuffer->myBufferDesc->MiscFlags = 0;
-		myIndexBuffer->myBufferDesc->StructureByteStride = 0;
+		myData.myIndexBuffer->myBufferDesc = new D3D11_BUFFER_DESC();
+		ZeroMemory(myData.myIndexBuffer->myBufferDesc, sizeof(*myData.myIndexBuffer->myBufferDesc));
+		myData.myIndexBuffer->myBufferDesc->Usage = D3D11_USAGE_IMMUTABLE;
+		myData.myIndexBuffer->myBufferDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
+		myData.myIndexBuffer->myBufferDesc->CPUAccessFlags = 0;
+		myData.myIndexBuffer->myBufferDesc->MiscFlags = 0;
+		myData.myIndexBuffer->myBufferDesc->StructureByteStride = 0;
 	}
 
 	void BaseModel::SetupVertexBuffer(int aVertexCount, char* aVertexData)
 	{
-		if (myVertexBuffer->myVertexBuffer != nullptr)
+		if (myData.myVertexBuffer->myVertexBuffer != nullptr)
 		{
-			SAFE_RELEASE(myVertexBuffer->myVertexBuffer);
+			SAFE_RELEASE(myData.myVertexBuffer->myVertexBuffer);
 		}
 
-		myVertexBuffer->myBufferDesc->ByteWidth = myVertexBuffer->myStride * aVertexCount;
+		myData.myVertexBuffer->myBufferDesc->ByteWidth = myData.myVertexBuffer->myStride * aVertexCount;
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = aVertexData;
 
-		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBuffer->myBufferDesc, &initData
-			, &myVertexBuffer->myVertexBuffer)) == TRUE, "BaseModel::SetupVertexBuffer: Failed to SetupVertexBuffer");
+		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myData.myVertexBuffer->myBufferDesc, &initData
+			, &myData.myVertexBuffer->myVertexBuffer)) == TRUE, "BaseModel::SetupVertexBuffer: Failed to SetupVertexBuffer");
 	}
 
 	void BaseModel::SetupIndexBuffer(int aIndexCount, char* aIndexData)
 	{
-		if (myIndexBuffer->myIndexBuffer != nullptr)
+		if (myData.myIndexBuffer->myIndexBuffer != nullptr)
 		{
-			SAFE_RELEASE(myIndexBuffer->myIndexBuffer);
+			SAFE_RELEASE(myData.myIndexBuffer->myIndexBuffer);
 		}
 
-		myIndexBuffer->myBufferDesc->ByteWidth = sizeof(UINT) * aIndexCount;
+		myData.myIndexBuffer->myBufferDesc->ByteWidth = sizeof(UINT) * aIndexCount;
 
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = aIndexData;
 
-		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myIndexBuffer->myBufferDesc, &initData,
-			&myIndexBuffer->myIndexBuffer)) == TRUE, "BaseModel::SetupIndexBuffer: Failed to SetupIndexBuffer");
+		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myData.myIndexBuffer->myBufferDesc, &initData,
+			&myData.myIndexBuffer->myIndexBuffer)) == TRUE, "BaseModel::SetupIndexBuffer: Failed to SetupIndexBuffer");
 	}
 }

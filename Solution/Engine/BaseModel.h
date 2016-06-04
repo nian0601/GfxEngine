@@ -1,19 +1,13 @@
 #pragma once
 
 #include <GrowingArray.h>
+#include "ModelData.h"
 
-struct ID3D11InputLayout;
 struct D3D11_INPUT_ELEMENT_DESC;
 
 namespace Easy3D
 {
 	class Effect;
-
-	struct VertexBuffer;
-	struct VertexData;
-	struct IndexBuffer;
-	struct IndexData;
-
 	class BaseModel
 	{
 	public:
@@ -21,6 +15,8 @@ namespace Easy3D
 		virtual ~BaseModel();
 
 		virtual void Render(Effect& aEffect);
+
+		const ModelData& GetData() const;
 
 	protected:
 		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, Effect* aEffect);
@@ -30,14 +26,14 @@ namespace Easy3D
 		void SetupVertexBuffer(int aVertexCount, char* aVertexData);
 		void SetupIndexBuffer(int aIndexCount, char* aIndexData);
 
-		VertexBuffer* myVertexBuffer;
-		VertexData* myVertexData;
-		IndexBuffer* myIndexBuffer;
-		IndexData* myIndexData;
-		ID3D11InputLayout* myInputLayout;
+		ModelData myData;
 		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
-		int myPrimitiveTopology;
 
 		bool myIsNullObject;
 	};
+
+	inline const ModelData& BaseModel::GetData() const
+	{
+		return myData;
+	}
 }

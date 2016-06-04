@@ -19,6 +19,8 @@ bool CheckFileExists(const CU::String<256>& aFile)
 	return found;
 }
 
+namespace FBX
+{
 FBXLoader::FBXLoader()
 {
 	myFbxManager = FbxManager::Create();
@@ -1679,4 +1681,5 @@ FbxModelData* FBXLoader::loadModel(const char* aFile, CU::GrowingArray<CU::Strin
 	}
 
 	return myLoadingModel;
+}
 }

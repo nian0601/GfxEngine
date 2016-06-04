@@ -2,9 +2,12 @@
 
 namespace Easy3D
 {
+	struct ModelData;
+
 	class Camera;
 	class Model;
 	class Effect;
+	class Renderer;
 
 	class ModelProxy
 	{
@@ -13,9 +16,11 @@ namespace Easy3D
 		ModelProxy();
 		~ModelProxy();
 
-		void Render(Effect& aEffect);
+		void Render(Renderer* aRenderer);
 
 		bool IsLoaded() const;
+
+		const ModelData& GetData() const;
 
 	private:
 		Model* myModel;

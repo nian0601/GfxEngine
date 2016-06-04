@@ -10,9 +10,8 @@
 namespace Easy3D
 {
 	Surface::Surface()
-		: myResourceViews(5)
+		: myTextures(5)
 		, myShaderResourceNames(5)
-		, myShaderVariables(5)
 	{
 	}
 
@@ -21,36 +20,11 @@ namespace Easy3D
 	{
 	}
 
-	void Surface::AddTexture(const CU::String<50>& aTeturePath, const CU::String<30>& aResourceName)
+	void Surface::AddTexture(const CU::String<50>& aTeturePath, const CU::String<50>& aResourceName)
 	{
 		Texture* tex = GPUContainer::GetInstance()->RequestTexture(aTeturePath);
 
-		myResourceViews.Add(tex->GetShaderView());
+		myTextures.Add(tex);
 		myShaderResourceNames.Add(aResourceName);
 	}
-
-	void Surface::GetShaderResources(Effect* aEffect)
-	{
-		for each (const CU::String<30>& resourceName in myShaderResourceNames)
-		{
-			myShaderVariables.Add(aEffect->GetEffect()->GetVariableByName(resourceName.c_str())->AsShaderResource());
-		}
-	}
-
-	void Surface::Activate()
-	{
-		for (int i = 0; i < myShaderVariables.Size(); ++i)
-		{
-			myShaderVariables[i]->SetResource(myResourceViews[i]);
-		}
-	}
-
-	void Surface::Deactivate()
-	{
-		for (int i = 0; i < myShaderVariables.Size(); ++i)
-		{
-			myShaderVariables[i]->SetResource(nullptr);
-		}
-	}
-
 }

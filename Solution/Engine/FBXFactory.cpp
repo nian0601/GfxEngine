@@ -14,7 +14,7 @@ namespace Easy3D
 {
 	FBXFactory::FBXFactory()
 	{
-		myLoader = new FBXLoader();
+		myLoader = new FBX::FBXLoader();
 	}
 
 	FBXFactory::~FBXFactory()
@@ -38,7 +38,7 @@ namespace Easy3D
 		}
 
 		CU::GrowingArray<CU::String<80>> errors(16);
-		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath.c_str(), errors);
+		FBX::FbxModelData* fbxModelData = myLoader->loadModel(aFilePath.c_str(), errors);
 
 		Model* returnModel = CreateModel(fbxModelData);
 		myModels[aFilePath] = returnModel;
@@ -47,10 +47,10 @@ namespace Easy3D
 		return returnModel;
 	}
 
-	Model* FBXFactory::CreateModel(FbxModelData* someModelData)
+	Model* FBXFactory::CreateModel(FBX::FbxModelData* someModelData)
 	{
 		Model* tempModel = new Model();
-		tempModel->myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		tempModel->myData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 		if (someModelData->myData)
 		{
@@ -64,8 +64,8 @@ namespace Easy3D
 				, someModelData->myData);
 
 			tempModel->mySurfaces.Add(surface);
-			tempModel->myIndexData = indexData;
-			tempModel->myVertexData = vertexData;
+			tempModel->myData.myIndexData = indexData;
+			tempModel->myData.myVertexData = vertexData;
 			tempModel->myOrientation = someModelData->myOrientation;
 		}
 
@@ -79,7 +79,7 @@ namespace Easy3D
 
 	void FBXFactory::LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
 		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
-		, ModelData* someData)
+		, FBX::ModelData* someData)
 	{
 		aIndexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
 		unsigned int* indexData = new unsigned int[someData->myIndexCount];
@@ -106,42 +106,42 @@ namespace Easy3D
 			desc->InputSlot = 0;
 			desc->InstanceDataStepRate = 0;
 
-			if (currentLayout.myType == ModelData::VERTEX_POS)
+			if (currentLayout.myType == FBX::ModelData::VERTEX_POS)
 			{
 				desc->SemanticName = "POSITION";
 				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_NORMAL)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_NORMAL)
 			{
 				desc->SemanticName = "NORMAL";
 				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_UV)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_UV)
 			{
 				desc->SemanticName = "TEXCOORD";
 				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_BINORMAL)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_BINORMAL)
 			{
 				desc->SemanticName = "BINORMAL";
 				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_TANGENT)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_TANGENT)
 			{
 				desc->SemanticName = "TANGENT";
 				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_SKINWEIGHTS)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_SKINWEIGHTS)
 			{
 				desc->SemanticName = "WEIGHTS";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_BONEID)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_BONEID)
 			{
 				desc->SemanticName = "BONES";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_UINT;
 			}
-			else if (currentLayout.myType == ModelData::VERTEX_COLOR)
+			else if (currentLayout.myType == FBX::ModelData::VERTEX_COLOR)
 			{
 				desc->SemanticName = "COLOR";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -154,27 +154,27 @@ namespace Easy3D
 			auto& currentTexture = someData->myTextures[i];
 
 			CU::String<80> resourceName;
-			if (currentTexture.myType == ALBEDO)
+			if (currentTexture.myType == FBX::ALBEDO)
 			{
 				resourceName = "AlbedoTexture";
 			}
-			if (currentTexture.myType == NORMAL)
+			if (currentTexture.myType == FBX::NORMAL)
 			{
 				resourceName = "NormalTexture";
 			}
-			if (currentTexture.myType == ROUGHNESS)
+			if (currentTexture.myType == FBX::ROUGHNESS)
 			{
 				resourceName = "RoughnessTexture";
 			}
-			if (currentTexture.myType == METALNESS)
+			if (currentTexture.myType == FBX::METALNESS)
 			{
 				resourceName = "MetalnessTexture";
 			}
-			if (currentTexture.myType == AMBIENT)
+			if (currentTexture.myType == FBX::AMBIENT)
 			{
 				resourceName = "AOTexture";
 			}
-			if (currentTexture.myType == FBXTextureType::EMISSIVE)
+			if (currentTexture.myType == FBX::FBXTextureType::EMISSIVE)
 			{
 				resourceName = "EmissiveTexture";
 			}

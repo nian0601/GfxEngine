@@ -12,7 +12,7 @@ namespace Easy3D
 		~FullscreenQuad();
 
 		void InitFullscreenQuad(Effect* aEffect);
-		void ActiveFullscreenQuad();
+		void ActivateFullscreenQuad();
 		void RenderFullscreenQuad(Effect* aEffect, const CU::String<30>& aTechnique);
 	protected:
 	};
