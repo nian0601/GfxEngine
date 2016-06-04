@@ -1,13 +1,14 @@
 #pragma once
 #include "BaseModel.h"
+#include <CUString.h>
 #include <Vector.h>
 #include <Matrix.h>
 #include <GrowingArray.h>
 
 namespace Easy3D
 {
-	class Surface;
 	class Renderer;
+	class Texture;
 
 	class Model : public BaseModel
 	{
@@ -28,6 +29,7 @@ namespace Easy3D
 		CU::GrowingArray<CU::Matrix44<float>> myChildTransforms;
 		CU::Matrix44<float> myOrientation;
 
-		CU::GrowingArray<Surface*> mySurfaces;
+		CU::GrowingArray<CU::String<50>> myShaderResourceNames;
+		CU::GrowingArray<Texture*> myTextures;	
 	};
 }

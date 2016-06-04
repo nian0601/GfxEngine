@@ -5,9 +5,9 @@
 #include <d3d11.h>
 #include "FbxFactory.h"
 #include "FBX/FbxLoader.h"
+#include "GPUContainer.h"
 #include "Matrix44.h"
 #include "Model.h"
-#include "Surface.h"
 
 
 namespace Easy3D
@@ -19,8 +19,6 @@ namespace Easy3D
 
 	FBXFactory::~FBXFactory()
 	{
-		int DeleteFromMapHere = 5;
-
 		for (auto it = myModels.Begin(); it != myModels.End(); it = myModels.Next(it))
 		{
 			SAFE_DELETE(it.Second());
@@ -58,12 +56,11 @@ namespace Easy3D
 
 			IndexData* indexData = new IndexData();
 			VertexData* vertexData = new VertexData();
-			Surface* surface = new Surface();
 
-			LoadData(indexData, vertexData, tempModel->myVertexFormat, *surface
+			LoadData(indexData, vertexData, tempModel->myVertexFormat
+				, tempModel->myShaderResourceNames, tempModel->myTextures
 				, someModelData->myData);
 
-			tempModel->mySurfaces.Add(surface);
 			tempModel->myData.myIndexData = indexData;
 			tempModel->myData.myVertexData = vertexData;
 			tempModel->myOrientation = someModelData->myOrientation;
@@ -78,7 +75,9 @@ namespace Easy3D
 	}
 
 	void FBXFactory::LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
-		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
+		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements
+		, CU::GrowingArray<CU::String<50>>& someShaderResourceNames
+		, CU::GrowingArray<Texture*>& someTextures
 		, FBX::ModelData* someData)
 	{
 		aIndexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
@@ -182,7 +181,8 @@ namespace Easy3D
 			int dataIndex = currentTexture.myFileName.RFind("Data\\");
 			CU::String<256> fromData = currentTexture.myFileName.SubStr(dataIndex, currentTexture.myFileName.Size());
 
-			aSurface.AddTexture(fromData.c_str(), resourceName.c_str());
+			someShaderResourceNames.Add(resourceName.c_str());
+			someTextures.Add(GPUContainer::GetInstance()->RequestTexture(fromData.c_str()));
 		}
 	}
 }

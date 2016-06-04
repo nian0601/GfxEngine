@@ -20,7 +20,6 @@ namespace FBX
 namespace Easy3D
 {
 	class Model;
-	class Surface;
 
 	class FBXFactory : public IModelFactory
 	{
@@ -33,7 +32,9 @@ namespace Easy3D
 	private:
 		Model* CreateModel(FBX::FbxModelData* someModelData);
 		void LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
-			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
+			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements
+			, CU::GrowingArray<CU::String<50>>& someShaderResourceNames
+			, CU::GrowingArray<Texture*>& someTextures
 			, FBX::ModelData* someData);
 
 		

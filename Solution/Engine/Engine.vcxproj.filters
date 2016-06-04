@@ -17,7 +17,6 @@
     <ClInclude Include="FBXFactory.h">
       <Filter>AssetManagement\ModelLoaders</Filter>
     </ClInclude>
-    <ClInclude Include="Surface.h" />
     <ClInclude Include="FBX\FbxLoader.h">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
     </ClInclude>
@@ -78,7 +77,6 @@
     <ClCompile Include="FBXFactory.cpp">
       <Filter>AssetManagement\ModelLoaders</Filter>
     </ClCompile>
-    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="FBX\FbxLoader.cpp">
       <Filter>AssetManagement\ModelLoaders\FBX</Filter>
     </ClCompile>

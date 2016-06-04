@@ -2,7 +2,7 @@
 #include "Model.h"
 #include <d3dx11effect.h>
 #include <GrowingArray.h>
-#include "Surface.h"
+#include "GPUContainer.h"
 #include "Renderer.h"
 
 namespace Easy3D
@@ -10,7 +10,8 @@ namespace Easy3D
 	Model::Model()
 		: myChildren(4)
 		, myChildTransforms(4)
-		, mySurfaces(4)
+		, myTextures(5)
+		, myShaderResourceNames(5)
 	{
 	}
 
@@ -154,9 +155,9 @@ namespace Easy3D
 	{
 		if (myIsNullObject == false)
 		{
-			for (int i = 0; i < mySurfaces[0]->TextureCount(); ++i)
+			for (int i = 0; i < myTextures.Size(); ++i)
 			{
-				aRenderer->SetTexture(mySurfaces[0]->GetResourceName(i), mySurfaces[0]->GetTexture(i));
+				aRenderer->SetTexture(myShaderResourceNames[i], myTextures[i]);
 			}
 
 			aRenderer->RenderModel(myData, "Render");
