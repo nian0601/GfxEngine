@@ -137,13 +137,13 @@ void DL_Debug::Debug::WriteLog(const eFilterLog aFilter, const char* aFormattedS
 	output += "]:";
 	output += buffer;
 
-	ourInstance->myDebugFile << output.c_str() << std::endl;
+	ourInstance->myDebugFile << output.c_str() << "\n";
 	ourInstance->myDebugFile.flush();
 }
 
 void DL_Debug::Debug::PrintMessage(const char* aString)
 {
-	ourInstance->myDebugFile << aString << std::endl;
+	ourInstance->myDebugFile << aString << "\n";
 	ourInstance->myDebugFile.flush();
 }
 
@@ -156,7 +156,7 @@ void DL_Debug::Debug::PrintMessageVA(const char *aFormattedString, ...)
 	perror(buffer);
 	va_end(args);
 
-	ourInstance->myDebugFile << buffer << std::endl;
+	ourInstance->myDebugFile << buffer << "\n";
 	ourInstance->myDebugFile.flush();
 }
 
@@ -196,7 +196,7 @@ void DL_Debug::Debug::AssertMessage(const char *aFileName, int aLine, const char
 	output += "\n\n";
 
 	ourInstance->myDebugFile << output.c_str();
-	ourInstance->myDebugFile << std::endl << std::endl << "Callstack" << std::endl;
+	ourInstance->myDebugFile << "\n" << "\n" << "Callstack" << "\n";
 
 	DL_Debug::StackWalker sw;
 	sw.ShowCallstack();
@@ -215,7 +215,7 @@ void DL_Debug::Debug::AssertMessage(const char *aFileName, int aLine, const char
 
 void DL_Debug::Debug::DebugMessage(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...)
 {
-	ourInstance->myDebugFile << std::endl << "File: " << aFileName << std::endl << "Line: " << aLine << std::endl << "Function: " << aFunctionName << std::endl;
+	ourInstance->myDebugFile << "\n" << "File: " << aFileName << "\n" << "Line: " << aLine << "\n" << "Function: " << aFunctionName << "\n";
 	char buffer[1024];
 	va_list args;
 	va_start(args, aFormattedString);
@@ -223,7 +223,7 @@ void DL_Debug::Debug::DebugMessage(const char *aFileName, int aLine, const char 
 	perror(buffer);
 	va_end(args);
 
-	ourInstance->myDebugFile << buffer << std::endl;
+	ourInstance->myDebugFile << buffer << "\n";
 	ourInstance->myDebugFile.flush();
 }
 

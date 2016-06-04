@@ -76,10 +76,10 @@
 
 
 #include "CUString.h"
+#include "CUMap.h"
 #include <fstream>
 #include "DL_Assert.h"
 #include "DL_StackWalker.h"
-#include <unordered_map>
 
 namespace DL_Debug
 {
@@ -121,6 +121,6 @@ namespace DL_Debug
 		~Debug();
 		static Debug* ourInstance;
 		std::ofstream myDebugFile;
-		std::unordered_map<eFilterLog, std::pair<bool, CU::String<256>>> myFilterLogStatus;
+		CU::Map<eFilterLog, std::pair<bool, CU::String<256>>> myFilterLogStatus;
 	};
 }
