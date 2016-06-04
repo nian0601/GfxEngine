@@ -17,39 +17,9 @@ CU::TimerManager::TimerManager()
 
 void CU::TimerManager::Update()
 {
-
 	TimeUnit time = GetTime();
-
 	myMasterTimer.AddTime(time);
-
-	for (unsigned int i = 0; i < myTimerList.size(); ++i)
-	{
-		myTimerList[i].AddTime(time);
-	}
-
-
 	myLastTime += time;
-}
-
-void CU::TimerManager::StartTimer(const CU::String<80>& aName)
-{
-	LARGE_INTEGER current;
-	QueryPerformanceCounter(&current);
-
-	myTimers[aName] = current.QuadPart * 1000000 / myFrequency;
-}
-
-CU::Time CU::TimerManager::StopTimer(const CU::String<80>& aName)
-{
-	if (myTimers.KeyExists(aName) == false)
-		return Time(0, 0);
-
-	LARGE_INTEGER current;
-	QueryPerformanceCounter(&current);
-
-	TimeUnit resultTime = (current.QuadPart * 1000000 / myFrequency) - myTimers[aName];
-
-	return Time(resultTime, 0);
 }
 
 const CU::Timer& CU::TimerManager::GetMasterTimer() const
@@ -63,36 +33,6 @@ CU::TimeUnit CU::TimerManager::GetTime()
 	QueryPerformanceCounter(&current);
 
 	return (current.QuadPart * 1000000 / myFrequency) - myLastTime;
-}
-
-CU::TimerHandle CU::TimerManager::CreateTimer()
-{
-	myTimerList.push_back(Timer());
-	return myTimerList.size() - 1;
-}
-
-
-const CU::Timer& CU::TimerManager::GetTimer(CU::TimerHandle aId) const
-{
-	assert(aId < myTimerList.size() && "GetTimer handle out of bounds.");
-	return myTimerList[aId];
-}
-
-
-void CU::TimerManager::PauseAll()
-{
-	for (unsigned int i = 0; i < myTimerList.size(); ++i)
-	{
-		myTimerList[i].Pause();
-	}
-}
-
-void CU::TimerManager::StartAll()
-{
-	for (unsigned int i = 0; i < myTimerList.size(); ++i)
-	{
-		myTimerList[i].Start();
-	}
 }
 
 void CU::TimerManager::CapFrameRate(float aFrameRate)
