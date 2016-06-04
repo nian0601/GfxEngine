@@ -9,6 +9,8 @@ namespace CU
 		: myThread(nullptr)
 		, myShouldEndThread(false)
 		, myThreadIsDone(false)
+		, myFileChanged(16)
+		, myFileChangedThreaded(16)
 	{
 
 	}
@@ -30,8 +32,10 @@ namespace CU
 		std::lock_guard<std::mutex> guard(myMutex);
 
 
-		myFileChanged.swap(myFileChangedThreaded);
-
+		CU::GrowingArray<CU::String<128>> temp(myFileChanged);
+		myFileChanged = myFileChangedThreaded;
+		myFileChangedThreaded = temp;
+		
 		for (CU::String<128>& theString : myFileChanged)
 		{
 			CU::String<128> directoryOfFile(theString);
@@ -40,8 +44,8 @@ namespace CU
 			CU::String<128> theFile(theString);
 			theFile = theFile.SubStr(theFile.RFind("\\/") + 1, theFile.Size());
 
-			std::vector<callback_function_file> callbacks = myCallbacks[theFile];
-			for (unsigned int i = 0; i < callbacks.size(); i++)
+			CU::GrowingArray<callback_function_file> callbacks = myCallbacks[theFile];
+			for (int i = 0; i < callbacks.Size(); i++)
 			{
 				if (callbacks[i])
 				{
@@ -50,10 +54,7 @@ namespace CU
 			}
 		}
 
-
-		myFileChanged.clear();
-
-
+		myFileChanged.RemoveAll();
 	}
 
 	void FileWatcher::UpdateChanges(const CU::String<128>& aDir)
@@ -78,8 +79,8 @@ namespace CU
 
 	void FileWatcher::OnFolderChange(const CU::String<128>& aDir)
 	{
-		std::vector<WIN32_FIND_DATA> currentFolderFiles = GetAllFilesInFolder(aDir);
-		std::vector<WIN32_FIND_DATA>& savedFolderFiles = myFolders[aDir];
+		CU::GrowingArray<WIN32_FIND_DATA> currentFolderFiles = GetAllFilesInFolder(aDir);
+		CU::GrowingArray<WIN32_FIND_DATA>& savedFolderFiles = myFolders[aDir];
 
 		for (WIN32_FIND_DATA& currentFile : currentFolderFiles)
 		{
@@ -107,7 +108,7 @@ namespace CU
 						bool isDependency = myDependencies.KeyExists(fileThatChangedPath);
 						if (isDependency)
 						{
-							const std::vector<CU::String<128>>& deps = myDependencies[fileThatChangedPath];
+							const CU::GrowingArray<CU::String<128>>& deps = myDependencies[fileThatChangedPath];
 							for (const CU::String<128>& file : deps)
 							{
 								OnFileChange(file);
@@ -130,14 +131,14 @@ namespace CU
 
 	void FileWatcher::OnFileChange(const CU::String<128>& aFile)
 	{
-		for (unsigned int i = 0; i < myFileChangedThreaded.size(); i++)
+		for (int i = 0; i < myFileChangedThreaded.Size(); i++)
 		{
 			if (myFileChangedThreaded[i] == aFile)
 			{
 				return;
 			}
 		}
-		myFileChangedThreaded.push_back(aFile);
+		myFileChangedThreaded.Add(aFile);
 
 	}
 
@@ -169,7 +170,7 @@ namespace CU
 				{
 					CU::String<128> depFile = directoryOfFile + "/" + foundFile;
 					WatchFileChange(depFile, aFunctionToCallOnChange);
-					myDependencies[depFile].push_back(aFile);
+					myDependencies[depFile].Add(aFile);
 				}
 			}
 		}
@@ -194,7 +195,7 @@ namespace CU
 		CU::String<128> theFile(aFile);
 		theFile = theFile.SubStr(theFile.RFind("\\/") + 1, theFile.Size());
 
-		myCallbacks[theFile].push_back(aFunctionToCallOnChange);
+		myCallbacks[theFile].Add(aFunctionToCallOnChange);
 		return WatchDirectory(directoryOfFile);
 	}
 
@@ -212,9 +213,9 @@ namespace CU
 		return true;
 	}
 
-	std::vector<WIN32_FIND_DATA> FileWatcher::GetAllFilesInFolder(const CU::String<128>& aDir)
+	CU::GrowingArray<WIN32_FIND_DATA> FileWatcher::GetAllFilesInFolder(const CU::String<128>& aDir)
 	{
-		std::vector<WIN32_FIND_DATA> filesInFolder;
+		CU::GrowingArray<WIN32_FIND_DATA> filesInFolder(16);
 		CU::String<128> searchDir(aDir);
 		searchDir += "/*.*";
 		WIN32_FIND_DATA fd;
@@ -225,7 +226,7 @@ namespace CU
 				// read all (real) files in current folder
 				// , delete '!' read other 2 default folder . and ..
 				if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-					filesInFolder.push_back(fd);
+					filesInFolder.Add(fd);
 				}
 			} while (::FindNextFile(hFind, &fd));
 			::FindClose(hFind);
