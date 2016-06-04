@@ -11,10 +11,8 @@ namespace std
 namespace Easy3D
 {
 	class Instance;
-	class Effect;
 	class Model;
 	class IModelFactory;
-	class Texture;
 
 	class AssetContainer
 	{
