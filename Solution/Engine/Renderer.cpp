@@ -13,6 +13,7 @@ namespace Easy3D
 	Renderer::Renderer(EffectID aFullscreenEffect)
 	{
 		InitFullscreenQuad(aFullscreenEffect);
+		Engine::GetInstance()->GetBackbuffer(myBackbuffer);
 	}
 
 
@@ -49,6 +50,14 @@ namespace Easy3D
 		var->AsVector()->SetFloatVector(&aVector.x);
 	}
 
+	void Renderer::SetClearColor(const CU::Vector4<float>& aColor)
+	{
+		myClearColor[0] = aColor.x;
+		myClearColor[1] = aColor.y;
+		myClearColor[2] = aColor.z;
+		myClearColor[3] = aColor.w;
+	}
+
 	void Renderer::AddRenderTarget(Texture* aTexture)
 	{
 		DL_ASSERT_EXP(myRenderTargetCount < 4, CU::Concatenate<256>("Added to many RenderTargets, only %i supported", 4));
@@ -56,15 +65,9 @@ namespace Easy3D
 		++myRenderTargetCount;
 	}
 
-	void Renderer::ClearRenderTarget(Texture* aTexture, const CU::Vector4<float>& aColor)
+	void Renderer::ClearRenderTarget(Texture* aTexture)
 	{
-		float clearColor[4];
-		clearColor[0] = aColor.x;
-		clearColor[1] = aColor.y;
-		clearColor[2] = aColor.z;
-		clearColor[3] = aColor.w;
-
-		Engine::GetInstance()->GetContext()->ClearRenderTargetView(aTexture->GetRenderTarget(), clearColor);
+		Engine::GetInstance()->GetContext()->ClearRenderTargetView(aTexture->GetRenderTarget(), myClearColor);
 	}
 
 	void Renderer::SetDepthStencil(Texture* aTexture)
@@ -75,6 +78,14 @@ namespace Easy3D
 	void Renderer::ClearDepthStencil(Texture* aTexture)
 	{
 		Engine::GetInstance()->GetContext()->ClearDepthStencilView(aTexture->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	}
+
+	void Renderer::SetBackbufferAsTarget()
+	{
+		DL_ASSERT_EXP(myRenderTargetCount < 4, CU::Concatenate<256>("Added to many RenderTargets, only %i supported", 4));
+		myRenderTargets[myRenderTargetCount] = myBackbuffer.myBackbufferTarget;
+		++myRenderTargetCount;
+		myDepthStencil = myBackbuffer.myDepthStencilView;
 	}
 
 	void Renderer::ApplyRenderTargetAndDepthStencil()
@@ -112,12 +123,18 @@ namespace Easy3D
 
 	ID3DX11EffectVariable* Renderer::GetEffectVariable(const CU::String<50>& aName)
 	{
-		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
+		if (myEffectVariables[myCurrentEffect].KeyExists(aName) == false)
+		{
+			Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
 
-		DL_ASSERT_EXP(effect != nullptr, "Cant GetEffectVariable without an Effect");
-		ID3DX11EffectVariable* var = effect->GetEffect()->GetVariableByName(aName.c_str());
-		DL_ASSERT_EXP(var->IsValid() == TRUE, CU::Concatenate<256>("ShaderVar: %s not found", aName.c_str()));
-		return var;
+			DL_ASSERT_EXP(effect != nullptr, "Cant GetEffectVariable without an Effect");
+			ID3DX11EffectVariable* var = effect->GetEffect()->GetVariableByName(aName.c_str());
+			DL_ASSERT_EXP(var->IsValid() == TRUE, CU::Concatenate<256>("ShaderVar: %s not found", aName.c_str()));
+			
+			myEffectVariables[myCurrentEffect][aName] = var;
+		}
+
+		return myEffectVariables[myCurrentEffect][aName];
 	}
 
 }

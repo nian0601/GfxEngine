@@ -1,20 +1,20 @@
 #pragma once
-#include <windef.h>
-#include <CUString.h>
-#include <WinUser.h>
-#include <Vector.h>
 
-#include "Model.h"
-#include "Effect.h"
+#include <CUString.h>
+#include <Vector.h>
+#include <windef.h>
+#include <WinUser.h>
 
 #undef CreateWindow
-
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 
+
 namespace Easy3D
 {
+	struct Backbuffer;
+
 	class DirectX;
 
 	class Engine
@@ -33,6 +33,7 @@ namespace Easy3D
 		ID3D11DeviceContext* GetContext() const;
 
 		void SetBackbufferAsRenderTarget();
+		void GetBackbuffer(Backbuffer& aBackbufferOut);
 
 		const CU::Vector2<float>& GetWindowSize() const;
 

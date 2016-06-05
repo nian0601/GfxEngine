@@ -47,9 +47,6 @@
     <ClInclude Include="BaseModel.h">
       <Filter>Models</Filter>
     </ClInclude>
-    <ClInclude Include="GfxStructs.h">
-      <Filter>Models</Filter>
-    </ClInclude>
     <ClInclude Include="Instance.h">
       <Filter>Models</Filter>
     </ClInclude>
@@ -59,10 +56,16 @@
     <ClInclude Include="ModelProxy.h">
       <Filter>Models</Filter>
     </ClInclude>
-    <ClInclude Include="ModelData.h">
-      <Filter>Models</Filter>
-    </ClInclude>
     <ClInclude Include="EngineTypes.h" />
+    <ClInclude Include="GfxStructs.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Backbuffer.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -142,6 +145,9 @@
     </Filter>
     <Filter Include="Models">
       <UniqueIdentifier>{5d0ead5d-ecf4-4885-8e31-23b03e54b24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structs">
+      <UniqueIdentifier>{410dad21-b6c2-4984-8c24-d2667e787ade}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

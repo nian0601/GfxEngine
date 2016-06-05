@@ -15,6 +15,8 @@ struct IDXGISwapChain;
 
 namespace Easy3D
 {
+	struct Backbuffer;
+
 	class DirectX
 	{
 	public:
@@ -29,6 +31,7 @@ namespace Easy3D
 		ID3D11DeviceContext* GetContext() const;
 
 		void SetBackbufferAsRenderTarget();
+		void GetBackbuffer(Backbuffer& aBackbufferOut);
 
 	private:
 		void SetupSwapChain(const HWND& aHWND, const CU::Vector2<float>& aScreenSize);

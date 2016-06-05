@@ -15,7 +15,7 @@ namespace CU
 
 		void Insert(const Key &aKey, const Value &aValue);
 		Value& Get(const Key &aKey); //Assert om key inte finns
-		void Delete(const Key &aKey); //Assert om key inte finns
+		void Remove(const Key &aKey); //Assert om key inte finns
 		bool KeyExists(const Key &aKey);
 		Value& operator[](const Key &aKey);
 
@@ -104,7 +104,7 @@ namespace CU
 	//------------------
 
 	template<typename Key, typename Value, int StartSize = 67, int BucketSize = 3>
-	void Map<Key, Value, StartSize, BucketSize>::Delete(const Key &aKey) //Assert om key inte finns
+	void Map<Key, Value, StartSize, BucketSize>::Remove(const Key &aKey) //Assert om key inte finns
 	{
 		assert(KeyExists(aKey) == true && "[CUMap]: Tried to delete an nonexisting Key.");
 

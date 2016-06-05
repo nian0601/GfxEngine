@@ -4,6 +4,7 @@
 #include "FullscreenQuad.h"
 #include "GfxStructs.h"
 #include "GPUContainer.h"
+#include "Effect.h"
 
 
 namespace Easy3D

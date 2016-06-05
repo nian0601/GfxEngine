@@ -20,6 +20,7 @@ namespace FBX
 namespace Easy3D
 {
 	class Model;
+	class Texture;
 
 	class FBXFactory : public IModelFactory
 	{

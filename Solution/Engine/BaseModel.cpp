@@ -2,6 +2,7 @@
 #include "BaseModel.h"
 #include <d3dx11effect.h>
 #include <d3d11.h>
+#include "Effect.h"
 #include "GfxStructs.h"
 #include "GPUContainer.h"
 

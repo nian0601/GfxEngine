@@ -1,4 +1,7 @@
 #pragma once
+
+#include "Backbuffer.h"
+#include <CUMap.h>
 #include <CUString.h>
 #include "FullscreenQuad.h"
 #include <Matrix.h>
@@ -25,10 +28,13 @@ namespace Easy3D
 		void SetVector(const CU::String<50>& aName, const CU::Vector3<float>& aVector);
 		void SetVector(const CU::String<50>& aName, const CU::Vector4<float>& aVector);
 
+		void SetClearColor(const CU::Vector4<float>& aColor);
+
 		void AddRenderTarget(Texture* aTexture);
-		void ClearRenderTarget(Texture* aTexture, const CU::Vector4<float>& aColor);
+		void ClearRenderTarget(Texture* aTexture);
 		void SetDepthStencil(Texture* aTexture);
 		void ClearDepthStencil(Texture* aTexture);
+		void SetBackbufferAsTarget();
 		void ApplyRenderTargetAndDepthStencil();
 
 		void RenderFullScreen(const CU::String<30>& aTechnique);
@@ -38,9 +44,13 @@ namespace Easy3D
 		ID3DX11EffectVariable* GetEffectVariable(const CU::String<50>& aName);
 
 		EffectID myCurrentEffect;
+		float myClearColor[4];
 
 		int myRenderTargetCount;
 		ID3D11RenderTargetView* myRenderTargets[4];
 		ID3D11DepthStencilView* myDepthStencil;
+		Backbuffer myBackbuffer;
+
+		CU::Map<EffectID, CU::Map<CU::String<50>, ID3DX11EffectVariable*>> myEffectVariables;
 	};
 }

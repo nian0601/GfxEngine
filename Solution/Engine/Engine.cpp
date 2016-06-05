@@ -103,4 +103,9 @@ namespace Easy3D
 		myDirectX->SetBackbufferAsRenderTarget();
 	}
 
+	void Engine::GetBackbuffer(Backbuffer& aBackbufferOut)
+	{
+		myDirectX->GetBackbuffer(aBackbufferOut);
+	}
+
 }

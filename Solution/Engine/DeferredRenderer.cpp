@@ -1,9 +1,7 @@
 #include "stdafx.h"
 
-#include <d3d11.h>
 #include "GBuffer.h"
 #include "GPUContainer.h"
-#include "Texture.h"
 #include "DeferredRenderer.h"
 #include "Scene.h"
 #include "Renderer.h"
@@ -19,6 +17,7 @@ namespace Easy3D
 		myCubemap = GPUContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
 
 		myRenderer = new Renderer(myFullscreenEffect);
+		myRenderer->SetClearColor({ 0.4f, 0.4f, 0.4f, 1.f });
 	}
 
 
@@ -31,7 +30,8 @@ namespace Easy3D
 	void DeferredRenderer::Render(Scene* aScene)
 	{
 		RenderToGBuffer(aScene);
-		Engine::GetInstance()->SetBackbufferAsRenderTarget();
+		myRenderer->SetBackbufferAsTarget();
+		myRenderer->ApplyRenderTargetAndDepthStencil();
 
 		RenderAmbientPass();
 	}
@@ -43,9 +43,9 @@ namespace Easy3D
 
 	void DeferredRenderer::RenderToGBuffer(Scene* aScene)
 	{
-		myRenderer->ClearRenderTarget(myGBuffer->myAlbedoAndMetalness, { 0.4f, 0.4f, 0.4f, 1.f });
-		myRenderer->ClearRenderTarget(myGBuffer->myNormalAndRoughness, { 0.4f, 0.4f, 0.4f, 1.f });
-		myRenderer->ClearRenderTarget(myGBuffer->myDepth, { 0.4f, 0.4f, 0.4f, 1.f });
+		myRenderer->ClearRenderTarget(myGBuffer->myAlbedoAndMetalness);
+		myRenderer->ClearRenderTarget(myGBuffer->myNormalAndRoughness);
+		myRenderer->ClearRenderTarget(myGBuffer->myDepth);
 		myRenderer->ClearDepthStencil(myGBuffer->myDepthStencil);
 
 		myRenderer->AddRenderTarget(myGBuffer->myAlbedoAndMetalness);

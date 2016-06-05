@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include "Backbuffer.h"
 #include "DirectX.h"
 #include <d3d11.h>
 
@@ -79,6 +81,16 @@ namespace Easy3D
 	void DirectX::SetBackbufferAsRenderTarget()
 	{
 		myContext->OMSetRenderTargets(1, &myBackbufferTarget, myDepthStencilView);
+	}
+
+	void DirectX::GetBackbuffer(Backbuffer& aBackbufferOut)
+	{
+		aBackbufferOut.myBackbufferTexture = myBackbuffer;
+		aBackbufferOut.myBackbufferTarget = myBackbufferTarget;
+		aBackbufferOut.myBackbufferView = myBackbufferView;
+
+		aBackbufferOut.myDepthStencilTexture = myDepthStencil;
+		aBackbufferOut.myDepthStencilView = myDepthStencilView;
 	}
 
 	void DirectX::SetupSwapChain(const HWND& aHWND, const CU::Vector2<float>& aScreenSize)
