@@ -83,6 +83,7 @@
     <ClInclude Include="DL_Assert.h" />
     <ClInclude Include="DL_Debug.h" />
     <ClInclude Include="DL_StackWalker.h" />
+    <ClInclude Include="FileStream.h" />
     <ClInclude Include="FileWatcher.h" />
     <ClInclude Include="Fov90Frustum.h" />
     <ClInclude Include="FuzzySet.h" />
@@ -131,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="DL_Debug.cpp" />
     <ClCompile Include="DL_StackWalker.cpp" />
+    <ClCompile Include="FileStream.cpp" />
     <ClCompile Include="FileWatcher.cpp" />
     <ClCompile Include="FuzzySet.cpp" />
     <ClCompile Include="InputWrapper.cpp" />

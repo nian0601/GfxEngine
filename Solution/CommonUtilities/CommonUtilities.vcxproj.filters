@@ -137,6 +137,7 @@
     <ClInclude Include="CUString.h" />
     <ClInclude Include="CUMapIterator.h" />
     <ClInclude Include="HashHelper.h" />
+    <ClInclude Include="FileStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileWatcher.cpp" />
@@ -181,6 +182,7 @@
       <Filter>DL_Debug</Filter>
     </ClCompile>
     <ClCompile Include="Murmur.cpp" />
+    <ClCompile Include="FileStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
