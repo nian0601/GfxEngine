@@ -4,7 +4,6 @@
 #include <Camera.h>
 #include <Effect.h>
 #include "Game.h"
-#include <GPUContainer.h>
 #include <Instance.h>
 #include <ModelProxy.h>
 #include <Scene.h>
@@ -47,7 +46,6 @@ Game::~Game()
 	SAFE_DELETE(myRenderer);
 
 	Easy3D::AssetContainer::Destroy();
-	Easy3D::GPUContainer::Destroy();
 }
 
 bool Game::Update()

@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
+#include "AssetContainer.h"
 #include <d3d11.h>
 #include <D3DX11async.h>
 #include <d3dx11effect.h>
 #include "Effect.h"
-#include "GPUContainer.h"
 #include "Renderer.h"
 #include "Texture.h"
 #include "GPUData.h"
@@ -124,7 +124,7 @@ namespace Easy3D
 	{
 		if (myEffectVariables[myCurrentEffect].KeyExists(aName) == false)
 		{
-			Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
+			Effect* effect = AssetContainer::GetInstance()->GetEffect(myCurrentEffect);
 
 			DL_ASSERT_EXP(effect != nullptr, "Cant GetEffectVariable without an Effect");
 			ID3DX11EffectVariable* var = effect->GetEffect()->GetVariableByName(aName.c_str());
@@ -147,7 +147,7 @@ namespace Easy3D
 		context->IASetIndexBuffer(someData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(someData.myIndexBuffer->myIndexBufferFormat), byteOffset);
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(someData.myPrimitiveTopology));
 
-		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
+		Effect* effect = AssetContainer::GetInstance()->GetEffect(myCurrentEffect);
 		D3DX11_TECHNIQUE_DESC techDesc;
 		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
+#include "AssetContainer.h"
 #include "GBuffer.h"
-#include "GPUContainer.h"
 #include "DeferredRenderer.h"
 #include "Scene.h"
 #include "Renderer.h"
@@ -12,9 +12,9 @@ namespace Easy3D
 	{
 		myGBuffer = new GBuffer();
 
-		myFullscreenEffect = GPUContainer::GetInstance()->LoadEffect("Data/Shader/S_effect_fullscreen.fx");
+		myFullscreenEffect = AssetContainer::GetInstance()->LoadEffect("Data/Shader/S_effect_fullscreen.fx");
 
-		myCubemap = GPUContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
+		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
 
 		myRenderer = new Renderer(myFullscreenEffect);
 		myRenderer->SetClearColor({ 0.4f, 0.4f, 0.4f, 1.f });

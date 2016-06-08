@@ -6,8 +6,6 @@
 #include "FBXFactory.h"
 #include "Texture.h"
 
-#include "GPUContainer.h"
-
 namespace Easy3D
 {
 	AssetContainer* AssetContainer::myInstance = nullptr;
@@ -28,7 +26,7 @@ namespace Easy3D
 
 	Instance* AssetContainer::RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
 	{
-		EffectID effect = GPUContainer::GetInstance()->LoadEffect(aEffectPath);
+		EffectID effect = LoadEffect(aEffectPath);
 
 		ModelProxy* proxy = new ModelProxy();
 		proxy->myModelData = myModelFactory->LoadModel(aModelPath, effect);
@@ -37,9 +35,46 @@ namespace Easy3D
 		return instance;
 	}
 
+	EffectID AssetContainer::LoadEffect(const CU::String<50>& aFilePath)
+	{
+		if (myEffectsID.KeyExists(aFilePath) == false)
+		{
+			Effect* effect = new Effect();
+			effect->Init(aFilePath);
+
+			myEffects[myNextEffectID] = effect;
+			myEffectsID[aFilePath] = myNextEffectID;
+			++myNextEffectID;
+		}
+
+		return myEffectsID[aFilePath];
+	}
+
+	Effect* AssetContainer::GetEffect(EffectID aID)
+	{
+		if (myEffects.KeyExists(aID) == true)
+		{
+			return myEffects[aID];
+		}
+
+		DL_ASSERT("Tried to Get an Invalid effect");
+		return nullptr;
+	}
+
+	Texture* AssetContainer::RequestTexture(const CU::String<50>& aFilePath)
+	{
+		if (myTextures.KeyExists(aFilePath) == false)
+		{
+			Texture* newTex = new Texture();
+			newTex->LoadTexture(aFilePath);
+			myTextures[aFilePath] = newTex;
+		}
+
+		return myTextures[aFilePath];
+	}
+
 	AssetContainer::AssetContainer()
-		: myNonDGFXModels(16)
-		, myModelFactory(new FBXFactory())
+		: myModelFactory(new FBXFactory())
 	{
 	}
 
@@ -47,5 +82,17 @@ namespace Easy3D
 	AssetContainer::~AssetContainer()
 	{
 		SAFE_DELETE(myModelFactory);
+
+		for (auto it = myEffects.Begin(); it != myEffects.End(); it = myEffects.Next(it))
+		{
+			SAFE_DELETE(it.Second());
+		}
+		myEffects.Clear();
+
+		for (auto it = myTextures.Begin(); it != myTextures.End(); it = myTextures.Next(it))
+		{
+			SAFE_DELETE(it.Second());
+		}
+		myTextures.Clear();
 	}
 }

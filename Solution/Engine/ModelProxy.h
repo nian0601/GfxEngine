@@ -2,10 +2,7 @@
 
 namespace Easy3D
 {
-
-	class Camera;
 	class ModelData;
-	class Effect;
 	class Renderer;
 
 	class ModelProxy

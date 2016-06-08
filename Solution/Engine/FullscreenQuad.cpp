@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
+#include "AssetContainer.h"
 #include <d3dx11effect.h>
 #include "FullscreenQuad.h"
 #include "GPUData.h"
-#include "GPUContainer.h"
 #include "Effect.h"
 
 
@@ -60,7 +60,7 @@ namespace Easy3D
 	void FullscreenQuad::RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique)
 	{
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
-		Effect* effect = GPUContainer::GetInstance()->GetEffect(aEffect);
+		Effect* effect = AssetContainer::GetInstance()->GetEffect(aEffect);
 
 		D3DX11_TECHNIQUE_DESC techDesc;
 		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);

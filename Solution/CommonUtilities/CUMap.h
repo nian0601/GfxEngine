@@ -199,12 +199,12 @@ namespace CU
 				break;
 			}
 
+			innerIndex = 0;
 			if (key != nullptr)
 			{
 				break;
 			}
 
-			innerIndex = 0;
 		}
 
 		return MapIterator<Key, Value>(first, second, key, value);

@@ -1,9 +1,10 @@
 #include "stdafx.h"
+
+#include "AssetContainer.h"
 #include <d3dx11effect.h>
 #include <d3d11.h>
 #include "Effect.h"
 #include "GfxStructs.h"
-#include "GPUContainer.h"
 #include "GPUData.h"
 
 
@@ -91,7 +92,7 @@ namespace Easy3D
 
 	void GPUData::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect)
 	{
-		Effect* effect = GPUContainer::GetInstance()->GetEffect(aEffect);
+		Effect* effect = AssetContainer::GetInstance()->GetEffect(aEffect);
 
 		D3DX11_PASS_DESC passDesc;
 		effect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);

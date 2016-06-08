@@ -105,7 +105,6 @@
     <ClInclude Include="FullscreenQuad.h" />
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="GfxStructs.h" />
-    <ClInclude Include="GPUContainer.h" />
     <ClInclude Include="GPUData.h" />
     <ClInclude Include="IModelFactory.h" />
     <ClInclude Include="Instance.h" />
@@ -128,7 +127,6 @@
     <ClCompile Include="FBX\FbxLoader.cpp" />
     <ClCompile Include="FullscreenQuad.cpp" />
     <ClCompile Include="GBuffer.cpp" />
-    <ClCompile Include="GPUContainer.cpp" />
     <ClCompile Include="GPUData.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="ModelData.cpp" />

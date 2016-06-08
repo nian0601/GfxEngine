@@ -41,9 +41,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering\Fullscreen Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="GPUContainer.h">
-      <Filter>AssetManagement</Filter>
-    </ClInclude>
     <ClInclude Include="EngineTypes.h" />
     <ClInclude Include="GfxStructs.h">
       <Filter>Structs</Filter>
@@ -101,9 +98,6 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\Fullscreen Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="GPUContainer.cpp">
-      <Filter>AssetManagement</Filter>
     </ClCompile>
     <ClCompile Include="ModelData.cpp">
       <Filter>Structs</Filter>

@@ -30,6 +30,7 @@ namespace Easy3D
 			aRenderer->SetMatrix("World", myOrientation);
 			aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
 
+			//aRenderer->RenderModel(myModelID);
 			myModel.Render(aRenderer);
 		}
 	}

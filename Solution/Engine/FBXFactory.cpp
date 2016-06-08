@@ -1,11 +1,10 @@
 #include "stdafx.h"
 
-
+#include "AssetContainer.h"
 #include <CommonHelper.h>
 #include <d3d11.h>
 #include "FbxFactory.h"
 #include "FBX/FbxLoader.h"
-#include "GPUContainer.h"
 #include "Matrix44.h"
 
 #include "ModelData.h"
@@ -182,7 +181,7 @@ namespace Easy3D
 			CU::String<256> fromData = currentTexture.myFileName.SubStr(dataIndex, currentTexture.myFileName.Size());
 
 			someGPUData.myShaderResourceNames.Add(resourceName.c_str());
-			someGPUData.myTextures.Add(GPUContainer::GetInstance()->RequestTexture(fromData.c_str()));
+			someGPUData.myTextures.Add(AssetContainer::GetInstance()->RequestTexture(fromData.c_str()));
 		}
 	}
 
