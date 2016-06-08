@@ -34,7 +34,7 @@ namespace Easy3D
 		ID3D11InputLayout* GetInputLayout() const;
 		int GetTopology() const;
 
-
+		const CU::String<30>& GetTechniqueName() const;
 	private:
 		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect);
 		void InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage);
@@ -53,6 +53,7 @@ namespace Easy3D
 
 		CU::GrowingArray<CU::String<50>> myShaderResourceNames;
 		CU::GrowingArray<Texture*> myTextures;
+		CU::String<30> myTechniqueName;
 	};
 
 	inline const VertexBuffer& GPUData::GetVertexBuffer() const
@@ -73,5 +74,10 @@ namespace Easy3D
 	inline int GPUData::GetTopology() const
 	{
 		return myPrimitiveTopology;
+	}
+
+	inline const CU::String<30>& GPUData::GetTechniqueName() const
+	{
+		return myTechniqueName;
 	}
 }

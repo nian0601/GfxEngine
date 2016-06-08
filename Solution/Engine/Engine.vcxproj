@@ -109,7 +109,6 @@
     <ClInclude Include="IModelFactory.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="ModelData.h" />
-    <ClInclude Include="ModelProxy.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="Renderer.h" />
@@ -130,7 +129,6 @@
     <ClCompile Include="GPUData.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="ModelData.cpp" />
-    <ClCompile Include="ModelProxy.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="Renderer.cpp" />

@@ -2,7 +2,6 @@
 #include "AssetContainer.h"
 #include "Effect.h"
 #include "Instance.h"
-#include "ModelProxy.h"
 #include "FBXFactory.h"
 #include "Texture.h"
 
@@ -24,15 +23,31 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Instance* AssetContainer::RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
+	Instance* AssetContainer::LoadModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
 	{
 		EffectID effect = LoadEffect(aEffectPath);
 
-		ModelProxy* proxy = new ModelProxy();
-		proxy->myModelData = myModelFactory->LoadModel(aModelPath, effect);
+		if (myModelID.KeyExists(aModelPath) == false)
+		{
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
 
-		Instance* instance = new Instance(*proxy, effect);
-		return instance;
+			myModels[myNextModelID] = modelData;
+			myModelID[aModelPath] = myNextModelID;
+			++myNextModelID;
+		}
+
+		return new Instance(myModelID[aModelPath], effect);
+	}
+
+	Easy3D::ModelData* AssetContainer::GetModel(ModelID aID)
+	{
+		if (myModels.KeyExists(aID) == true)
+		{
+			return myModels[aID];
+		}
+
+		DL_ASSERT("Tried to Get an Invalid model");
+		return nullptr;
 	}
 
 	EffectID AssetContainer::LoadEffect(const CU::String<50>& aFilePath)

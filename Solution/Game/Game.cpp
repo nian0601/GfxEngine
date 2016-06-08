@@ -5,7 +5,6 @@
 #include <Effect.h>
 #include "Game.h"
 #include <Instance.h>
-#include <ModelProxy.h>
 #include <Scene.h>
 #include <TimerManager.h>
 
@@ -21,7 +20,7 @@ Game::Game()
 
 	myInstances.Init(16);
 
-	myInstances.Add(Easy3D::AssetContainer::GetInstance()->RequestModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
+	myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
 	myScene = new Easy3D::Scene();

@@ -54,9 +54,6 @@
     <ClInclude Include="GPUData.h">
       <Filter>Structs</Filter>
     </ClInclude>
-    <ClInclude Include="ModelProxy.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Instance.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -106,9 +103,6 @@
       <Filter>Structs</Filter>
     </ClCompile>
     <ClCompile Include="Instance.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelProxy.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>

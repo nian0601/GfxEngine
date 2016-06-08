@@ -59,6 +59,8 @@ namespace Easy3D
 
 		SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
 		SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
+
+		myTechniqueName = "Render";
 	}
 
 	void GPUData::Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData)
@@ -78,6 +80,8 @@ namespace Easy3D
 
 		SetupVertexBuffer(aVertexCount, aVertexData);
 		SetupIndexBuffer(aIndexCount, aIndexData);
+
+		myTechniqueName = "Render";
 	}
 
 	void GPUData::SetTopology(int aTopology)

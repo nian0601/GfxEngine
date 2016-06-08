@@ -101,23 +101,10 @@ namespace Easy3D
 		RenderFullscreenQuad(myCurrentEffect, aTechnique);
 	}
 
-	void Renderer::RenderModel(const ModelData& aData, const CU::String<30>& aTechnique)
+	void Renderer::RenderModel(ModelID aModelID)
 	{
-		if (aData.myIsNullObject == false)
-		{
-			const GPUData& gpuData = *aData.myGPUData;
-			for (int i = 0; i < gpuData.myTextures.Size(); ++i)
-			{
-				SetTexture(gpuData.myShaderResourceNames[i], gpuData.myTextures[i]);
-			}
-		
-			RenderGPUData(gpuData, aTechnique);
-		}
-
-		for (ModelData* child : aData.myChildren)
-		{
-			RenderModel(*child, aTechnique);
-		}
+		ModelData* modelData = AssetContainer::GetInstance()->GetModel(aModelID);
+		RenderModelData(*modelData);
 	}
 
 	ID3DX11EffectVariable* Renderer::GetEffectVariable(const CU::String<50>& aName)
@@ -136,7 +123,26 @@ namespace Easy3D
 		return myEffectVariables[myCurrentEffect][aName];
 	}
 
-	void Renderer::RenderGPUData(const GPUData& someData, const CU::String<30>& aTechnique)
+	void Renderer::RenderModelData(const ModelData& someData)
+	{
+		if (someData.myIsNullObject == false)
+		{
+			const GPUData& gpuData = *someData.myGPUData;
+			for (int i = 0; i < gpuData.myTextures.Size(); ++i)
+			{
+				SetTexture(gpuData.myShaderResourceNames[i], gpuData.myTextures[i]);
+			}
+
+			RenderGPUData(gpuData);
+		}
+
+		for (ModelData* child : someData.myChildren)
+		{
+			RenderModelData(*child);
+		}
+	}
+
+	void Renderer::RenderGPUData(const GPUData& someData)
 	{
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
 
@@ -149,10 +155,10 @@ namespace Easy3D
 
 		Effect* effect = AssetContainer::GetInstance()->GetEffect(myCurrentEffect);
 		D3DX11_TECHNIQUE_DESC techDesc;
-		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
+		effect->GetTechnique(someData.GetTechniqueName())->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
-			effect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
+			effect->GetTechnique(someData.GetTechniqueName())->GetPassByIndex(i)->Apply(0, context);
 			context->DrawIndexed(someData.myIndexData->myNumberOfIndices, 0, 0);
 		}
 	}

@@ -38,11 +38,12 @@ namespace Easy3D
 		void ApplyRenderTargetAndDepthStencil();
 
 		void RenderFullScreen(const CU::String<30>& aTechnique);
-		void RenderModel(const ModelData& aData, const CU::String<30>& aTechnique);
+		void RenderModel(ModelID aModelID);
 
 	private:
 		ID3DX11EffectVariable* GetEffectVariable(const CU::String<50>& aName);
-		void RenderGPUData(const GPUData& someData, const CU::String<30>& aTechnique);
+		void RenderModelData(const ModelData& someData);
+		void RenderGPUData(const GPUData& someData);
 
 		EffectID myCurrentEffect;
 		float myClearColor[4];

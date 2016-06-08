@@ -2,15 +2,14 @@
 
 #include "AssetContainer.h"
 #include "Camera.h"
-#include "ModelProxy.h"
 #include "Effect.h"
 #include "Instance.h"
 #include "Renderer.h"
 
 namespace Easy3D
 {
-	Instance::Instance(ModelProxy& aModel, EffectID aEffect)
-		: myModel(aModel)
+	Instance::Instance(ModelID aModelID, EffectID aEffect)
+		: myModelID(aModelID)
 		, myEffect(aEffect)
 	{
 	}
@@ -22,17 +21,13 @@ namespace Easy3D
 
 	void Instance::Render(Renderer* aRenderer, const Camera& aCamera)
 	{
-		if (myModel.IsLoaded() == true)
-		{
-			aRenderer->SetEffect(myEffect);
-			aRenderer->SetMatrix("View", aCamera.GetView());
-			aRenderer->SetMatrix("Projection", aCamera.GetProjection());
-			aRenderer->SetMatrix("World", myOrientation);
-			aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
+		aRenderer->SetEffect(myEffect);
+		aRenderer->SetMatrix("View", aCamera.GetView());
+		aRenderer->SetMatrix("Projection", aCamera.GetProjection());
+		aRenderer->SetMatrix("World", myOrientation);
+		aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
 
-			//aRenderer->RenderModel(myModelID);
-			myModel.Render(aRenderer);
-		}
+		aRenderer->RenderModel(myModelID);
 	}
 
 	void Instance::SetPosition(const CU::Vector3<float>& aPosition)

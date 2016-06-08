@@ -5,13 +5,12 @@
 namespace Easy3D
 {
 	class Camera;
-	class ModelProxy;
 	class Renderer;
 
 	class Instance
 	{
 	public:
-		Instance(ModelProxy& aModel, EffectID aEffect);
+		Instance(ModelID aModelID, EffectID aEffect);
 		~Instance();
 
 		void Render(Renderer* aRenderer, const Camera& aCamera);
@@ -23,7 +22,7 @@ namespace Easy3D
 		void operator=(Instance&) = delete;
 
 		CU::Matrix44<float> myOrientation;
-		ModelProxy& myModel;
+		ModelID myModelID;
 		EffectID myEffect;
 	};
 }
