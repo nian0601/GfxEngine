@@ -7,6 +7,7 @@
 #include "GPUContainer.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "GPUData.h"
 
 namespace Easy3D
 {
@@ -102,22 +103,20 @@ namespace Easy3D
 
 	void Renderer::RenderModel(const ModelData& aData, const CU::String<30>& aTechnique)
 	{
-		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
-
-		const unsigned int byteOffset = 0;
-
-		context->IASetInputLayout(aData.myInputLayout);
-		context->IASetVertexBuffers(0, 1, &aData.myVertexBuffer->myVertexBuffer, &aData.myVertexBuffer->myStride, &byteOffset);
-		context->IASetIndexBuffer(aData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(aData.myIndexBuffer->myIndexBufferFormat), byteOffset);
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(aData.myPrimitiveTopology));
-
-		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
-		D3DX11_TECHNIQUE_DESC techDesc;
-		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
-		for (UINT i = 0; i < techDesc.Passes; ++i)
+		if (aData.myIsNullObject == false)
 		{
-			effect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
-			context->DrawIndexed(aData.myIndexData->myNumberOfIndices, 0, 0);
+			const GPUData& gpuData = *aData.myGPUData;
+			for (int i = 0; i < gpuData.myTextures.Size(); ++i)
+			{
+				SetTexture(gpuData.myShaderResourceNames[i], gpuData.myTextures[i]);
+			}
+		
+			RenderGPUData(gpuData, aTechnique);
+		}
+
+		for (ModelData* child : aData.myChildren)
+		{
+			RenderModel(*child, aTechnique);
 		}
 	}
 
@@ -135,6 +134,27 @@ namespace Easy3D
 		}
 
 		return myEffectVariables[myCurrentEffect][aName];
+	}
+
+	void Renderer::RenderGPUData(const GPUData& someData, const CU::String<30>& aTechnique)
+	{
+		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
+
+		const unsigned int byteOffset = 0;
+
+		context->IASetInputLayout(someData.myInputLayout);
+		context->IASetVertexBuffers(0, 1, &someData.myVertexBuffer->myVertexBuffer, &someData.myVertexBuffer->myStride, &byteOffset);
+		context->IASetIndexBuffer(someData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(someData.myIndexBuffer->myIndexBufferFormat), byteOffset);
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(someData.myPrimitiveTopology));
+
+		Effect* effect = GPUContainer::GetInstance()->GetEffect(myCurrentEffect);
+		D3DX11_TECHNIQUE_DESC techDesc;
+		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);
+		for (UINT i = 0; i < techDesc.Passes; ++i)
+		{
+			effect->GetTechnique(aTechnique)->GetPassByIndex(i)->Apply(0, context);
+			context->DrawIndexed(someData.myIndexData->myNumberOfIndices, 0, 0);
+		}
 	}
 
 }

@@ -2,7 +2,6 @@
 #include "AssetContainer.h"
 #include "Effect.h"
 #include "Instance.h"
-#include "Model.h"
 #include "ModelProxy.h"
 #include "FBXFactory.h"
 #include "Texture.h"
@@ -27,26 +26,12 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Instance* AssetContainer::RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const CU::String<50>& aEffectPath)
-	{
-		EffectID effect = GPUContainer::GetInstance()->LoadEffect(aEffectPath);
-
-		myNonDGFXModels.Add(new Model());
-		myNonDGFXModels.GetLast()->InitCube(aSize, aColor, effect);
-
-		ModelProxy* proxy = new ModelProxy();
-		proxy->myModel = myNonDGFXModels.GetLast();
-
-		Instance* instance = new Instance(*proxy, effect);
-		return instance;
-	}
-
 	Instance* AssetContainer::RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
 	{
 		EffectID effect = GPUContainer::GetInstance()->LoadEffect(aEffectPath);
 
 		ModelProxy* proxy = new ModelProxy();
-		proxy->myModel = myModelFactory->LoadModel(aModelPath, effect);
+		proxy->myModelData = myModelFactory->LoadModel(aModelPath, effect);
 
 		Instance* instance = new Instance(*proxy, effect);
 		return instance;

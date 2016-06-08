@@ -20,11 +20,7 @@ namespace Easy3D
 		static AssetContainer* GetInstance();
 		static void Destroy();
 
-
-		Instance* RequestCube(const CU::Vector3<float>& aSize, const CU::Vector4<float>& aColor, const CU::String<50>& aEffectPath);
 		Instance* RequestModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath);
-
-		
 
 	private:
 		AssetContainer();

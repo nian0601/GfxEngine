@@ -1,21 +1,36 @@
 #pragma once
 
-struct ID3D11InputLayout;
+#include <GrowingArray.h>
+#include <Matrix.h>
+#include "EngineTypes.h"
 
 namespace Easy3D
 {
-	struct VertexBuffer;
-	struct VertexData;
-	struct IndexBuffer;
-	struct IndexData;
+	class GPUData;
 
-	struct ModelData
+	class ModelData
 	{
-		VertexBuffer* myVertexBuffer;
-		VertexData* myVertexData;
-		IndexBuffer* myIndexBuffer;
-		IndexData* myIndexData;
-		ID3D11InputLayout* myInputLayout;
-		int myPrimitiveTopology;
+		friend class FBXFactory;
+		friend class Renderer;
+	public:
+		ModelData();
+		~ModelData();
+
+		void Init(EffectID aEffectID);
+		void AddChild(ModelData* aModelData);
+
+	private:
+		GPUData* myGPUData;
+
+		CU::GrowingArray<ModelData*> myChildren;
+		CU::GrowingArray<CU::Matrix44<float>> myChildTransforms;
+		CU::Matrix44<float> myOrientation;
+		bool myIsNullObject;
+	};
+
+	struct ModelBatchData
+	{
+		ModelData myModelData;
+		CU::GrowingArray<CU::Matrix44<float>> myOrientations;
 	};
 }

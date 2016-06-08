@@ -20,10 +20,14 @@ namespace Easy3D
 	{
 		DL_ASSERT_EXP(myCamera != nullptr, "Cant render without a Camera");
 
+		//aRenderer->BeginModelBatch();
+
 		for (Instance* instance : myInstances)
 		{
 			instance->Render(aRenderer, *myCamera);
 		}
+
+		//aRenderer->EndModelBatch();
 	}
 
 	void Scene::SetCamera(Camera& aCamera)

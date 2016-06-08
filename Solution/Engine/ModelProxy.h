@@ -2,10 +2,9 @@
 
 namespace Easy3D
 {
-	struct ModelData;
 
 	class Camera;
-	class Model;
+	class ModelData;
 	class Effect;
 	class Renderer;
 
@@ -23,11 +22,12 @@ namespace Easy3D
 		const ModelData& GetData() const;
 
 	private:
-		Model* myModel;
+		ModelData* myModelData;
 	};
 
 	inline bool ModelProxy::IsLoaded() const
 	{
-		return myModel != nullptr;
+		int DoRealLoadedCheckhere = 5;
+		return true;
 	}
 }

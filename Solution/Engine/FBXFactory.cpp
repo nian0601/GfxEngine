@@ -7,7 +7,9 @@
 #include "FBX/FbxLoader.h"
 #include "GPUContainer.h"
 #include "Matrix44.h"
-#include "Model.h"
+
+#include "ModelData.h"
+#include "GPUData.h"
 
 
 namespace Easy3D
@@ -28,7 +30,7 @@ namespace Easy3D
 		SAFE_DELETE(myLoader);
 	}
 
-	Model* FBXFactory::LoadModel(const CU::String<50>& aFilePath, EffectID aEffect)
+	ModelData* FBXFactory::LoadModel(const CU::String<50>& aFilePath, EffectID aEffect)
 	{
 		if (myModels.KeyExists(aFilePath) == true)
 		{
@@ -38,66 +40,63 @@ namespace Easy3D
 		CU::GrowingArray<CU::String<80>> errors(16);
 		FBX::FbxModelData* fbxModelData = myLoader->loadModel(aFilePath.c_str(), errors);
 
-		Model* returnModel = CreateModel(fbxModelData);
-		myModels[aFilePath] = returnModel;
+		ModelData* modelData = CreateModel(fbxModelData);
+		myModels[aFilePath] = modelData;
 
-		returnModel->Init(aEffect);
-		return returnModel;
+		modelData->Init(aEffect);
+		return modelData;
 	}
 
-	Model* FBXFactory::CreateModel(FBX::FbxModelData* someModelData)
+	ModelData* FBXFactory::CreateModel(FBX::FbxModelData* someModelData)
 	{
-		Model* tempModel = new Model();
-		tempModel->myData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		ModelData* modelData = new ModelData();
 
 		if (someModelData->myData)
 		{
-			tempModel->myIsNullObject = false;
+			modelData->myIsNullObject = false;
+			modelData->myOrientation = someModelData->myOrientation;
 
-			IndexData* indexData = new IndexData();
-			VertexData* vertexData = new VertexData();
+			modelData->myGPUData = new GPUData();
+			GPUData& gpuData = *modelData->myGPUData;
+			gpuData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+			gpuData.myIndexData = new IndexData();
+			gpuData.myVertexData = new VertexData();
 
-			LoadData(indexData, vertexData, tempModel->myVertexFormat
-				, tempModel->myShaderResourceNames, tempModel->myTextures
-				, someModelData->myData);
-
-			tempModel->myData.myIndexData = indexData;
-			tempModel->myData.myVertexData = vertexData;
-			tempModel->myOrientation = someModelData->myOrientation;
+			LoadData(gpuData, someModelData->myData);
 		}
 
 		for (int i = 0; i < someModelData->myChildren.Size(); ++i)
 		{
 			auto currentChild = someModelData->myChildren[i];
-			tempModel->AddChild(CreateModel(currentChild));
+			modelData->AddChild(CreateModel(currentChild));
 		}
-		return tempModel;
+		return modelData;
 	}
 
-	void FBXFactory::LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
-		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements
-		, CU::GrowingArray<CU::String<50>>& someShaderResourceNames
-		, CU::GrowingArray<Texture*>& someTextures
-		, FBX::ModelData* someData)
+	void FBXFactory::LoadData(GPUData& someGPUData, FBX::ModelData* someFBXData)
 	{
-		aIndexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
-		unsigned int* indexData = new unsigned int[someData->myIndexCount];
-		memcpy(indexData, someData->myIndicies, someData->myIndexCount*sizeof(unsigned int));
-		aIndexWrapper->myIndexData = (char*)indexData;
-		aIndexWrapper->mySize = someData->myIndexCount*sizeof(unsigned int);
-		aIndexWrapper->myNumberOfIndices = someData->myIndexCount;
+		unsigned int* rawIndexData = new unsigned int[someFBXData->myIndexCount];
+		memcpy(rawIndexData, someFBXData->myIndicies, someFBXData->myIndexCount*sizeof(unsigned int));
 
-		int sizeOfBuffer = someData->myVertexCount*someData->myVertexStride*sizeof(float);
-		char* vertexRawData = new char[sizeOfBuffer];
-		memcpy(vertexRawData, someData->myVertexBuffer, sizeOfBuffer);
-		aVertexData->myVertexData = vertexRawData;
-		aVertexData->myNumberOfVertices = someData->myVertexCount;
-		aVertexData->mySize = sizeOfBuffer;
-		aVertexData->myStride = someData->myVertexStride*sizeof(float);
+		IndexData* indexData = someGPUData.myIndexData;
+		indexData->myFormat = DXGI_FORMAT_R32_UINT;
+		indexData->myIndexData = (char*)rawIndexData;
+		indexData->mySize = someFBXData->myIndexCount*sizeof(unsigned int);
+		indexData->myNumberOfIndices = someFBXData->myIndexCount;
 
-		for (int i = 0; i < someData->myLayout.Size(); ++i)
+		int sizeOfBuffer = someFBXData->myVertexCount*someFBXData->myVertexStride*sizeof(float);
+		char* rawVertexData = new char[sizeOfBuffer];
+		memcpy(rawVertexData, someFBXData->myVertexBuffer, sizeOfBuffer);
+
+		VertexData* vertexData = someGPUData.myVertexData;
+		vertexData->myVertexData = rawVertexData;
+		vertexData->myNumberOfVertices = someFBXData->myVertexCount;
+		vertexData->mySize = sizeOfBuffer;
+		vertexData->myStride = someFBXData->myVertexStride*sizeof(float);
+
+		for (int i = 0; i < someFBXData->myLayout.Size(); ++i)
 		{
-			auto currentLayout = someData->myLayout[i];
+			auto currentLayout = someFBXData->myLayout[i];
 			D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
 			desc->SemanticIndex = currentLayout.mySemanticIndex;
 			desc->AlignedByteOffset = currentLayout.myOffset;
@@ -145,12 +144,13 @@ namespace Easy3D
 				desc->SemanticName = "COLOR";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			}
-			someInputElements.Add(desc);
+
+			someGPUData.myVertexFormat.Add(desc);
 		}
 
-		for (int i = 0; i < someData->myTextures.Size(); ++i)
+		for (int i = 0; i < someFBXData->myTextures.Size(); ++i)
 		{
-			auto& currentTexture = someData->myTextures[i];
+			auto& currentTexture = someFBXData->myTextures[i];
 
 			CU::String<80> resourceName;
 			if (currentTexture.myType == FBX::ALBEDO)
@@ -181,8 +181,9 @@ namespace Easy3D
 			int dataIndex = currentTexture.myFileName.RFind("Data\\");
 			CU::String<256> fromData = currentTexture.myFileName.SubStr(dataIndex, currentTexture.myFileName.Size());
 
-			someShaderResourceNames.Add(resourceName.c_str());
-			someTextures.Add(GPUContainer::GetInstance()->RequestTexture(fromData.c_str()));
+			someGPUData.myShaderResourceNames.Add(resourceName.c_str());
+			someGPUData.myTextures.Add(GPUContainer::GetInstance()->RequestTexture(fromData.c_str()));
 		}
 	}
+
 }

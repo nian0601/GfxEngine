@@ -42,6 +42,7 @@ namespace Easy3D
 
 	private:
 		ID3DX11EffectVariable* GetEffectVariable(const CU::String<50>& aName);
+		void RenderGPUData(const GPUData& someData, const CU::String<30>& aTechnique);
 
 		EffectID myCurrentEffect;
 		float myClearColor[4];

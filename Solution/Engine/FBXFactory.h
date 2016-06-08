@@ -19,7 +19,8 @@ namespace FBX
 
 namespace Easy3D
 {
-	class Model;
+	class ModelData;
+	class GPUData;
 	class Texture;
 
 	class FBXFactory : public IModelFactory
@@ -28,20 +29,13 @@ namespace Easy3D
 		FBXFactory();
 		~FBXFactory();
 
-		Model* LoadModel(const CU::String<50>& aFilePath, EffectID aEffect) override;
+		ModelData* LoadModel(const CU::String<50>& aFilePath, EffectID aEffect) override;
 		
 	private:
-		Model* CreateModel(FBX::FbxModelData* someModelData);
-		void LoadData(IndexData* aIndexWrapper, VertexData* aVertexData
-			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements
-			, CU::GrowingArray<CU::String<50>>& someShaderResourceNames
-			, CU::GrowingArray<Texture*>& someTextures
-			, FBX::ModelData* someData);
-
-		
+		ModelData* CreateModel(FBX::FbxModelData* someModelData);
+		void LoadData(GPUData& someGPUData, FBX::ModelData* someFBXData);
 
 		FBX::FBXLoader *myLoader;
-
-		CU::Map<CU::String<50>, Model*> myModels;
+		CU::Map<CU::String<50>, ModelData*> myModels;
 	};
 }

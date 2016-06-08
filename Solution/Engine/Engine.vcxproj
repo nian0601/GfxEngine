@@ -95,7 +95,6 @@
   <ItemGroup>
     <ClInclude Include="AssetContainer.h" />
     <ClInclude Include="Backbuffer.h" />
-    <ClInclude Include="BaseModel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Effect.h" />
@@ -107,9 +106,9 @@
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="GfxStructs.h" />
     <ClInclude Include="GPUContainer.h" />
+    <ClInclude Include="GPUData.h" />
     <ClInclude Include="IModelFactory.h" />
     <ClInclude Include="Instance.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="ModelProxy.h" />
     <ClInclude Include="PointLight.h" />
@@ -121,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetContainer.cpp" />
-    <ClCompile Include="BaseModel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -131,8 +129,9 @@
     <ClCompile Include="FullscreenQuad.cpp" />
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GPUContainer.cpp" />
+    <ClCompile Include="GPUData.cpp" />
     <ClCompile Include="Instance.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelData.cpp" />
     <ClCompile Include="ModelProxy.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />

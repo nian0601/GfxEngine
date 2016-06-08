@@ -2,7 +2,7 @@
 
 #include <d3dx11effect.h>
 #include "FullscreenQuad.h"
-#include "GfxStructs.h"
+#include "GPUData.h"
 #include "GPUContainer.h"
 #include "Effect.h"
 
@@ -20,26 +20,14 @@ namespace Easy3D
 
 	void FullscreenQuad::InitFullscreenQuad(EffectID aEffect)
 	{
-		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-
-		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), aEffect);
-		InitVertexBuffer(sizeof(VertexPosUV), D3D11_USAGE_IMMUTABLE, 0);
-		InitIndexBuffer();
-
-		CU::GrowingArray<VertexPosUV> vertices;
-		vertices.Init(4);
+		CU::GrowingArray<VertexPosUV> vertices(4);
 		vertices.Add({ { -1.f, -1.f, 0.f }, { 0.f, 1.f } }); //topleft
 		vertices.Add({ { 1.f, -1.f, 0.f }, { 1.f, 1.f } }); //topright
 		vertices.Add({ { -1.f, 1.f, 0.f }, { 0.f, 0.f } }); //bottomleft
 		vertices.Add({ { 1.f, 1.f, 0.f }, { 1.f, 0.f } }); //bottomright
 
-		CU::GrowingArray<int> indices;
-		indices.Init(6);
 
+		CU::GrowingArray<int> indices(6);
 		indices.Add(0);
 		indices.Add(2);
 		indices.Add(1);
@@ -48,20 +36,25 @@ namespace Easy3D
 		indices.Add(2);
 		indices.Add(3);
 
-		SetupVertexBuffer(vertices.Size(), reinterpret_cast<char*>(&vertices[0]));
-		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]));
 
-		myData.myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		myGPUData.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		myGPUData.AddInputElement(new D3D11_INPUT_ELEMENT_DESC({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }));
+		myGPUData.AddInputElement(new D3D11_INPUT_ELEMENT_DESC({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }));
+		myGPUData.Init(aEffect, indices.Size(), reinterpret_cast<char*>(&indices[0]), vertices.Size()
+			, sizeof(VertexPosUV), reinterpret_cast<char*>(&vertices[0]));
 	}
 
 	void FullscreenQuad::ActivateFullscreenQuad()
 	{
 		const unsigned int byteOffset = 0;
 		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
-		context->IASetInputLayout(myData.myInputLayout);
-		context->IASetVertexBuffers(0, 1, &myData.myVertexBuffer->myVertexBuffer, &myData.myVertexBuffer->myStride, &byteOffset);
-		context->IASetIndexBuffer(myData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(myData.myIndexBuffer->myIndexBufferFormat), byteOffset);
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myData.myPrimitiveTopology));
+		const IndexBuffer& indexBuffer = myGPUData.GetIndexBuffer();
+		const VertexBuffer& vertexBuffer = myGPUData.GetVertexBuffer();
+
+		context->IASetInputLayout(myGPUData.GetInputLayout());
+		context->IASetIndexBuffer(indexBuffer.myIndexBuffer, DXGI_FORMAT(indexBuffer.myIndexBufferFormat), byteOffset);
+		context->IASetVertexBuffers(0, 1, &vertexBuffer.myVertexBuffer, &vertexBuffer.myStride, &byteOffset);
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myGPUData.GetTopology()));
 	}
 
 	void FullscreenQuad::RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique)
