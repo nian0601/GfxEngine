@@ -19,12 +19,14 @@ namespace Easy3D
 
 		const CU::Matrix44<float>& GetView() const;
 		const CU::Matrix44<float>& GetProjection() const;
+		const CU::Matrix44<float>& GetViewProjection() const;
 
 		CU::Vector3<float> GetPosition() const;
 
 	private:
 		CU::Matrix44<float> myProjection;
 		CU::Matrix44<float> myView;
+		CU::Matrix44<float> myViewProjection;
 
 		CU::Matrix44<float> myOrientation;
 	};
@@ -37,6 +39,11 @@ namespace Easy3D
 	inline const CU::Matrix44<float>& Camera::GetProjection() const
 	{
 		return myProjection;
+	}
+
+	inline const CU::Matrix44<float>& Camera::GetViewProjection() const
+	{
+		return myViewProjection;
 	}
 
 	inline CU::Vector3<float> Camera::GetPosition() const

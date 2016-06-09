@@ -6,7 +6,7 @@
 
 namespace CU
 {
-	FileStream::FileStream(const CU::String<50>& aFilePath, int aFlags)
+	FileStream::FileStream(const CU::String<64>& aFilePath, int aFlags)
 		: myFlags(aFlags)
 	{
 		CU::String<3> flags;

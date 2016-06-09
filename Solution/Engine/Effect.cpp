@@ -27,7 +27,7 @@ namespace Easy3D
 		SAFE_RELEASE(myEffect);
 	}
 
-	void Effect::Init(const CU::String<50>& aFilePath)
+	void Effect::Init(const CU::String<64>& aFilePath)
 	{
 		myFileName = CU::GetFileNameFromFilePath(aFilePath);
 		myFilePath = aFilePath;

@@ -15,7 +15,7 @@ namespace CU
 			BINARY = 4,
 		};
 
-		FileStream(const CU::String<50>& aFilePath, int aFlags);
+		FileStream(const CU::String<64>& aFilePath, int aFlags);
 		~FileStream();
 
 		void Write(int aValue);

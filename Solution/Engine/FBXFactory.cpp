@@ -29,7 +29,7 @@ namespace Easy3D
 		SAFE_DELETE(myLoader);
 	}
 
-	ModelData* FBXFactory::LoadModel(const CU::String<50>& aFilePath, EffectID aEffect)
+	ModelData* FBXFactory::LoadModel(const CU::String<64>& aFilePath, EffectID aEffect)
 	{
 		if (myModels.KeyExists(aFilePath) == true)
 		{

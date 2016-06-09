@@ -23,7 +23,7 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Instance* AssetContainer::LoadModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath)
+	Instance* AssetContainer::LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath)
 	{
 		EffectID effect = LoadEffect(aEffectPath);
 
@@ -50,7 +50,7 @@ namespace Easy3D
 		return nullptr;
 	}
 
-	EffectID AssetContainer::LoadEffect(const CU::String<50>& aFilePath)
+	EffectID AssetContainer::LoadEffect(const CU::String<64>& aFilePath)
 	{
 		if (myEffectsID.KeyExists(aFilePath) == false)
 		{

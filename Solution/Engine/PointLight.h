@@ -22,7 +22,6 @@ namespace Easy3D
 		const PointLightData& GetData() const;
 
 	private:
-		Instance* myLightMesh;
 		PointLightData myData;
 	};
 

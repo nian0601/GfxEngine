@@ -22,8 +22,7 @@ namespace Easy3D
 	void Instance::Render(Renderer* aRenderer, const Camera& aCamera)
 	{
 		aRenderer->SetEffect(myEffect);
-		aRenderer->SetMatrix("View", aCamera.GetView());
-		aRenderer->SetMatrix("Projection", aCamera.GetProjection());
+		aRenderer->SetMatrix("ViewProjection", aCamera.GetViewProjection());
 		aRenderer->SetMatrix("World", myOrientation);
 		aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
 

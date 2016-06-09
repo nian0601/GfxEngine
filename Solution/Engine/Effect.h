@@ -21,7 +21,7 @@ namespace Easy3D
 		Effect();
 		~Effect();
 
-		void Init(const CU::String<50>& aFilePath);
+		void Init(const CU::String<64>& aFilePath);
 
 		ID3DX11Effect* GetEffect() const;
 		ID3DX11EffectTechnique* GetTechnique(const CU::String<30>& aTechniqueName) const;
@@ -66,7 +66,7 @@ namespace Easy3D
 		ID3DX11EffectScalarVariable* myMetalness;
 		ID3DX11EffectScalarVariable* myRoughness;
 
-		CU::String<50> myFileName;
-		CU::String<50> myFilePath;
+		CU::String<64> myFileName;
+		CU::String<64> myFilePath;
 	};
 }

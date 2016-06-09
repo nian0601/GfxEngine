@@ -51,6 +51,12 @@ namespace Easy3D
 		var->AsVector()->SetFloatVector(&aVector.x);
 	}
 
+	void Renderer::SetRawData(const CU::String<64>& aName, int aDataSize, const void* someData)
+	{
+		ID3DX11EffectVariable* var = GetEffectVariable(aName);
+		var->SetRawValue(someData, 0, aDataSize);
+	}
+
 	void Renderer::SetClearColor(const CU::Vector4<float>& aColor)
 	{
 		myClearColor[0] = aColor.x;

@@ -24,10 +24,10 @@ namespace Easy3D
 		static AssetContainer* GetInstance();
 		static void Destroy();
 
-		Instance* LoadModel(const CU::String<50>& aModelPath, const CU::String<50>& aEffectPath);
+		Instance* LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
 		ModelData* GetModel(ModelID aID);
 
-		EffectID LoadEffect(const CU::String<50>& aFilePath);
+		EffectID LoadEffect(const CU::String<64>& aFilePath);
 		Effect* GetEffect(EffectID aID);
 
 		Texture* RequestTexture(const CU::String<64>& aFilePath);
@@ -41,11 +41,11 @@ namespace Easy3D
 		IModelFactory* myModelFactory;
 
 		CU::Map<EffectID, Effect*> myEffects;
-		CU::Map<CU::String<50>, EffectID> myEffectsID;
+		CU::Map<CU::String<64>, EffectID> myEffectsID;
 		EffectID myNextEffectID;
 
 		CU::Map<ModelID, ModelData*> myModels;
-		CU::Map<CU::String<50>, ModelID> myModelID;
+		CU::Map<CU::String<64>, ModelID> myModelID;
 		ModelID myNextModelID;
 
 		CU::Map<CU::String<64>, Texture*> myTextures;

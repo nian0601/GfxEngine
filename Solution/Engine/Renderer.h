@@ -27,6 +27,7 @@ namespace Easy3D
 		void SetMatrix(const CU::String<64>& aName, const CU::Matrix44<float>& aMatrix);
 		void SetVector(const CU::String<64>& aName, const CU::Vector3<float>& aVector);
 		void SetVector(const CU::String<64>& aName, const CU::Vector4<float>& aVector);
+		void SetRawData(const CU::String<64>& aName, int aDataSize, const void* someData);
 
 		void SetClearColor(const CU::Vector4<float>& aColor);
 

@@ -8,6 +8,7 @@
 #include <Scene.h>
 #include <TimerManager.h>
 #include <DeferredRenderer.h>
+#include <PointLight.h>
 
 Game::Game()
 {
@@ -26,9 +27,9 @@ Game::Game()
 		myScene->AddInstance(instance);
 	}
 
+	myScene->AddLight(new Easy3D::PointLight({ 0.f, 0.f, 5.f }, { 1.f, 0.f, 0.f, 3.f }, 10));
+
 	myTimerManager = new CU::TimerManager();
-
-
 	myRenderer = new Easy3D::DeferredRenderer();
 }
 

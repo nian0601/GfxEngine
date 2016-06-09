@@ -8,6 +8,7 @@ namespace Easy3D
 	Scene::Scene()
 		: myCamera(nullptr)
 		, myInstances(16)
+		, myPointLights(16)
 	{
 	}
 
@@ -44,6 +45,11 @@ namespace Easy3D
 	{
 		DL_ASSERT_EXP(myInstances.Find(aInstance) != myInstances.FoundNone, "Cant remove Instance thats not in the scene");
 		myInstances.RemoveCyclic(aInstance);
+	}
+
+	void Scene::AddLight(PointLight* aLight)
+	{
+		myPointLights.Add(aLight);
 	}
 
 }

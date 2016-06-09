@@ -1,28 +1,42 @@
 #include "S_u_variables.fx"
 
-PixelShader_Model VS(VertexShader_Model aInput)
+struct PointLightData
 {
-	PixelShader_Model output = (PixelShader_Model)0;
-	output.Position = mul(aInput.Position, World);
-	output.Position = mul(output.Position, View);
-	output.Position = mul(output.Position, Projection);
-	
-	output.Tex = aInput.Tex;
-	
-	output.Normal = mul(aInput.Normal, World);
-	output.BiNormal = aInput.BiNormal;
-	output.Tangent = mul(aInput.Tangent, World);
+	float4 Position;
+	float4 Color;
+	float Range;
+};
+PointLightData PointLight;
 
-	output.WorldPosition = mul(aInput.Position, World);
+Pixel_LightMesh VertexShader_PointLight(Vertex_LightMesh aInput)
+{
+	Pixel_LightMesh output = (Pixel_LightMesh)0;
+
+	float range = 10; //20.f;
+	float4 scale = float4(range, range, range, 1.0f);
+	aInput.Position *= scale;
 	
+	aInput.Position.w = 1.0f;
+
+	Matrix mat = mul(World, ViewProjection);
+	output.Position = mul(aInput.Position, mat);
+
+	float x = output.Position.x;
+	float y = output.Position.y;
+	float w = output.Position.w;
+
+	output.Tex = float4((float2(x + w, w - y)) / 2, output.Position.zw);
+
 	return output;
 }
 
-float4 PS(PixelShader_Model aInput) : SV_Target
+float4 PixelShader_PointLight(Pixel_LightMesh aInput) : SV_Target
 {
-	PBLData data = CalculatePBLData(aInput.Tex, aInput.Normal, aInput.BiNormal, aInput.Tangent);
-
-	float3 ToEye = normalize(CameraPosition - aInput.WorldPosition.xyz);
+	return float4(1, 1, 1, 1);
+	/*
+	PBLData data = CalculatePBLData_GBuffer(aInput.Tex);
+	
+	float3 ToEye = normalize(CameraPosition - data.WorldPosition.xyz);
 	float3 RefFresnel = ReflectionFresnel(data.Substance, data.Normal, ToEye, 1 - data.RoughnessOffsetted);
 
 
@@ -57,14 +71,16 @@ float4 PS(PixelShader_Model aInput) : SV_Target
 	float3 LightSpecc = (((D * V * F) / 3.14159 + (1 - F) * NdotL * data.MetalnessAlbedo * data.AmbientOcclusion)) * LightColor;
 
 	return saturate(float4(ambientColor + LightSpecc, 1.f));
+	*/
 }
+
 
 technique11 Render
 {
 	pass P0
 	{
-		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetVertexShader(CompileShader(vs_5_0, VertexShader_PointLight()));
 		SetGeometryShader(NULL);
-		SetPixelShader(CompileShader(ps_5_0, PS()));
+		SetPixelShader(CompileShader(ps_5_0, PixelShader_PointLight()));
 	}
 }

@@ -17,6 +17,7 @@ namespace Easy3D
 	void Camera::Update()
 	{
 		myView = CU::InverseSimple(myOrientation);
+		myViewProjection = myView * myProjection;
 	}
 
 	void Camera::Resize(const CU::Vector2<float>& aSize)

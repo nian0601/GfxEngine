@@ -238,11 +238,11 @@ namespace CU
 			|| aValue == 1024 * 6;
 	}
 
-	inline CU::String<50> GetFileNameFromFilePath(const CU::String<50>& aFilePath)
+	inline CU::String<64> GetFileNameFromFilePath(const CU::String<64>& aFilePath)
 	{
 		int index = aFilePath.RFind("/") + 1;
 
-		CU::String<50> result = aFilePath.SubStr(index, aFilePath.Size());
+		CU::String<64> result = aFilePath.SubStr(index, aFilePath.Size());
 		return result;
 	}
 }

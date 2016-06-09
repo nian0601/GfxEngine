@@ -5,6 +5,7 @@ namespace Easy3D
 {
 	class Effect;
 	class GBuffer;
+	class Instance;
 	class Scene;
 	class Texture;
 	class Renderer;
@@ -22,11 +23,14 @@ namespace Easy3D
 	private:
 		void RenderToGBuffer(Scene* aScene);
 		void RenderAmbientPass();
+		void RenderPointLights(Scene* aScene);
 
 		EffectID myFullscreenEffect;
+		EffectID myPointLightEffect;
 		GBuffer* myGBuffer;
 		Texture* myCubemap;
 
 		Renderer* myRenderer;
+		Instance* myPointLightInstance;
 	};
 }

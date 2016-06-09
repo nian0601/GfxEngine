@@ -3,9 +3,8 @@
 Pixel_Model VertexShader_Model(Vertex_Model aInput)
 {
 	Pixel_Model output = (Pixel_Model)0;
-	output.Position = mul(aInput.Position, World);
-	output.Position = mul(output.Position, View);
-	output.Position = mul(output.Position, Projection);
+	Matrix mat = mul(World, ViewProjection);
+	output.Position = mul(aInput.Position, mat);
 	
 	output.Tex = aInput.Tex;
 	

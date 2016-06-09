@@ -42,6 +42,18 @@ struct Pixel_FullscreenQuad
 	float2 Tex : TEXCOORD;
 };
 
+struct Vertex_LightMesh
+{
+	float4 Position : POSITION;
+};
+
+struct Pixel_LightMesh
+{
+	float4 Position : SV_POSITION;
+	float4 Tex : POSITION;
+};
+
+
 struct GBuffer
 {
 	float4 AlbedoMetalness;
