@@ -23,10 +23,10 @@ namespace Easy3D
 		~Renderer();
 
 		void SetEffect(EffectID aEffect);
-		void SetTexture(const CU::String<50>& aName, Texture* aTexture);
-		void SetMatrix(const CU::String<50>& aName, const CU::Matrix44<float>& aMatrix);
-		void SetVector(const CU::String<50>& aName, const CU::Vector3<float>& aVector);
-		void SetVector(const CU::String<50>& aName, const CU::Vector4<float>& aVector);
+		void SetTexture(const CU::String<64>& aName, Texture* aTexture);
+		void SetMatrix(const CU::String<64>& aName, const CU::Matrix44<float>& aMatrix);
+		void SetVector(const CU::String<64>& aName, const CU::Vector3<float>& aVector);
+		void SetVector(const CU::String<64>& aName, const CU::Vector4<float>& aVector);
 
 		void SetClearColor(const CU::Vector4<float>& aColor);
 
@@ -41,7 +41,7 @@ namespace Easy3D
 		void RenderModel(ModelID aModelID);
 
 	private:
-		ID3DX11EffectVariable* GetEffectVariable(const CU::String<50>& aName);
+		ID3DX11EffectVariable* GetEffectVariable(const CU::String<64>& aName);
 		void RenderModelData(const ModelData& someData);
 		void RenderGPUData(const GPUData& someData);
 
@@ -53,6 +53,6 @@ namespace Easy3D
 		ID3D11DepthStencilView* myDepthStencil;
 		Backbuffer myBackbuffer;
 
-		CU::Map<EffectID, CU::Map<CU::String<50>, ID3DX11EffectVariable*>> myEffectVariables;
+		CU::Map<EffectID, CU::Map<CU::String<64>, ID3DX11EffectVariable*>> myEffectVariables;
 	};
 }

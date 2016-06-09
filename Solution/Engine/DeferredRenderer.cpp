@@ -12,9 +12,9 @@ namespace Easy3D
 	{
 		myGBuffer = new GBuffer();
 
-		myFullscreenEffect = AssetContainer::GetInstance()->LoadEffect("Data/Shader/S_effect_fullscreen.fx");
+		myFullscreenEffect = AssetContainer::GetInstance()->LoadEffect("Data/Resource/Shader/S_effect_fullscreen.fx");
 
-		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Texture/church_cubemap.dds");
+		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Resource/Texture/church_cubemap.dds");
 
 		myRenderer = new Renderer(myFullscreenEffect);
 		myRenderer->SetClearColor({ 0.4f, 0.4f, 0.4f, 1.f });

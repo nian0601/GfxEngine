@@ -207,7 +207,7 @@ namespace FBX
 		FBXLoader();
 		~FBXLoader();
 
-		FbxModelData* loadModel(const char* aFile, CU::GrowingArray<CU::String<80>>& someOutErrors);
+		FbxModelData* loadModel(const char* aFile, CU::GrowingArray<CU::String<256>>& someOutErrors);
 	private:
 		FbxScene* LoadScene(const char* aFile);
 		FbxModelData* myLoadingModel;

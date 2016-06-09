@@ -7,13 +7,7 @@
 #include <Instance.h>
 #include <Scene.h>
 #include <TimerManager.h>
-
-#include <FullscreenQuad.h>
 #include <DeferredRenderer.h>
-
-#include <CUString.h>
-#include <CUMap.h>
-#include <FileStream.h>
 
 Game::Game()
 {
@@ -21,8 +15,8 @@ Game::Game()
 
 	myInstances.Init(16);
 
-	//myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Model/PBL_Arm/pbl_metalness_arm_ascii.fbx", "Data/Shader/S_effect_model.fx"));
-	//myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
+	myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_test_balls.fbx", "Data/Resource/Shader/S_effect_model.fx"));
+	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
 	myScene = new Easy3D::Scene();
 	myScene->SetCamera(*myCamera);
@@ -36,28 +30,6 @@ Game::Game()
 
 
 	myRenderer = new Easy3D::DeferredRenderer();
-
-	CU::FileStream stream("test.txt", CU::FileStream::eFlag::WRITE);
-	stream.Write(123);
-	stream.Write(654.f);
-	stream.Write('a');
-	CU::String<30> test("lol apa banan");
-	stream.Write(test);
-	stream.Close();
-
-	CU::FileStream inStream("test.txt", CU::FileStream::eFlag::READ);
-	int first = 0;
-	float second = 0;
-	char third = 0;
-	CU::String<30> fourth;
-	inStream.Read(first);
-	inStream.Read(second);
-	inStream.Read(third);
-	inStream.Read(fourth);
-
-	int size = sizeof(CU::String<30>);
-	int size2 = sizeof(CU::String<80>);
-	int size3 = sizeof(CU::String<400>);
 }
 
 
@@ -74,7 +46,7 @@ bool Game::Update()
 {
 	myTimerManager->Update();
 	float delta = myTimerManager->GetMasterTimer().GetTime().GetFrameTime();
-	myCamera->Update();
+	
 	UpdateCamera(delta);
 
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
@@ -94,6 +66,8 @@ void Game::Render()
 
 void Game::UpdateCamera(float aDelta)
 {
+	myCamera->Update();
+
 	float speed = 10.f * aDelta;
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
 	CU::Vector3<float> dir;

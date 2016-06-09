@@ -76,7 +76,7 @@ namespace Easy3D
 		return nullptr;
 	}
 
-	Texture* AssetContainer::RequestTexture(const CU::String<50>& aFilePath)
+	Texture* AssetContainer::RequestTexture(const CU::String<64>& aFilePath)
 	{
 		if (myTextures.KeyExists(aFilePath) == false)
 		{

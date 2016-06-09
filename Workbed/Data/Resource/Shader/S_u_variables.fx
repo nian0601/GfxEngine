@@ -15,6 +15,7 @@ Texture2D NormalTexture;
 Texture2D RoughnessTexture;
 Texture2D MetalnessTexture;
 Texture2D AOTexture;
+Texture2D EmissiveTexture;
 
 //GBuffer-Textures
 Texture2D AlbedoMetalnessTexture;

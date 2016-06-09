@@ -51,7 +51,7 @@ namespace Easy3D
 		int myPrimitiveTopology;
 		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
 
-		CU::GrowingArray<CU::String<50>> myShaderResourceNames;
+		CU::GrowingArray<CU::String<64>> myShaderResourceNames;
 		CU::GrowingArray<Texture*> myTextures;
 		CU::String<30> myTechniqueName;
 	};

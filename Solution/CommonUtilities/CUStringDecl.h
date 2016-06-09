@@ -309,11 +309,11 @@ namespace CU
 			jumpTable[x] = NotFound;
 		}
 
-		for (int x = 0; x < lenghtOfPattern - 1; ++x)
-		{
-			jumpTable[aPattern[x]] = lenghtOfPattern - x - 1;
-		}
 
+		for (int x = lenghtOfPattern-1; x > 0; --x)
+		{
+			jumpTable[aPattern[x]] = x;
+		}
 
 		if (lenghtOfPattern > lenghtOfText) return NotFound;
 

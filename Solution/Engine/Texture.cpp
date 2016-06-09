@@ -37,7 +37,7 @@ namespace Easy3D
 		}
 	}
 
-	void Texture::LoadTexture(const CU::String<50>& aPath)
+	void Texture::LoadTexture(const CU::String<64>& aPath)
 	{
 		myFilePath = aPath;
 
@@ -50,14 +50,14 @@ namespace Easy3D
 			DL_MESSAGE_BOX(CU::Concatenate("Failed to load: %s,\ntrying to use MissingTexture-texture.", myFilePath.c_str()).c_str()
 				, "Failed to load texture", MB_ICONWARNING);
 
-			myFilePath = "Data/Texture/T_missing_texture.dds";
+			myFilePath = "Data/Resource/Texture/T_missing_texture.dds";
 			hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice()
 				, myFilePath.c_str(), NULL, NULL, &myShaderView, NULL);
 
 			
 			if (FAILED(hr) != S_OK)
 			{
-				DL_ASSERT("[Texture]: Failed to load MissingTexture-texture: Data/Texture/T_missing_texture.dds");
+				DL_ASSERT("[Texture]: Failed to load MissingTexture-texture: Data/Resource//T_missing_texture.dds");
 			}
 		}
 	}

@@ -30,7 +30,7 @@ namespace Easy3D
 		EffectID LoadEffect(const CU::String<50>& aFilePath);
 		Effect* GetEffect(EffectID aID);
 
-		Texture* RequestTexture(const CU::String<50>& aFilePath);
+		Texture* RequestTexture(const CU::String<64>& aFilePath);
 
 	private:
 		AssetContainer();
@@ -48,7 +48,7 @@ namespace Easy3D
 		CU::Map<CU::String<50>, ModelID> myModelID;
 		ModelID myNextModelID;
 
-		CU::Map<CU::String<50>, Texture*> myTextures;
+		CU::Map<CU::String<64>, Texture*> myTextures;
 
 		static AssetContainer* myInstance;
 	};

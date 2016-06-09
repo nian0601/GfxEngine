@@ -27,25 +27,25 @@ namespace Easy3D
 		myCurrentEffect = aEffect;
 	}
 
-	void Renderer::SetTexture(const CU::String<50>& aName, Texture* aTexture)
+	void Renderer::SetTexture(const CU::String<64>& aName, Texture* aTexture)
 	{
 		ID3DX11EffectVariable* var = GetEffectVariable(aName);
 		var->AsShaderResource()->SetResource(aTexture->GetShaderView());
 	}
 
-	void Renderer::SetMatrix(const CU::String<50>& aName, const CU::Matrix44<float>& aMatrix)
+	void Renderer::SetMatrix(const CU::String<64>& aName, const CU::Matrix44<float>& aMatrix)
 	{
 		ID3DX11EffectVariable* var = GetEffectVariable(aName);
 		var->AsMatrix()->SetMatrix(&aMatrix.myMatrix[0]);
 	}
 
-	void Renderer::SetVector(const CU::String<50>& aName, const CU::Vector3<float>& aVector)
+	void Renderer::SetVector(const CU::String<64>& aName, const CU::Vector3<float>& aVector)
 	{
 		ID3DX11EffectVariable* var = GetEffectVariable(aName);
 		var->AsVector()->SetFloatVector(&aVector.x);
 	}
 
-	void Renderer::SetVector(const CU::String<50>& aName, const CU::Vector4<float>& aVector)
+	void Renderer::SetVector(const CU::String<64>& aName, const CU::Vector4<float>& aVector)
 	{
 		ID3DX11EffectVariable* var = GetEffectVariable(aName);
 		var->AsVector()->SetFloatVector(&aVector.x);
@@ -107,7 +107,7 @@ namespace Easy3D
 		RenderModelData(*modelData);
 	}
 
-	ID3DX11EffectVariable* Renderer::GetEffectVariable(const CU::String<50>& aName)
+	ID3DX11EffectVariable* Renderer::GetEffectVariable(const CU::String<64>& aName)
 	{
 		if (myEffectVariables[myCurrentEffect].KeyExists(aName) == false)
 		{

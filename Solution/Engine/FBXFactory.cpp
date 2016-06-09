@@ -36,7 +36,7 @@ namespace Easy3D
 			return myModels[aFilePath];
 		}
 
-		CU::GrowingArray<CU::String<80>> errors(16);
+		CU::GrowingArray<CU::String<256>> errors(16);
 		FBX::FbxModelData* fbxModelData = myLoader->loadModel(aFilePath.c_str(), errors);
 
 		ModelData* modelData = CreateModel(fbxModelData);
