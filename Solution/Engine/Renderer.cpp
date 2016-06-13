@@ -15,6 +15,9 @@ namespace Easy3D
 	{
 		InitFullscreenQuad(aFullscreenEffect);
 		Engine::GetInstance()->GetBackbuffer(myBackbuffer);
+
+		CreateDepthStencilStates();
+		CreateRasterizerStates();
 	}
 
 
@@ -63,6 +66,16 @@ namespace Easy3D
 		myClearColor[1] = aColor.y;
 		myClearColor[2] = aColor.z;
 		myClearColor[3] = aColor.w;
+	}
+
+	void Renderer::SetRasterizerState(eRasterizer aState)
+	{
+		Engine::GetInstance()->GetContext()->RSSetState(myRasterizerStates[aState]);
+	}
+
+	void Renderer::SetDepthStencilState(eDepthState aState)
+	{
+		Engine::GetInstance()->GetContext()->OMSetDepthStencilState(myDepthStencilStates[aState], 1);
 	}
 
 	void Renderer::AddRenderTarget(Texture* aTexture)
@@ -167,6 +180,82 @@ namespace Easy3D
 			effect->GetTechnique(someData.GetTechniqueName())->GetPassByIndex(i)->Apply(0, context);
 			context->DrawIndexed(someData.myIndexData->myNumberOfIndices, 0, 0);
 		}
+	}
+
+	void Renderer::CreateRasterizerStates()
+	{
+		D3D11_RASTERIZER_DESC desc;
+		ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+		desc.FrontCounterClockwise = false;
+		desc.DepthBias = false;
+		desc.DepthBiasClamp = 0;
+		desc.SlopeScaledDepthBias = 0;
+		desc.DepthClipEnable = false;
+		desc.ScissorEnable = false;
+		desc.MultisampleEnable = false;
+		desc.AntialiasedLineEnable = false;
+
+
+		desc.FillMode = D3D11_FILL_WIREFRAME;
+		desc.CullMode = D3D11_CULL_BACK;
+		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::WIRE_FRAME)]);
+
+
+		desc.FillMode = D3D11_FILL_SOLID;
+		desc.CullMode = D3D11_CULL_BACK;
+		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::CULL_BACK)]);
+
+		desc.FillMode = D3D11_FILL_SOLID;
+		desc.CullMode = D3D11_CULL_NONE;
+		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::NO_CULLING)]);
+	}
+
+	void Renderer::CreateDepthStencilStates()
+	{
+		D3D11_DEPTH_STENCIL_DESC  stencilDesc;
+		stencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		stencilDesc.StencilEnable = true;
+		stencilDesc.StencilReadMask = 0xFF;
+		stencilDesc.StencilWriteMask = 0xFF;
+		stencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		stencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		stencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		stencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		stencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		stencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		stencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		stencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+
+		stencilDesc.DepthEnable = true;
+		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::Z_ENABLED)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create Z_ENABLED depthstate");
+
+		stencilDesc.DepthEnable = false;
+		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::Z_DISABLED)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create Z_DISABLED depthstate");
+
+		stencilDesc.DepthEnable = true;
+		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+		stencilDesc.DepthFunc = D3D11_COMPARISON_GREATER_EQUAL;
+		stencilDesc.StencilEnable = false;
+		stencilDesc.StencilReadMask = UINT8(0xFF);
+		stencilDesc.StencilWriteMask = 0x0;
+
+		stencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_ZERO;
+		stencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_ZERO;
+		stencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		stencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL;
+
+		stencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_ZERO;
+		stencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_ZERO;
+		stencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_ZERO;
+		stencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
+
+		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::READ_NO_WRITE)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create READ_NO_WRITE depthstate");
 	}
 
 }

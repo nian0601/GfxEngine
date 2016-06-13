@@ -12,7 +12,7 @@ Pixel_LightMesh VertexShader_PointLight(Vertex_LightMesh aInput)
 {
 	Pixel_LightMesh output = (Pixel_LightMesh)0;
 
-	float range = 10; //20.f;
+	float range = 1; //20.f;
 	float4 scale = float4(range, range, range, 1.0f);
 	aInput.Position *= scale;
 	

@@ -27,7 +27,7 @@ Game::Game()
 		myScene->AddInstance(instance);
 	}
 
-	myScene->AddLight(new Easy3D::PointLight({ 0.f, 0.f, 5.f }, { 1.f, 0.f, 0.f, 3.f }, 10));
+	myScene->AddLight(new Easy3D::PointLight({ -1.2f, -1.f, 5.f }, { 1.f, 0.f, 0.f, 3.f }, 0.1f));
 
 	myTimerManager = new CU::TimerManager();
 	myRenderer = new Easy3D::DeferredRenderer();

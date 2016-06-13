@@ -11,11 +11,30 @@
 struct ID3DX11EffectVariable;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
+struct ID3D11RasterizerState;
+struct ID3D11DepthStencilState;
 
 namespace Easy3D
 {
 	class Effect;
 	class Texture;
+
+	enum eDepthState
+	{
+		Z_ENABLED,
+		Z_DISABLED,
+		READ_NO_WRITE,
+		_DEPTH_COUNT
+	};
+
+	enum eRasterizer
+	{
+		CULL_BACK,
+		WIRE_FRAME,
+		NO_CULLING,
+		_RAZTER_COUNT
+	};
+
 	class Renderer : public FullscreenQuad
 	{
 	public:
@@ -30,6 +49,9 @@ namespace Easy3D
 		void SetRawData(const CU::String<64>& aName, int aDataSize, const void* someData);
 
 		void SetClearColor(const CU::Vector4<float>& aColor);
+
+		void SetRasterizerState(eRasterizer aState);
+		void SetDepthStencilState(eDepthState aState);
 
 		void AddRenderTarget(Texture* aTexture);
 		void ClearRenderTarget(Texture* aTexture);
@@ -46,6 +68,9 @@ namespace Easy3D
 		void RenderModelData(const ModelData& someData);
 		void RenderGPUData(const GPUData& someData);
 
+		void CreateRasterizerStates();
+		void CreateDepthStencilStates();
+
 		EffectID myCurrentEffect;
 		float myClearColor[4];
 
@@ -55,5 +80,8 @@ namespace Easy3D
 		Backbuffer myBackbuffer;
 
 		CU::Map<EffectID, CU::Map<CU::String<64>, ID3DX11EffectVariable*>> myEffectVariables;
+
+		ID3D11RasterizerState* myRasterizerStates[static_cast<int>(eRasterizer::_RAZTER_COUNT)];
+		ID3D11DepthStencilState* myDepthStencilStates[static_cast<int>(eDepthState::_DEPTH_COUNT)];
 	};
 }
