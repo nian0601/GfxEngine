@@ -21,9 +21,10 @@ namespace Easy3D
 
 	enum eDepthState
 	{
-		Z_ENABLED,
-		Z_DISABLED,
+		ENABLED,
+		DISABLED,
 		READ_NO_WRITE,
+		NO_READ_NO_WRITE,
 		_DEPTH_COUNT
 	};
 
@@ -57,7 +58,8 @@ namespace Easy3D
 		void ClearRenderTarget(Texture* aTexture);
 		void SetDepthStencil(Texture* aTexture);
 		void ClearDepthStencil(Texture* aTexture);
-		void SetBackbufferAsTarget();
+		void UseOriginalDepthStencil();
+		void UseOriginalRenderTarget();
 		void ApplyRenderTargetAndDepthStencil();
 
 		void RenderFullScreen(const CU::String<30>& aTechnique);

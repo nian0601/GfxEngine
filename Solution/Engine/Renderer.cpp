@@ -100,12 +100,16 @@ namespace Easy3D
 		Engine::GetInstance()->GetContext()->ClearDepthStencilView(aTexture->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 	}
 
-	void Renderer::SetBackbufferAsTarget()
+	void Renderer::UseOriginalDepthStencil()
+	{
+		myDepthStencil = myBackbuffer.myDepthStencilView;
+	}
+
+	void Renderer::UseOriginalRenderTarget()
 	{
 		DL_ASSERT_EXP(myRenderTargetCount < 4, CU::Concatenate<256>("Added to many RenderTargets, only %i supported", 4));
 		myRenderTargets[myRenderTargetCount] = myBackbuffer.myBackbufferTarget;
 		++myRenderTargetCount;
-		myDepthStencil = myBackbuffer.myDepthStencilView;
 	}
 
 	void Renderer::ApplyRenderTargetAndDepthStencil()
@@ -229,13 +233,21 @@ namespace Easy3D
 
 		stencilDesc.DepthEnable = true;
 		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::Z_ENABLED)]);
-		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create Z_ENABLED depthstate");
+		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::ENABLED)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create ENABLED depthstate");
 
 		stencilDesc.DepthEnable = false;
 		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::Z_DISABLED)]);
-		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create Z_DISABLED depthstate");
+		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::DISABLED)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create DISABLED depthstate");
+
+		stencilDesc.DepthEnable = false;
+		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+		stencilDesc.StencilEnable = false;
+		stencilDesc.StencilReadMask = UINT8(0xFF);
+		stencilDesc.StencilWriteMask = 0x0;
+		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::NO_READ_NO_WRITE)]);
+		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create NO_READ_NO_WRITE depthstate");
 
 		stencilDesc.DepthEnable = true;
 		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;

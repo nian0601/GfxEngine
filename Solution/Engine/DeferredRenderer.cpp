@@ -35,7 +35,8 @@ namespace Easy3D
 	void DeferredRenderer::Render(Scene* aScene)
 	{
 		RenderToGBuffer(aScene);
-		myRenderer->SetBackbufferAsTarget();
+		myRenderer->UseOriginalRenderTarget();
+		myRenderer->UseOriginalDepthStencil();
 		myRenderer->ApplyRenderTargetAndDepthStencil();
 
 		RenderAmbientPass();
@@ -65,6 +66,8 @@ namespace Easy3D
 
 	void DeferredRenderer::RenderAmbientPass()
 	{
+		myRenderer->SetDepthStencilState(NO_READ_NO_WRITE);
+
 		myRenderer->SetEffect(myFullscreenEffect);
 		myRenderer->SetTexture("AlbedoMetalnessTexture", myGBuffer->myAlbedoAndMetalness);
 		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
@@ -76,6 +79,13 @@ namespace Easy3D
 
 	void DeferredRenderer::RenderPointLights(Scene* aScene)
 	{
+		myRenderer->UseOriginalRenderTarget();
+		myRenderer->SetDepthStencil(myGBuffer->myDepthStencil);
+		myRenderer->ApplyRenderTargetAndDepthStencil();
+
+		myRenderer->SetRasterizerState(NO_CULLING);
+		myRenderer->SetDepthStencilState(READ_NO_WRITE);
+
 		myRenderer->SetEffect(myPointLightEffect);
 		myRenderer->SetTexture("AlbedoMetalnessTexture", myGBuffer->myAlbedoAndMetalness);
 		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
@@ -89,6 +99,10 @@ namespace Easy3D
 			myPointLightInstance->SetPosition(light->GetData().myPosition);
 			myPointLightInstance->Render(myRenderer, aScene->GetCamera());
 		}
+
+
+		myRenderer->SetDepthStencilState(DISABLED);
+		myRenderer->SetRasterizerState(CULL_BACK);
 	}
 
 }
