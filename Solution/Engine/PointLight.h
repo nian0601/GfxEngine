@@ -7,7 +7,7 @@ namespace Easy3D
 {
 	struct PointLightData
 	{
-		CU::Vector3<float> myPosition;
+		CU::Vector4<float> myPosition;
 		CU::Vector4<float> myColor;
 		float myRange;
 	};

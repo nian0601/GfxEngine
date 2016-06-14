@@ -6,13 +6,13 @@ struct PointLightData
 	float4 Color;
 	float Range;
 };
-PointLightData PointLight;
+PointLightData PointLight[1];
 
 Pixel_LightMesh VertexShader_PointLight(Vertex_LightMesh aInput)
 {
 	Pixel_LightMesh output = (Pixel_LightMesh)0;
 
-	float range = 1; //20.f;
+	float range = 10.f;//PointLight[0].Range;
 	float4 scale = float4(range, range, range, 1.0f);
 	aInput.Position *= scale;
 	
@@ -32,7 +32,31 @@ Pixel_LightMesh VertexShader_PointLight(Vertex_LightMesh aInput)
 
 float4 PixelShader_PointLight(Pixel_LightMesh aInput) : SV_Target
 {
-	return float4(1, 1, 1, 1);
+	return PointLight[0].Color;
+	aInput.Tex /= aInput.Tex.w;
+
+	PBLData data = CalculatePBLData_GBuffer(aInput.Tex.xy);
+
+	float3 viewPos = CameraPosition;
+	float3 toEye = normalize(viewPos - data.WorldPosition.xyz);
+
+	float3 toLight = PointLight[0].Position - data.WorldPosition;
+	float3 lightDir = normalize(toLight);
+	float3 halfVec = normalize(lightDir + toEye.xyz);
+	float NdotL = saturate(dot(data.Normal.xyz, lightDir));
+	float HdotN = saturate(dot(halfVec, data.Normal.xyz));
+	float NdotV = saturate(dot(data.Normal.xyz, toEye));
+
+	float3 F = saturate(Fresnel(data.Substance.xyz, lightDir, halfVec));
+	float D = saturate(D_GGX(HdotN, (data.Roughness + 1.f) / 2.f));
+	float V = saturate(SchlickForGGX((data.Roughness + 1.f) / 2.f, NdotV, NdotL));
+	float lambert = NdotL;
+
+	float attenuation = Attenuation(toLight, PointLight[0].Range);
+	float3 lightColor = PointLight[0].Color.xyz * 10 * attenuation;
+	float3 directSpecc = F * D * V * NdotL * lightColor;
+	return float4(directSpecc, 1.f);
+	//return float4(1, 1, 1, 1);
 	/*
 	PBLData data = CalculatePBLData_GBuffer(aInput.Tex);
 	
@@ -73,7 +97,6 @@ float4 PixelShader_PointLight(Pixel_LightMesh aInput) : SV_Target
 	return saturate(float4(ambientColor + LightSpecc, 1.f));
 	*/
 }
-
 
 technique11 Render
 {

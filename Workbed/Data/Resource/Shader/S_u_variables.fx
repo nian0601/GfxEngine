@@ -199,3 +199,26 @@ float D_GGX(float HdotN, float aRoughness)
 
 	return m2 / (3.14159 * denominator * denominator);
 }
+
+
+//
+//	Attenuations
+//--------------------------------------------------------
+float Attenuation(float3 aLightVec, float aRange)
+{
+	float distance = length(aLightVec);
+	//return 1 - (distance / aRange);
+
+	float attenuation = 1.f;// / (1.f + 0.1f * distance + 0.01f * distance * distance);
+	float fallOff = 0.9f - (distance / (aRange + 0.00001f));
+	return saturate(attenuation * fallOff);
+}
+
+float AngularAttenuation(float3 aLightVec, float3 aLightDirection, float aLightCone)
+{
+	float angularAttenuation = dot(-aLightVec, aLightDirection);
+	angularAttenuation -= 1.f - aLightCone;
+	angularAttenuation *= 1.f / aLightCone;
+
+	return angularAttenuation;
+}

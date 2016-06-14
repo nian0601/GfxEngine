@@ -16,7 +16,9 @@ Game::Game()
 
 	myInstances.Init(16);
 
-	myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_test_balls.fbx", "Data/Resource/Shader/S_effect_model.fx"));
+	//myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_test_balls.fbx", "Data/Resource/Shader/S_effect_model.fx"));
+	myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_Arm/pbl_metalness_arm_binary.fbx", "Data/Resource/Shader/S_effect_model.fx"));
+
 	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
 
 	myScene = new Easy3D::Scene();

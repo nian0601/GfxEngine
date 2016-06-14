@@ -50,6 +50,9 @@ namespace Easy3D
 
 	void DeferredRenderer::RenderToGBuffer(Scene* aScene)
 	{
+		myRenderer->SetDepthStencilState(ENABLED);
+		myRenderer->SetRasterizerState(CULL_BACK);
+
 		myRenderer->ClearRenderTarget(myGBuffer->myAlbedoAndMetalness);
 		myRenderer->ClearRenderTarget(myGBuffer->myNormalAndRoughness);
 		myRenderer->ClearRenderTarget(myGBuffer->myDepth);
@@ -96,12 +99,12 @@ namespace Easy3D
 		for each (const PointLight* light in pointLights)
 		{
 			myRenderer->SetRawData("PointLight", sizeof(light->GetData()), &light->GetData());
-			myPointLightInstance->SetPosition(light->GetData().myPosition);
+			//myPointLightInstance->SetPosition(light->GetData().myPosition.GetVector3());
 			myPointLightInstance->Render(myRenderer, aScene->GetCamera());
 		}
 
 
-		myRenderer->SetDepthStencilState(DISABLED);
+		myRenderer->SetDepthStencilState(ENABLED);
 		myRenderer->SetRasterizerState(CULL_BACK);
 	}
 

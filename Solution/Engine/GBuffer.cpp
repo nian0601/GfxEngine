@@ -39,6 +39,7 @@ namespace Easy3D
 		SAFE_DELETE(myAlbedoAndMetalness);
 		SAFE_DELETE(myNormalAndRoughness);
 		SAFE_DELETE(myDepth);
+		SAFE_DELETE(myDepthStencil);
 	}
 
 	void GBuffer::Set(Effect* aEffect)
