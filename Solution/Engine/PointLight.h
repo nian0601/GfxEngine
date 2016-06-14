@@ -20,6 +20,7 @@ namespace Easy3D
 		~PointLight();
 
 		const PointLightData& GetData() const;
+		CU::Vector3<float> GetPosition() const;
 
 	private:
 		PointLightData myData;
@@ -28,5 +29,10 @@ namespace Easy3D
 	inline const PointLightData& PointLight::GetData() const
 	{
 		return myData;
+	}
+
+	inline CU::Vector3<float> PointLight::GetPosition() const
+	{
+		return myData.myPosition.GetVector3();
 	}
 }

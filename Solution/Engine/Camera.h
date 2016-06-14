@@ -18,6 +18,7 @@ namespace Easy3D
 
 
 		const CU::Matrix44<float>& GetView() const;
+		const CU::Matrix44<float>& GetNotInvertedView() const;
 		const CU::Matrix44<float>& GetProjection() const;
 		const CU::Matrix44<float>& GetViewProjection() const;
 
@@ -34,6 +35,11 @@ namespace Easy3D
 	inline const CU::Matrix44<float>& Camera::GetView() const
 	{
 		return myView;
+	}
+
+	inline const CU::Matrix44<float>& Camera::GetNotInvertedView() const
+	{
+		return myOrientation;
 	}
 
 	inline const CU::Matrix44<float>& Camera::GetProjection() const

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AssetContainer.h"
+#include "Camera.h"
 #include "GBuffer.h"
 #include "DeferredRenderer.h"
 #include "Instance.h"
@@ -35,11 +36,7 @@ namespace Easy3D
 	void DeferredRenderer::Render(Scene* aScene)
 	{
 		RenderToGBuffer(aScene);
-		myRenderer->UseOriginalRenderTarget();
-		myRenderer->UseOriginalDepthStencil();
-		myRenderer->ApplyRenderTargetAndDepthStencil();
-
-		RenderAmbientPass();
+		RenderAmbientPass(aScene->GetCamera());
 		RenderPointLights(aScene);
 	}
 
@@ -67,8 +64,12 @@ namespace Easy3D
 		aScene->Render(myRenderer);
 	}
 
-	void DeferredRenderer::RenderAmbientPass()
+	void DeferredRenderer::RenderAmbientPass(const Camera& aCamera)
 	{
+		myRenderer->UseOriginalRenderTarget();
+		myRenderer->UseOriginalDepthStencil();
+		myRenderer->ApplyRenderTargetAndDepthStencil();
+
 		myRenderer->SetDepthStencilState(NO_READ_NO_WRITE);
 
 		myRenderer->SetEffect(myFullscreenEffect);
@@ -76,6 +77,8 @@ namespace Easy3D
 		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
 		myRenderer->SetTexture("DepthTexture", myGBuffer->myDepth);
 		myRenderer->SetTexture("Cubemap", myCubemap);
+		myRenderer->SetMatrix("InvertedProjection", CU::InverseReal(aCamera.GetProjection()));
+		myRenderer->SetMatrix("NotInvertedView", aCamera.GetNotInvertedView());
 
 		myRenderer->RenderFullScreen("Deferred_Ambient");
 	}
@@ -94,12 +97,14 @@ namespace Easy3D
 		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
 		myRenderer->SetTexture("DepthTexture", myGBuffer->myDepth);
 		myRenderer->SetTexture("Cubemap", myCubemap);
+		myRenderer->SetMatrix("InvertedProjection", CU::InverseReal(aScene->GetCamera().GetProjection()));
+		myRenderer->SetMatrix("NotInvertedView", aScene->GetCamera().GetNotInvertedView());
 
 		const CU::GrowingArray<PointLight*>& pointLights = aScene->GetPointLights();
 		for each (const PointLight* light in pointLights)
 		{
 			myRenderer->SetRawData("PointLight", sizeof(light->GetData()), &light->GetData());
-			//myPointLightInstance->SetPosition(light->GetData().myPosition.GetVector3());
+			myPointLightInstance->SetPosition(light->GetPosition());
 			myPointLightInstance->Render(myRenderer, aScene->GetCamera());
 		}
 

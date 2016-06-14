@@ -3,6 +3,7 @@
 
 namespace Easy3D
 {
+	class Camera;
 	class Effect;
 	class GBuffer;
 	class Instance;
@@ -22,7 +23,7 @@ namespace Easy3D
 
 	private:
 		void RenderToGBuffer(Scene* aScene);
-		void RenderAmbientPass();
+		void RenderAmbientPass(const Camera& aCamera);
 		void RenderPointLights(Scene* aScene);
 
 		EffectID myFullscreenEffect;
