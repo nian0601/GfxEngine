@@ -3,7 +3,6 @@
 float4 PixelShader_Deferred_Ambient(Pixel_FullscreenQuad aInput) : SV_Target
 {
 	PBLData data = CalculatePBLData_GBuffer(aInput.Tex);
-	
 	float3 ToEye = normalize(CameraPosition - data.WorldPosition.xyz);
 	float3 RefFresnel = ReflectionFresnel(data.Substance, data.Normal, ToEye, 1 - data.RoughnessOffsetted);
 
@@ -24,6 +23,7 @@ float4 PixelShader_Deferred_Ambient(Pixel_FullscreenQuad aInput) : SV_Target
 
 
 	//To test things we also do calculations for a faked directional light
+	/*
 	float3 LightDir = normalize(float3(-0.5f, 1.f, 1.f));
 	float3 LightColor = float3(0.f, 1.f, 0.f);
 
@@ -37,6 +37,6 @@ float4 PixelShader_Deferred_Ambient(Pixel_FullscreenQuad aInput) : SV_Target
 	float V = saturate(SchlickForGGX((data.Roughness + 1) / 2, dot(data.Normal, ToEye), NdotL));
 
 	float3 LightSpecc = (((D * V * F) / 3.14159 + (1 - F) * NdotL * data.MetalnessAlbedo * data.AmbientOcclusion)) * LightColor;
-
-	return saturate(float4(ambientColor + LightSpecc, 1.f));
+	*/
+	return saturate(float4(ambientColor, 1.f));
 }

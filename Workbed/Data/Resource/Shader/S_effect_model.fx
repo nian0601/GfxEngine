@@ -37,7 +37,7 @@ GBuffer PixelShader_Model(Pixel_Model aInput) : SV_Target
 	GBuffer output;
 	output.AlbedoMetalness = float4(AlbedoColor.xyz, Metalness);
 	output.NormalRoughness = float4(norm, Roughness);
-	output.Depth = aInput.WorldPosition.z;
+	output.Depth = aInput.Position.z;
 	
 	return output;
 }

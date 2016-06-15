@@ -86,7 +86,7 @@ PBLData CalculatePBLData_GBuffer(float2 aTexCoord)
 {
 	float4 AlbedoMetalness = AlbedoMetalnessTexture.Sample(pointSampling, aTexCoord);
 	float4 NormalRoughness = NormalRoughnessTexture.Sample(pointSampling, aTexCoord);
-	float Depth = DepthTexture.Sample(pointSampling, aTexCoord);
+	float Depth = DepthTexture.Sample(pointSampling, aTexCoord).x;
 
 	float3 Albedo = AlbedoMetalness.xyz;
 	float3 Metalness = float3(AlbedoMetalness.w, AlbedoMetalness.w, AlbedoMetalness.w);
@@ -94,6 +94,7 @@ PBLData CalculatePBLData_GBuffer(float2 aTexCoord)
 	float3 Normal = NormalRoughness.xyz;
 	Normal *= 2.f;
 	Normal -= 1.f;
+	Normal = normalize(Normal);
 
 	float Roughness = NormalRoughness.w;
 
@@ -207,11 +208,18 @@ float D_GGX(float HdotN, float aRoughness)
 float Attenuation(float3 aLightVec, float aRange)
 {
 	float distance = length(aLightVec);
-	//return 1 - (distance / aRange);
+	float attenuation = 1.f / (1.f + 0.1f * distance + 0.01f * distance * distance);
+	float fallOff = 1.f - (distance / (aRange + 0.00001f));
+	float totalAttenuation = attenuation * fallOff;
+	return totalAttenuation;
+/*
+	float distance = length(aLightVec);
+	return 1 - (distance / aRange);
 
-	float attenuation = 1.f;// / (1.f + 0.1f * distance + 0.01f * distance * distance);
-	float fallOff = 0.9f - (distance / (aRange + 0.00001f));
+	float attenuation = (1.f + 0.1f * distance + 0.01f * distance * distance); //1.f;
+	float fallOff = 1.f - (distance / (aRange + 0.00001f));
 	return saturate(attenuation * fallOff);
+	*/
 }
 
 float AngularAttenuation(float3 aLightVec, float3 aLightDirection, float aLightCone)

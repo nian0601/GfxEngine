@@ -30,6 +30,7 @@ namespace Easy3D
 		CU::Matrix44<float> myViewProjection;
 
 		CU::Matrix44<float> myOrientation;
+		bool myIsDirty;
 	};
 
 	inline const CU::Matrix44<float>& Camera::GetView() const

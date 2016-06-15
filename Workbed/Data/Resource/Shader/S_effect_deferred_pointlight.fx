@@ -37,7 +37,7 @@ float4 PixelShader_PointLight(Pixel_LightMesh aInput) : SV_Target
 	aInput.Tex /= aInput.Tex.w;
 
 	PBLData data = CalculatePBLData_GBuffer(aInput.Tex.xy);
-
+	//return float4(data.WorldPosition.xyz, 1.f);
 	float3 viewPos = CameraPosition;
 	float3 toEye = normalize(viewPos - data.WorldPosition.xyz);
 
@@ -55,9 +55,23 @@ float4 PixelShader_PointLight(Pixel_LightMesh aInput) : SV_Target
 
 	float attenuation = Attenuation(toLight, PointLight[0].Range);
 	float3 lightColor = PointLight[0].Color.xyz * PointLight[0].Color.w * attenuation;
-	float3 directSpecc = F * D * V * NdotL * lightColor;
+	float3 directSpecc = F * D * V  * lightColor;
 	return float4(directSpecc, 1.f);
 }
+
+
+BlendState BlendCorrect
+{
+	BlendEnable[0] = TRUE;
+	SrcBlend = ONE;
+	DestBlend = ONE;
+	BlendOp = ADD;
+	SrcBlendAlpha = ZERO;
+	DestBlendAlpha = ONE;
+	BlendOpAlpha = ADD;
+	RenderTargetWriteMask[0] = 0x0F;
+};
+
 
 technique11 Render
 {
@@ -66,5 +80,6 @@ technique11 Render
 		SetVertexShader(CompileShader(vs_5_0, VertexShader_PointLight()));
 		SetGeometryShader(NULL);
 		SetPixelShader(CompileShader(ps_5_0, PixelShader_PointLight()));
+		//SetBlendState(BlendCorrect, float4(0.f, 0.f, 0.f, 0.f), 0xFFFFFFFF);
 	}
 }

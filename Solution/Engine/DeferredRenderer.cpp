@@ -96,7 +96,6 @@ namespace Easy3D
 		myRenderer->SetTexture("AlbedoMetalnessTexture", myGBuffer->myAlbedoAndMetalness);
 		myRenderer->SetTexture("NormalRoughnessTexture", myGBuffer->myNormalAndRoughness);
 		myRenderer->SetTexture("DepthTexture", myGBuffer->myDepth);
-		myRenderer->SetTexture("Cubemap", myCubemap);
 		myRenderer->SetMatrix("InvertedProjection", CU::InverseReal(aScene->GetCamera().GetProjection()));
 		myRenderer->SetMatrix("NotInvertedView", aScene->GetCamera().GetNotInvertedView());
 
