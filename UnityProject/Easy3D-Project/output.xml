@@ -1,7 +1,17 @@
 <Cube>
-	<Position x="2" y="0" z="2"/>
-	<Scale x="2" y="1" z="1"/>
+	<Position x="-1" y="1" z="3"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="45" z="0"/>
+</Cube>
+<Cube>
+	<Position x="1" y="0" z="2"/>
+	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="0" y="1" z="0"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="44.99998" y="180" z="180"/>
 </Cube>
 <Cube>
 	<Position x="2" y="1" z="1"/>
@@ -9,22 +19,12 @@
 	<Rotation x="45" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="2" y="-1" z="0"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
 	<Position x="1" y="0" z="0"/>
 	<Scale x="1" y="1" z="2"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="1" y="-1" z="1"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="1" y="0" z="2"/>
+	<Position x="2" y="-1" z="0"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
@@ -34,14 +34,19 @@
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
+	<Position x="2" y="0" z="2"/>
+	<Scale x="2" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
 	<Position x="0" y="0" z="3"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="-1" y="1" z="3"/>
+	<Position x="-1" y="0" z="1"/>
 	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="45" z="0"/>
+	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
 	<Position x="0" y="1" z="2"/>
@@ -49,8 +54,8 @@
 	<Rotation x="0" y="0" z="45"/>
 </Cube>
 <Cube>
-	<Position x="-1" y="-1" z="2"/>
-	<Scale x="1" y="2" z="1"/>
+	<Position x="0" y="0" z="1"/>
+	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
@@ -59,19 +64,14 @@
 	<Rotation x="0" y="0" z="135"/>
 </Cube>
 <Cube>
-	<Position x="-1" y="0" z="1"/>
-	<Scale x="1" y="1" z="1"/>
+	<Position x="-1" y="-1" z="2"/>
+	<Scale x="1" y="2" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="0" y="0" z="1"/>
+	<Position x="1" y="-1" z="1"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="0" y="1" z="0"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="44.99998" y="180" z="180"/>
 </Cube>
 <Cube>
 	<Position x="2" y="1" z="3"/>
