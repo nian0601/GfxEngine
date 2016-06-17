@@ -3,6 +3,7 @@
 #include "DL_Debug.h"
 #include "Vector.h"
 #include "CUString.h"
+#include "CommonHelper.h"
 
 //#define tinyxml2::XMLElement* tinyxml2::tinyxml2::XMLElement**
 
@@ -228,7 +229,7 @@ bool XMLReader::ForceReadAttribute(const tinyxml2::XMLElement* aElementToReadFro
 			}
 		}
 	}
-	DL_ASSERT(CU::Concatenate("Failed to read Attribute: [ %s ], [ %s ] and [ %s ] from Element: [ %s ], in Document: [ %s ]", 
+	DL_ASSERT(CU::Concatenate<256>("Failed to read Attribute: [ %s ], [ %s ] and [ %s ] from Element: [ %s ], in Document: [ %s ]", 
 		aFirst.c_str(), aSecond.c_str(), aThird.c_str(), aElementToReadFrom->Name(), myFilePath.c_str()));
 	return false;
 }

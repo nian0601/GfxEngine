@@ -11,6 +11,7 @@ namespace Easy3D
 	Instance::Instance(ModelID aModelID, EffectID aEffect)
 		: myModelID(aModelID)
 		, myEffect(aEffect)
+		, myScale(1.f, 1.f, 1.f)
 	{
 	}
 
@@ -25,6 +26,7 @@ namespace Easy3D
 		aRenderer->SetMatrix("ViewProjection", aCamera.GetViewProjection());
 		aRenderer->SetMatrix("World", myOrientation);
 		aRenderer->SetVector("CameraPosition", aCamera.GetPosition());
+		aRenderer->SetVector("Scale", myScale);
 
 		aRenderer->RenderModel(myModelID);
 	}
@@ -37,6 +39,23 @@ namespace Easy3D
 	CU::Vector3<float> Instance::GetPosition() const
 	{
 		return myOrientation.GetPos();
+	}
+
+	void Instance::SetRotation(const CU::Vector3<float>& aRotation)
+	{
+		CU::Vector3<float> pos = myOrientation.GetPos();
+		myOrientation.SetPos(CU::Vector3<float>());
+
+		myOrientation = myOrientation * CU::Matrix44f::CreateRotateAroundZ(aRotation.z);
+		myOrientation = myOrientation * CU::Matrix44f::CreateRotateAroundX(aRotation.x);
+		myOrientation = myOrientation * CU::Matrix44f::CreateRotateAroundY(aRotation.y);
+
+		myOrientation.SetPos(pos);
+	}
+
+	void Instance::SetScale(const CU::Vector3<float>& aScale)
+	{
+		myScale = aScale;
 	}
 
 }

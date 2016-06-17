@@ -10,16 +10,38 @@
 #include <DeferredRenderer.h>
 #include <PointLight.h>
 
+#include <XMLReader.h>
+#include <MathHelper.h>
+
 Game::Game()
 {
 	myCamera = new Easy3D::Camera();
 
 	myInstances.Init(16);
 
-	//myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_test_balls.fbx", "Data/Resource/Shader/S_effect_model.fx"));
-	myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/PBL_Arm/pbl_metalness_arm_binary.fbx", "Data/Resource/Shader/S_effect_model.fx"));
+	XMLReader reader;
+	reader.OpenDocument("Data/Resource/Level/Level_01.xml");
+	for (tinyxml2::XMLElement* cube = reader.ForceFindFirstChild("Cube"); cube != nullptr; cube = reader.FindNextElement(cube, "Cube"))
+	{
+		CU::Vector3<float> position;
+		CU::Vector3<float> rotation;
+		CU::Vector3<float> scale;
 
-	myInstances.GetLast()->SetPosition({ -1.2f, -1.f, 5.f });
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(cube, "Position"), "x", "y", "z", position);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(cube, "Scale"), "x", "y", "z", scale);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(cube, "Rotation"), "x", "y", "z", rotation);
+
+		rotation.x = CU::Math::DegreeToRad(rotation.x);
+		rotation.y = CU::Math::DegreeToRad(rotation.y);
+		rotation.z = CU::Math::DegreeToRad(rotation.z);
+
+		myInstances.Add(Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/Cube/SM_1x1_cube.fbx", "Data/Resource/Shader/S_effect_cube.fx"));
+		myInstances.GetLast()->SetPosition(position);
+		myInstances.GetLast()->SetRotation(rotation);
+		myInstances.GetLast()->SetScale(scale);
+
+	}
+	reader.CloseDocument();
 
 	myScene = new Easy3D::Scene();
 	myScene->SetCamera(*myCamera);

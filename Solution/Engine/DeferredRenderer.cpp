@@ -37,7 +37,7 @@ namespace Easy3D
 	{
 		RenderToGBuffer(aScene);
 		RenderAmbientPass(aScene->GetCamera());
-		RenderPointLights(aScene);
+		//RenderPointLights(aScene);
 	}
 
 	void DeferredRenderer::Resize(float aWidth, float aHeight)
