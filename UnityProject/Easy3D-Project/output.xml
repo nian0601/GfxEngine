@@ -1,80 +1,200 @@
 <Cube>
-	<Position x="-1" y="1" z="3"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="45" z="0"/>
-</Cube>
-<Cube>
-	<Position x="1" y="0" z="2"/>
+	<Position x="-0.1621749" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="0" y="1" z="0"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="44.99998" y="180" z="180"/>
-</Cube>
-<Cube>
-	<Position x="2" y="1" z="1"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="45" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="1" y="0" z="0"/>
-	<Scale x="1" y="1" z="2"/>
-	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="2" y="-1" z="0"/>
+	<Position x="-1.162175" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="1" y="-1" z="3"/>
+	<Position x="-3.162175" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="2" y="0" z="2"/>
-	<Scale x="2" y="1" z="1"/>
-	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="0" y="0" z="3"/>
+	<Position x="-2.162175" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="-1" y="0" z="1"/>
+	<Position x="-4.162175" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="0" y="1" z="2"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="0" z="45"/>
-</Cube>
-<Cube>
-	<Position x="0" y="0" z="1"/>
+	<Position x="-5.142175" y="-0.7438436" z="-4.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="-1" y="-1" z="0"/>
-	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="0" z="135"/>
-</Cube>
-<Cube>
-	<Position x="-1" y="-1" z="2"/>
-	<Scale x="1" y="2" z="1"/>
-	<Rotation x="0" y="0" z="0"/>
-</Cube>
-<Cube>
-	<Position x="1" y="-1" z="1"/>
+	<Position x="-5.142175" y="-0.7438436" z="-5.097015"/>
 	<Scale x="1" y="1" z="1"/>
 	<Rotation x="0" y="0" z="0"/>
 </Cube>
 <Cube>
-	<Position x="2" y="1" z="3"/>
+	<Position x="-4.162175" y="-0.7438436" z="-5.097015"/>
 	<Scale x="1" y="1" z="1"/>
-	<Rotation x="0" y="135" z="0"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-2.162175" y="-0.7438436" z="-5.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-3.162175" y="-0.7438436" z="-5.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-1.162175" y="-0.7438436" z="-5.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-0.1621749" y="-0.7438436" z="-5.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-0.1621749" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-1.162175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-3.162175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-2.162175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-4.162175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-5.142175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-0.1621749" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-1.162175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-3.162175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-2.162175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-4.162175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-5.142175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-4.162175" y="1.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-2.162175" y="1.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-0.1621749" y="1.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-0.1621749" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-1.162175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-3.162175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-2.162175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-4.162175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-5.142175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="-0.7438436" z="-3.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="-0.7438436" z="-5.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="-0.7438436" z="-4.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="0.2561564" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="2.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
+</Cube>
+<Cube>
+	<Position x="-6.142175" y="1.256156" z="-2.097015"/>
+	<Scale x="1" y="1" z="1"/>
+	<Rotation x="0" y="0" z="0"/>
 </Cube>
