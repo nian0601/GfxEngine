@@ -7,6 +7,7 @@ Matrix Projection;
 Matrix InvertedProjection;
 Matrix ViewProjection;
 float3 CameraPosition;
+float3 Scale;
 
 
 //Model-Textures

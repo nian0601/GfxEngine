@@ -1,13 +1,11 @@
 struct Vertex_ColoredCube
 {
 	float4 Position : POSITION;
-	float4 Color : Color0;	
 };
 
 struct Pixel_ColoredCube
 {
 	float4 Position : SV_POSITION;
-	float4 Color : Color0;	
 };
 
 
