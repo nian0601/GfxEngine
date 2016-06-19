@@ -81,6 +81,8 @@
     <ClInclude Include="BaseProcessor.h" />
     <ClInclude Include="ComponentFilter.h" />
     <ClInclude Include="CustomEntityTypes.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="InputProcessor.h" />
     <ClInclude Include="RenderProcessor.h" />
     <ClInclude Include="TypeID.h" />
     <ClInclude Include="ComponentStorage.h" />
@@ -93,6 +95,8 @@
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="BaseProcessor.cpp" />
     <ClCompile Include="ComponentStorage.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="InputProcessor.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RenderProcessor.cpp" />
     <ClCompile Include="stdafx.cpp">

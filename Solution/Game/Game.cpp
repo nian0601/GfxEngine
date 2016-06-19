@@ -17,12 +17,13 @@
 #include <BaseComponent.h>
 #include <RenderComponent.h>
 #include <TranslationComponent.h>
-
+#include <InputComponent.h>
 
 #include <TypeID.h>
 
 #include <ComponentFilter.h>
 #include <RenderProcessor.h>
+#include <InputProcessor.h>
 
 Game::Game()
 {
@@ -40,6 +41,7 @@ Game::Game()
 	myRenderer = new Easy3D::DeferredRenderer();
 
 	myWorld.AddProcessor<RenderProcessor>();
+	myWorld.AddProcessor<InputProcessor>();
 }
 
 
@@ -85,29 +87,29 @@ void Game::UpdateCamera(float aDelta)
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
 	CU::Vector3<float> dir;
 
-	if (input->KeyIsPressed(DIK_W))
+	if (input->KeyIsPressed(DIK_NUMPAD8))
 	{
 		dir.z = 1.f;
 	}
-	else if (input->KeyIsPressed(DIK_S))
+	else if (input->KeyIsPressed(DIK_NUMPAD2))
 	{
 		dir.z = -1.f;
 	}
 
-	if (input->KeyIsPressed(DIK_A))
+	if (input->KeyIsPressed(DIK_NUMPAD4))
 	{
 		dir.x = -1.f;
 	}
-	else if (input->KeyIsPressed(DIK_D))
+	else if (input->KeyIsPressed(DIK_NUMPAD6))
 	{
 		dir.x = 1.f;
 	}
 
-	if (input->KeyIsPressed(DIK_Q))
+	if (input->KeyIsPressed(DIK_NUMPAD7))
 	{
 		dir.y = 1.f;
 	}
-	else if (input->KeyIsPressed(DIK_E))
+	else if (input->KeyIsPressed(DIK_NUMPAD9))
 	{
 		dir.y = -1.f;
 	}
@@ -135,6 +137,8 @@ void Game::UpdateCamera(float aDelta)
 
 void Game::LoadLevel()
 {
+
+	Entity lastEntity = 0;
 	XMLReader reader;
 	reader.OpenDocument("Data/Resource/Level/Level_01.xml");
 	for (tinyxml2::XMLElement* cube = reader.ForceFindFirstChild("Cube"); cube != nullptr; cube = reader.FindNextElement(cube, "Cube"))
@@ -167,7 +171,11 @@ void Game::LoadLevel()
 		RenderComponent& renderComp = myWorld.GetComponent<RenderComponent>(entity);
 		renderComp.myModelID = Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/Cube/SM_1x1_cube.fbx", "Data/Resource/Shader/S_effect_cube.fx");
 		renderComp.myEffectID = Easy3D::AssetContainer::GetInstance()->LoadEffect("Data/Resource/Shader/S_effect_cube.fx");
+
+		lastEntity = entity;
 	}
+
+	myWorld.AddComponent<InputComponent>(lastEntity);
 
 	reader.CloseDocument();
 }

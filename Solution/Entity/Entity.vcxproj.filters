@@ -32,6 +32,12 @@
     <ClCompile Include="RenderProcessor.cpp">
       <Filter>Processors</Filter>
     </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputProcessor.cpp">
+      <Filter>Processors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -55,6 +61,12 @@
     <ClInclude Include="CustomEntityTypes.h" />
     <ClInclude Include="ComponentFilter.h" />
     <ClInclude Include="RenderProcessor.h">
+      <Filter>Processors</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputProcessor.h">
       <Filter>Processors</Filter>
     </ClInclude>
   </ItemGroup>
