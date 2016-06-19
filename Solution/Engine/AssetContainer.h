@@ -24,7 +24,8 @@ namespace Easy3D
 		static AssetContainer* GetInstance();
 		static void Destroy();
 
-		Instance* LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
+		Instance* CreateInstance(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
+		ModelID LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
 		ModelData* GetModel(ModelID aID);
 
 		EffectID LoadEffect(const CU::String<64>& aFilePath);

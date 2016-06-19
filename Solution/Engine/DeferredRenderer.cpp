@@ -23,7 +23,7 @@ namespace Easy3D
 		myRenderer = new Renderer(myFullscreenEffect);
 		myRenderer->SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 
-		myPointLightInstance = AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
+		myPointLightInstance = AssetContainer::GetInstance()->CreateInstance("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
 	}
 
 

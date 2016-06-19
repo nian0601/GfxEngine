@@ -23,7 +23,7 @@ namespace Easy3D
 		SAFE_DELETE(myInstance);
 	}
 
-	Instance* AssetContainer::LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath)
+	Easy3D::Instance* AssetContainer::CreateInstance(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath)
 	{
 		EffectID effect = LoadEffect(aEffectPath);
 
@@ -37,6 +37,22 @@ namespace Easy3D
 		}
 
 		return new Instance(myModelID[aModelPath], effect);
+	}
+
+	ModelID AssetContainer::LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath)
+	{
+		EffectID effect = LoadEffect(aEffectPath);
+
+		if (myModelID.KeyExists(aModelPath) == false)
+		{
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
+
+			myModels[myNextModelID] = modelData;
+			myModelID[aModelPath] = myNextModelID;
+			++myNextModelID;
+		}
+
+		return myModelID[aModelPath];
 	}
 
 	Easy3D::ModelData* AssetContainer::GetModel(ModelID aID)
