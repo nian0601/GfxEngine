@@ -31,6 +31,14 @@ namespace Easy3D
 		//aRenderer->EndModelBatch();
 	}
 
+	void Scene::Render()
+	{
+		for (Instance* instance : myInstances)
+		{
+			instance->Render();
+		}
+	}
+
 	void Scene::SetCamera(Camera& aCamera)
 	{
 		myCamera = &aCamera;

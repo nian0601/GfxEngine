@@ -8,8 +8,8 @@ struct Message
 	eMessageType GetMessageType() const;
 
 
-	void operator=(Message&) = delete;
-	const eMessageType myMessageType;
+	//void operator=(Message&) = delete;
+	eMessageType myMessageType;
 };
 
 inline Message::Message(eMessageType aMessageType)

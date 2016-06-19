@@ -9,7 +9,7 @@
 #include <TimerManager.h>
 #include <DeferredRenderer.h>
 #include <PointLight.h>
-
+#include <PostMaster.h>
 #include <XMLReader.h>
 #include <MathHelper.h>
 
@@ -39,7 +39,6 @@ Game::Game()
 		myInstances.GetLast()->SetPosition(position);
 		myInstances.GetLast()->SetRotation(rotation);
 		myInstances.GetLast()->SetScale(scale);
-
 	}
 	reader.CloseDocument();
 
@@ -65,6 +64,7 @@ Game::~Game()
 	SAFE_DELETE(myRenderer);
 
 	Easy3D::AssetContainer::Destroy();
+	PostMaster::GetInstance()->Destroy();
 }
 
 bool Game::Update()
@@ -86,6 +86,7 @@ bool Game::Update()
 
 void Game::Render()
 {
+	myScene->Render();
 	myRenderer->Render(myScene);
 }
 

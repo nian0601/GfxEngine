@@ -35,6 +35,7 @@ namespace Easy3D
 
 	void DeferredRenderer::Render(Scene* aScene)
 	{
+		
 		RenderToGBuffer(aScene);
 		RenderAmbientPass(aScene->GetCamera());
 		//RenderPointLights(aScene);
@@ -61,7 +62,8 @@ namespace Easy3D
 		myRenderer->SetDepthStencil(myGBuffer->myDepthStencil);
 		myRenderer->ApplyRenderTargetAndDepthStencil();
 
-		aScene->Render(myRenderer);
+		myRenderer->RenderModels(aScene->GetCamera());
+		//aScene->Render(myRenderer);
 	}
 
 	void DeferredRenderer::RenderAmbientPass(const Camera& aCamera)

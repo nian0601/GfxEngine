@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AssetContainer.h"
+#include "Camera.h"
 #include <d3d11.h>
 #include <D3DX11async.h>
 #include <d3dx11effect.h>
@@ -9,20 +10,47 @@
 #include "Texture.h"
 #include "GPUData.h"
 
+#include <PostMaster.h>
+
 namespace Easy3D
 {
 	Renderer::Renderer(EffectID aFullscreenEffect)
+		: myRenderBuffer(128)
 	{
 		InitFullscreenQuad(aFullscreenEffect);
 		Engine::GetInstance()->GetBackbuffer(myBackbuffer);
 
 		CreateDepthStencilStates();
 		CreateRasterizerStates();
+
+		PostMaster::GetInstance()->Subscribe(this, eMessageType::RENDER);
 	}
 
 
 	Renderer::~Renderer()
 	{
+		PostMaster::GetInstance()->UnSubscribe(this, 0);
+	}
+
+	void Renderer::ReceiveMessage(const RenderMessage& aMessage)
+	{
+		myRenderBuffer.Add(aMessage);
+	}
+
+	void Renderer::RenderModels(const Camera& aCamera)
+	{
+		for each (const RenderMessage& msg in myRenderBuffer)
+		{
+			SetEffect(msg.myEffectID);
+			SetMatrix("ViewProjection", aCamera.GetViewProjection());
+			SetMatrix("World", msg.myOrientation);
+			SetVector("CameraPosition", aCamera.GetPosition());
+			SetVector("Scale", msg.myScale);
+
+			RenderModel(msg.myModelID);
+		}
+
+		myRenderBuffer.RemoveAll();
 	}
 
 	void Renderer::SetEffect(EffectID aEffect)

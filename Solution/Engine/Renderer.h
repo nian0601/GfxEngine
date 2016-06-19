@@ -7,6 +7,9 @@
 #include <Matrix.h>
 #include "ModelData.h"
 #include <Vector.h>
+#include <Subscriber.h>
+#include <GrowingArray.h>
+#include <RenderMessage.h>
 
 struct ID3DX11EffectVariable;
 struct ID3D11RenderTargetView;
@@ -16,6 +19,7 @@ struct ID3D11DepthStencilState;
 
 namespace Easy3D
 {
+	class Camera;
 	class Effect;
 	class Texture;
 
@@ -36,11 +40,14 @@ namespace Easy3D
 		_RAZTER_COUNT
 	};
 
-	class Renderer : public FullscreenQuad
+	class Renderer : public FullscreenQuad, public Subscriber
 	{
 	public:
 		Renderer(EffectID aFullscreenEffect);
 		~Renderer();
+
+		void ReceiveMessage(const RenderMessage& aMessage) override;
+		void RenderModels(const Camera& aCamera);
 
 		void SetEffect(EffectID aEffect);
 		void SetTexture(const CU::String<64>& aName, Texture* aTexture);
@@ -85,5 +92,7 @@ namespace Easy3D
 
 		ID3D11RasterizerState* myRasterizerStates[static_cast<int>(eRasterizer::_RAZTER_COUNT)];
 		ID3D11DepthStencilState* myDepthStencilStates[static_cast<int>(eDepthState::_DEPTH_COUNT)];
+
+		CU::GrowingArray<RenderMessage> myRenderBuffer;
 	};
 }

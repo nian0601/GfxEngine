@@ -14,6 +14,7 @@ namespace Easy3D
 		Scene();
 		~Scene();
 
+		void Render();
 		void Render(Renderer* aRenderer);
 
 		void SetCamera(Camera& aCamera);

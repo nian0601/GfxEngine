@@ -28,15 +28,12 @@ PostMaster::~PostMaster()
 
 PostMaster* PostMaster::GetInstance()
 {
-	DL_ASSERT_EXP(myInstance != nullptr, "Need to create Postmaster before getting it.");
+	if (myInstance == nullptr)
+	{
+		myInstance = new PostMaster();
+	}
+
 	return myInstance;
-}
-
-void PostMaster::Create()
-{
-	DL_ASSERT_EXP(myInstance == nullptr, "Postmaster already created.");
-
-	myInstance = new PostMaster();
 }
 
 void PostMaster::Destroy()

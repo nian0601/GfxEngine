@@ -13,6 +13,7 @@ namespace Easy3D
 		Instance(ModelID aModelID, EffectID aEffect);
 		~Instance();
 
+		void Render();
 		void Render(Renderer* aRenderer, const Camera& aCamera);
 
 		void SetPosition(const CU::Vector3<float>& aPosition);
