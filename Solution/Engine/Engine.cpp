@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "Engine.h"
 #include "GPUContext.h"
+#include <InputWrapper.h>
+#include "WindowHandler.h"
 
 namespace Easy3D
 {
 	Engine* Engine::myInstance = nullptr;
 
-	void Engine::Create()
+	void Engine::Create(const CU::Vector2<float>& aSize)
 	{
 		DL_ASSERT_EXP(myInstance == nullptr, "Cant create Engine multiple times");
-		myInstance = new Engine();
+		myInstance = new Engine(aSize);
 	}
 
 	void Engine::Destroy()
@@ -22,65 +24,39 @@ namespace Easy3D
 		return myInstance;
 	}
 
-	Engine::Engine()
-		: myGPUContext(nullptr)
+	void Engine::Run()
 	{
-		
+		//while (myIsRunning == true)
+		{
+			if (myWindowHandler->PumpEvent() == false)
+			{
+				myIsRunning = false;
+			}
+			else
+			{
+				if (myWindowHandler->GetShouldResize() == true)
+				{
+					myWindowHandler->HasResized();
+				}
+			}
+		}
+	}
+
+	Engine::Engine(const CU::Vector2<float>& aSize)
+		: myGPUContext(nullptr)
+		, myWindowSize(aSize)
+	{
+		myWindowHandler = new WindowHandler(myWindowSize);
+		myGPUContext = new GPUContext(myWindowSize, myWindowHandler->GetHwnd());
+
+		CU::InputWrapper::Create(myWindowHandler->GetHwnd(), GetModuleHandle(NULL), DISCL_NONEXCLUSIVE
+			| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	}
 
 
 	Engine::~Engine()
 	{
 		SAFE_DELETE(myGPUContext);
-	}
-
-	void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const CU::String<30>& aTitle)
-	{
-		myWindowSize = aSize;
-
-		WNDCLASSEX wcex;
-		wcex.cbSize = sizeof(WNDCLASSEX);
-
-		wcex.style = CS_HREDRAW | CS_VREDRAW;
-		wcex.lpfnWndProc = aWndProc;
-		wcex.cbClsExtra = 0;
-		wcex.cbWndExtra = 0;
-		wcex.hInstance = GetModuleHandle(NULL);
-		wcex.hIcon = LoadIcon(wcex.hInstance, NULL);
-		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-		wcex.lpszMenuName = NULL;
-		wcex.lpszClassName = aTitle.c_str();
-		wcex.hIconSm = LoadIcon(wcex.hInstance, NULL);
-
-		DL_ASSERT_EXP(RegisterClassEx(&wcex) != FALSE, "Failed to RegisterClassEx");
-
-		RECT rc = { 0, 0, int(aSize.x), int(aSize.y) };
-		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-
-		aHwnd = CreateWindowEx(
-			WS_EX_CLIENTEDGE,
-			aTitle.c_str(),
-			aTitle.c_str(),
-			WS_OVERLAPPEDWINDOW,
-			0,
-			0,
-			rc.right - rc.left,
-			rc.bottom - rc.top,
-			NULL,
-			NULL,
-			GetModuleHandle(NULL),
-			NULL);
-
-		DL_ASSERT_EXP(aHwnd != nullptr, "Failed to CreateWindowEx");
-
-		ShowWindow(aHwnd, 10);
-		UpdateWindow(aHwnd);
-	}
-
-	void Engine::CreateDirectX(const HWND& aHwnd)
-	{
-		myGPUContext = new GPUContext(aHwnd, myWindowSize);
 	}
 
 	void Engine::Render()

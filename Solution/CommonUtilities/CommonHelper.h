@@ -183,8 +183,10 @@ namespace CU
 		char buffer[1024];
 		va_list args;
 		va_start(args, aFormattedString);
-		vsprintf_s(buffer, aFormattedString, args);
-		perror(buffer);
+		if (vsprintf_s(buffer, aFormattedString, args) < 0)
+		{
+			perror(buffer);
+		}
 		va_end(args);
 
 		return buffer;

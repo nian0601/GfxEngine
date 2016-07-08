@@ -115,6 +115,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="WindowHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetContainer.cpp" />
@@ -139,6 +140,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="WindowHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">

@@ -5,7 +5,7 @@
 
 namespace Easy3D
 {
-	GPUContext::GPUContext(const HWND& aHwnd, const CU::Vector2<float>& aScreenSize)
+	GPUContext::GPUContext(const CU::Vector2<float>& aScreenSize, const HWND& aHwnd)
 	{
 		myDirectX = new DirectX();
 		myDirectX->Init(aHwnd, aScreenSize);
@@ -41,5 +41,6 @@ namespace Easy3D
 	{
 		myDirectX->GetBackbuffer(aBackbufferOut);
 	}
+
 
 }

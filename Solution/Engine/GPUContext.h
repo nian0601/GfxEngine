@@ -12,7 +12,7 @@ namespace Easy3D
 	class GPUContext
 	{
 	public:
-		GPUContext(const HWND& aHwnd, const CU::Vector2<float>& aScreenSize);
+		GPUContext(const CU::Vector2<float>& aScreenSize, const HWND& aHwnd);
 		~GPUContext();
 
 		void FinishFrame();

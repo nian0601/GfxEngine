@@ -30,8 +30,6 @@ namespace DL_Debug
 	class Debug
 	{
 	public:
-
-		static bool Create(CU::String<256> aFile = "DebugLogger.txt");
 		static bool Destroy();
 		static Debug* GetInstance();
 

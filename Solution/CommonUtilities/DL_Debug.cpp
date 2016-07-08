@@ -14,17 +14,6 @@ DL_Debug::Debug* DL_Debug::Debug::ourInstance = nullptr;
 
 DL_Debug::Debug::Debug()
 {
-}
-
-
-DL_Debug::Debug::~Debug()
-{
-}
-bool DL_Debug::Debug::Create(CU::String<256> aFile)
-{
-	assert(ourInstance == nullptr && "Debugobject already created");
-	ourInstance = new Debug();
-
 	time_t now = time(0);
 	struct tm tstruct;
 	char buf[30];
@@ -38,13 +27,13 @@ bool DL_Debug::Debug::Create(CU::String<256> aFile)
 
 	logFolder += buf;
 	logFolder += "_";
-	logFolder += aFile;
-	ourInstance->myDebugFile.open(logFolder.c_str());
-	if (ourInstance == nullptr)
-	{
-		return(false);
-	}
-	return(true);
+	logFolder += "DebugLogger.txt";
+	myDebugFile.open(logFolder.c_str());
+}
+
+
+DL_Debug::Debug::~Debug()
+{
 }
 
 bool DL_Debug::Debug::Destroy()
@@ -63,7 +52,12 @@ bool DL_Debug::Debug::Destroy()
 
 DL_Debug::Debug* DL_Debug::Debug::GetInstance()
 {
-	return(ourInstance);
+	if (ourInstance == nullptr)
+	{
+		ourInstance = new DL_Debug::Debug();
+	}
+
+	return ourInstance;
 }
 
 void DL_Debug::Debug::PrintMessage(const char* aString)

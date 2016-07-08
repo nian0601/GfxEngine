@@ -17,16 +17,16 @@ namespace Easy3D
 
 	class DirectX;
 	class GPUContext;
+	class WindowHandler;
 
 	class Engine
 	{
 	public:
-		static void Create();
+		static void Create(const CU::Vector2<float>& aSize);
 		static void Destroy();
 		static Engine* GetInstance();
 
-		void CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const CU::String<30>& aTitle);
-		void CreateDirectX(const HWND& aHwnd);
+		void Run();
 
 		void Render();
 
@@ -34,11 +34,13 @@ namespace Easy3D
 		const CU::Vector2<float>& GetWindowSize() const;
 
 	private:
-		Engine();
+		Engine(const CU::Vector2<float>& aSize);
 		~Engine();
 
 		GPUContext* myGPUContext;
+		WindowHandler* myWindowHandler;
 		CU::Vector2<float> myWindowSize;
+		bool myIsRunning;
 
 		static Engine* myInstance;
 	};
