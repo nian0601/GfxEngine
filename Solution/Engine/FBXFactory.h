@@ -19,6 +19,7 @@ namespace FBX
 
 namespace Easy3D
 {
+	class AssetContainer;
 	class ModelData;
 	class GPUData;
 	class Texture;
@@ -26,14 +27,17 @@ namespace Easy3D
 	class FBXFactory : public IModelFactory
 	{
 	public:
-		FBXFactory();
+		FBXFactory(AssetContainer& aAssetContainer, GPUContext& aGPUContext);
 		~FBXFactory();
 
-		ModelData* LoadModel(const CU::String<64>& aFilePath, EffectID aEffect, GPUContext& aGPUContext) override;
+		ModelData* LoadModel(const CU::String<64>& aFilePath, EffectID aEffect) override;
 		
 	private:
 		ModelData* CreateModel(FBX::FbxModelData* someModelData);
 		void LoadData(GPUData& someGPUData, FBX::ModelData* someFBXData);
+
+		AssetContainer& myAssetContainer;
+		GPUContext& myGPUContext;
 
 		FBX::FBXLoader *myLoader;
 		CU::Map<CU::String<64>, ModelData*> myModels;

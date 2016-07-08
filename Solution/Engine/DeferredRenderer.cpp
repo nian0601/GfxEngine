@@ -15,15 +15,16 @@ namespace Easy3D
 	{
 		myGBuffer = new GBuffer();
 
-		myFullscreenEffect = AssetContainer::GetInstance()->LoadEffect("Data/Resource/Shader/S_effect_fullscreen.fx");
-		myPointLightEffect = AssetContainer::GetInstance()->LoadEffect("Data/Resource/Shader/S_effect_deferred_pointlight.fx");
+		AssetContainer& assetContainer = Engine::GetInstance()->GetAssetContainer();
+		myFullscreenEffect = assetContainer.LoadEffect("Data/Resource/Shader/S_effect_fullscreen.fx");
+		myPointLightEffect = assetContainer.LoadEffect("Data/Resource/Shader/S_effect_deferred_pointlight.fx");
 
-		myCubemap = AssetContainer::GetInstance()->RequestTexture("Data/Resource/Texture/church_cubemap.dds");
+		myCubemap = assetContainer.RequestTexture("Data/Resource/Texture/church_cubemap.dds");
 
 		myRenderer = new Renderer(myFullscreenEffect);
 		myRenderer->SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 
-		myPointLightInstance = AssetContainer::GetInstance()->CreateInstance("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
+		myPointLightInstance = assetContainer.CreateInstance("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
 	}
 
 

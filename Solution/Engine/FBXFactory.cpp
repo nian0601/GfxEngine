@@ -13,7 +13,9 @@
 
 namespace Easy3D
 {
-	FBXFactory::FBXFactory()
+	FBXFactory::FBXFactory(AssetContainer& aAssetContainer, GPUContext& aGPUContext)
+		: myAssetContainer(aAssetContainer)
+		, myGPUContext(aGPUContext)
 	{
 		myLoader = new FBX::FBXLoader();
 	}
@@ -29,7 +31,7 @@ namespace Easy3D
 		SAFE_DELETE(myLoader);
 	}
 
-	ModelData* FBXFactory::LoadModel(const CU::String<64>& aFilePath, EffectID aEffect, GPUContext& aGPUContext)
+	ModelData* FBXFactory::LoadModel(const CU::String<64>& aFilePath, EffectID aEffect)
 	{
 		if (myModels.KeyExists(aFilePath) == true)
 		{
@@ -42,7 +44,7 @@ namespace Easy3D
 		ModelData* modelData = CreateModel(fbxModelData);
 		myModels[aFilePath] = modelData;
 
-		modelData->Init(aEffect, aGPUContext);
+		modelData->Init(aEffect, myGPUContext, myAssetContainer);
 		return modelData;
 	}
 
@@ -181,7 +183,7 @@ namespace Easy3D
 			CU::String<256> fromData = currentTexture.myFileName.SubStr(dataIndex, currentTexture.myFileName.Size());
 
 			someGPUData.myShaderResourceNames.Add(resourceName.c_str());
-			someGPUData.myTextures.Add(AssetContainer::GetInstance()->RequestTexture(fromData.c_str()));
+			someGPUData.myTextures.Add(myAssetContainer.RequestTexture(fromData.c_str()));
 		}
 	}
 

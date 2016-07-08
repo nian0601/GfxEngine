@@ -19,6 +19,7 @@ struct ID3D11DepthStencilState;
 
 namespace Easy3D
 {
+	class AssetContainer;
 	class Camera;
 	class Effect;
 	class GPUContext;
@@ -96,5 +97,6 @@ namespace Easy3D
 		ID3D11DepthStencilState* myDepthStencilStates[static_cast<int>(eDepthState::_DEPTH_COUNT)];
 
 		CU::GrowingArray<RenderMessage> myRenderBuffer;
+		AssetContainer& myAssetContainer;
 	};
 }

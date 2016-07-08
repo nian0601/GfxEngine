@@ -106,6 +106,7 @@
     <ClInclude Include="GfxStructs.h" />
     <ClInclude Include="GPUContext.h" />
     <ClInclude Include="GPUData.h" />
+    <ClInclude Include="IGame.h" />
     <ClInclude Include="IModelFactory.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="ModelData.h" />

@@ -5,24 +5,13 @@
 
 int main()
 {
-	Easy3D::Engine::Create({ 1280.f, 720.f });
-
 	Game game;
+	Easy3D::Engine::Create({ 1280.f, 720.f }, game);
 
-	bool isRunning = true;
-	while (isRunning == true)
-	{
-		Easy3D::Engine::GetInstance()->Run();
+	Easy3D::Engine::GetInstance()->Init();
 
-		CU::InputWrapper::GetInstance()->Update();
-
-		isRunning = game.Update();
-		game.Render();
-		Easy3D::Engine::GetInstance()->Render();
-	}
+	Easy3D::Engine::GetInstance()->Run();
 
 	Easy3D::Engine::Destroy();
-
-	DL_Debug::Debug::Destroy();
 	return 0;
 }

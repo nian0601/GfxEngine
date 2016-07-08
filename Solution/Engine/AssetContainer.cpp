@@ -7,29 +7,13 @@
 
 namespace Easy3D
 {
-	AssetContainer* AssetContainer::myInstance = nullptr;
-	AssetContainer* AssetContainer::GetInstance()
-	{
-		if (myInstance == nullptr)
-		{
-			myInstance = new AssetContainer();
-		}
-
-		return myInstance;
-	}
-
-	void AssetContainer::Destroy()
-	{
-		SAFE_DELETE(myInstance);
-	}
-
 	Easy3D::Instance* AssetContainer::CreateInstance(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath)
 	{
 		EffectID effect = LoadEffect(aEffectPath);
 
 		if (myModelID.KeyExists(aModelPath) == false)
 		{
-			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect, myGpuContext);
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
 
 			myModels[myNextModelID] = modelData;
 			myModelID[aModelPath] = myNextModelID;
@@ -45,7 +29,7 @@ namespace Easy3D
 
 		if (myModelID.KeyExists(aModelPath) == false)
 		{
-			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect, myGpuContext);
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
 
 			myModels[myNextModelID] = modelData;
 			myModelID[aModelPath] = myNextModelID;
@@ -104,10 +88,10 @@ namespace Easy3D
 		return myTextures[aFilePath];
 	}
 
-	AssetContainer::AssetContainer()
-		: myModelFactory(new FBXFactory())
-		, myGpuContext(Engine::GetInstance()->GetGPUContext())
+	AssetContainer::AssetContainer(GPUContext& aGPUContext)
+		: myGpuContext(aGPUContext)
 	{
+		myModelFactory = new FBXFactory(*this, myGpuContext);
 	}
 
 

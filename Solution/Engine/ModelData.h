@@ -17,7 +17,7 @@ namespace Easy3D
 		ModelData();
 		~ModelData();
 
-		void Init(EffectID aEffectID, GPUContext& aGPUContext);
+		void Init(EffectID aEffectID, GPUContext& aGPUContext, AssetContainer& aAssetContainer);
 		void AddChild(ModelData* aModelData);
 
 	private:

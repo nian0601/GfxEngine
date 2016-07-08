@@ -18,8 +18,9 @@ namespace Easy3D
 	Renderer::Renderer(EffectID aFullscreenEffect)
 		: myRenderBuffer(128)
 		, myGPUContext(Engine::GetInstance()->GetGPUContext())
+		, myAssetContainer(Engine::GetInstance()->GetAssetContainer())
 	{
-		InitFullscreenQuad(aFullscreenEffect, myGPUContext);
+		InitFullscreenQuad(aFullscreenEffect, myGPUContext, myAssetContainer);
 		myGPUContext.GetBackbuffer(myBackbuffer);
 
 		CreateDepthStencilStates();
@@ -151,12 +152,12 @@ namespace Easy3D
 	void Renderer::RenderFullScreen(const CU::String<30>& aTechnique)
 	{
 		ActivateFullscreenQuad(myGPUContext);
-		RenderFullscreenQuad(myCurrentEffect, aTechnique, myGPUContext);
+		RenderFullscreenQuad(myCurrentEffect, aTechnique, myGPUContext, myAssetContainer);
 	}
 
 	void Renderer::RenderModel(ModelID aModelID)
 	{
-		ModelData* modelData = AssetContainer::GetInstance()->GetModel(aModelID);
+		ModelData* modelData = myAssetContainer.GetModel(aModelID);
 		RenderModelData(*modelData);
 	}
 
@@ -164,7 +165,7 @@ namespace Easy3D
 	{
 		if (myEffectVariables[myCurrentEffect].KeyExists(aName) == false)
 		{
-			Effect* effect = AssetContainer::GetInstance()->GetEffect(myCurrentEffect);
+			Effect* effect = myAssetContainer.GetEffect(myCurrentEffect);
 
 			DL_ASSERT_EXP(effect != nullptr, "Cant GetEffectVariable without an Effect");
 			ID3DX11EffectVariable* var = effect->GetEffect()->GetVariableByName(aName.c_str());
@@ -206,7 +207,7 @@ namespace Easy3D
 		context->IASetIndexBuffer(someData.myIndexBuffer->myIndexBuffer, DXGI_FORMAT(someData.myIndexBuffer->myIndexBufferFormat), byteOffset);
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(someData.myPrimitiveTopology));
 
-		Effect* effect = AssetContainer::GetInstance()->GetEffect(myCurrentEffect);
+		Effect* effect = myAssetContainer.GetEffect(myCurrentEffect);
 		D3DX11_TECHNIQUE_DESC techDesc;
 		effect->GetTechnique(someData.GetTechniqueName())->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)

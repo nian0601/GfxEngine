@@ -62,6 +62,7 @@
       <Filter>GPUContext</Filter>
     </ClInclude>
     <ClInclude Include="WindowHandler.h" />
+    <ClInclude Include="IGame.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />

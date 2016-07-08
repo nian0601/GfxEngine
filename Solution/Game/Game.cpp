@@ -3,6 +3,7 @@
 #include <AssetContainer.h>
 #include <Camera.h>
 #include <Effect.h>
+#include <Engine.h>
 #include "Game.h"
 #include <Instance.h>
 #include <Scene.h>
@@ -27,39 +28,36 @@
 
 Game::Game()
 {
+}
 
+
+Game::~Game()
+{
+	SAFE_DELETE(myRenderer);
+
+	PostMaster::GetInstance()->Destroy();
+}
+
+void Game::Init(Easy3D::Engine& aEngine)
+{
 	myCamera = new Easy3D::Camera();
 
-	LoadLevel();
+	LoadLevel(aEngine.GetAssetContainer());
 
 	myScene = new Easy3D::Scene();
 	myScene->SetCamera(*myCamera);
 
 	myScene->AddLight(new Easy3D::PointLight({ -1.2f, -1.f, 3.f }, { 1.f, 0.f, 0.f, 3.f }, 4.f));
 
-	myTimerManager = new CU::TimerManager();
 	myRenderer = new Easy3D::DeferredRenderer();
 
 	myWorld.AddProcessor<RenderProcessor>();
 	myWorld.AddProcessor<InputProcessor>();
 }
 
-
-Game::~Game()
+bool Game::Update(float aDelta)
 {
-	SAFE_DELETE(myTimerManager);
-	SAFE_DELETE(myRenderer);
-
-	Easy3D::AssetContainer::Destroy();
-	PostMaster::GetInstance()->Destroy();
-}
-
-bool Game::Update()
-{
-	myTimerManager->Update();
-	float delta = myTimerManager->GetMasterTimer().GetTime().GetFrameTime();
-	
-	UpdateCamera(delta);
+	UpdateCamera(aDelta);
 
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
 
@@ -68,15 +66,16 @@ bool Game::Update()
 		return false;
 	}
 
-	myWorld.Update(delta);
+	myWorld.Update(aDelta);
 
+
+	myRenderer->Render(myScene);
 	return true;
 }
 
-void Game::Render()
+void Game::OnResize(float aWidth, float aHeight)
 {
-	//myScene->Render();
-	myRenderer->Render(myScene);
+	//throw std::logic_error("The method or operation is not implemented.");
 }
 
 void Game::UpdateCamera(float aDelta)
@@ -135,9 +134,8 @@ void Game::UpdateCamera(float aDelta)
 	}
 }
 
-void Game::LoadLevel()
+void Game::LoadLevel(Easy3D::AssetContainer& aAssetContainer)
 {
-
 	Entity lastEntity = 0;
 	XMLReader reader;
 	reader.OpenDocument("Data/Resource/Level/Level_01.xml");
@@ -169,8 +167,8 @@ void Game::LoadLevel()
 		comp.myOrientation.SetPos(position);
 
 		RenderComponent& renderComp = myWorld.GetComponent<RenderComponent>(entity);
-		renderComp.myModelID = Easy3D::AssetContainer::GetInstance()->LoadModel("Data/Resource/Model/Cube/SM_1x1_cube.fbx", "Data/Resource/Shader/S_effect_cube.fx");
-		renderComp.myEffectID = Easy3D::AssetContainer::GetInstance()->LoadEffect("Data/Resource/Shader/S_effect_cube.fx");
+		renderComp.myModelID = aAssetContainer.LoadModel("Data/Resource/Model/Cube/SM_1x1_cube.fbx", "Data/Resource/Shader/S_effect_cube.fx");
+		renderComp.myEffectID = aAssetContainer.LoadEffect("Data/Resource/Shader/S_effect_cube.fx");
 
 		lastEntity = entity;
 	}

@@ -22,8 +22,8 @@ namespace Easy3D
 	class AssetContainer
 	{
 	public:
-		static AssetContainer* GetInstance();
-		static void Destroy();
+		AssetContainer(GPUContext& aGPUContext);
+		~AssetContainer();
 
 		Instance* CreateInstance(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
 		ModelID LoadModel(const CU::String<64>& aModelPath, const CU::String<64>& aEffectPath);
@@ -35,9 +35,6 @@ namespace Easy3D
 		Texture* RequestTexture(const CU::String<64>& aFilePath);
 
 	private:
-		AssetContainer();
-		~AssetContainer();
-
 		void Run();
 
 		IModelFactory* myModelFactory;

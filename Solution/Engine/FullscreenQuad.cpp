@@ -19,7 +19,7 @@ namespace Easy3D
 	{
 	}
 
-	void FullscreenQuad::InitFullscreenQuad(EffectID aEffect, GPUContext& aGPUContext)
+	void FullscreenQuad::InitFullscreenQuad(EffectID aEffect, GPUContext& aGPUContext, AssetContainer& aAssetContainer)
 	{
 		CU::GrowingArray<VertexPosUV> vertices(4);
 		vertices.Add({ { -1.f, -1.f, 0.f }, { 0.f, 1.f } }); //topleft
@@ -42,7 +42,7 @@ namespace Easy3D
 		myGPUData.AddInputElement(new D3D11_INPUT_ELEMENT_DESC({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }));
 		myGPUData.AddInputElement(new D3D11_INPUT_ELEMENT_DESC({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }));
 		myGPUData.Init(aEffect, indices.Size(), reinterpret_cast<char*>(&indices[0]), vertices.Size()
-			, sizeof(VertexPosUV), reinterpret_cast<char*>(&vertices[0]), aGPUContext);
+			, sizeof(VertexPosUV), reinterpret_cast<char*>(&vertices[0]), aGPUContext, aAssetContainer);
 	}
 
 	void FullscreenQuad::ActivateFullscreenQuad(GPUContext& aGPUContext)
@@ -58,10 +58,10 @@ namespace Easy3D
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY(myGPUData.GetTopology()));
 	}
 
-	void FullscreenQuad::RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique, GPUContext& aGPUContext)
+	void FullscreenQuad::RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique, GPUContext& aGPUContext, AssetContainer& aAssetContainer)
 	{
 		ID3D11DeviceContext* context = aGPUContext.GetContext();
-		Effect* effect = AssetContainer::GetInstance()->GetEffect(aEffect);
+		Effect* effect = aAssetContainer.GetEffect(aEffect);
 
 		D3DX11_TECHNIQUE_DESC techDesc;
 		effect->GetTechnique(aTechnique)->GetDesc(&techDesc);

@@ -43,7 +43,7 @@ namespace Easy3D
 		myVertexFormat.DeleteAll();
 	}
 
-	void GPUData::Init(EffectID aEffect, GPUContext& aGPUContext)
+	void GPUData::Init(EffectID aEffect, GPUContext& aGPUContext, AssetContainer& aAssetContainer)
 	{
 		const int size = myVertexFormat.Size();
 		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
@@ -52,7 +52,7 @@ namespace Easy3D
 			vertexDesc[i] = *myVertexFormat[i];
 		}
 
-		InitInputLayout(vertexDesc, size, aEffect, aGPUContext);
+		InitInputLayout(vertexDesc, size, aEffect, aGPUContext, aAssetContainer);
 		delete[] vertexDesc;
 
 		InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
@@ -64,7 +64,8 @@ namespace Easy3D
 		myTechniqueName = "Render";
 	}
 
-	void GPUData::Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData, GPUContext& aGPUContext)
+	void GPUData::Init(EffectID aEffect, int aIndexCount, char* aIndexData
+		, int aVertexCount, int aVertexStride, char* aVertexData, GPUContext& aGPUContext, AssetContainer& aAssetContainer)
 	{
 		const int size = myVertexFormat.Size();
 		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
@@ -73,7 +74,7 @@ namespace Easy3D
 			vertexDesc[i] = *myVertexFormat[i];
 		}
 
-		InitInputLayout(vertexDesc, size, aEffect, aGPUContext);
+		InitInputLayout(vertexDesc, size, aEffect, aGPUContext, aAssetContainer);
 		delete[] vertexDesc;
 
 		InitVertexBuffer(aVertexStride, D3D11_USAGE_IMMUTABLE, 0);
@@ -95,9 +96,9 @@ namespace Easy3D
 		myVertexFormat.Add(aElement);
 	}
 
-	void GPUData::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect, GPUContext& aGPUContext)
+	void GPUData::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect, GPUContext& aGPUContext, AssetContainer& aAssetContainer)
 	{
-		Effect* effect = AssetContainer::GetInstance()->GetEffect(aEffect);
+		Effect* effect = aAssetContainer.GetEffect(aEffect);
 
 		D3DX11_PASS_DESC passDesc;
 		effect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
