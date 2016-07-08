@@ -2,7 +2,7 @@
 
 #include <D3DX11tex.h>
 #include "Texture.h"
-
+#include "GPUContext.h"
 
 namespace Easy3D
 {
@@ -22,26 +22,26 @@ namespace Easy3D
 		SAFE_RELEASE(myShaderView);
 	}
 
-	void Texture::InitForShader(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat)
+	void Texture::InitForShader(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat, GPUContext& aGpuContext)
 	{
 		myFormat = aFormat;
 
 		if ((aBindFlag & D3D11_BIND_SHADER_RESOURCE) > 0 || (aBindFlag & D3D11_BIND_RENDER_TARGET) > 0)
 		{
-			CreateShaderViewAndRenderTarget(aWidth, aHeight, aBindFlag, aFormat);
+			CreateShaderViewAndRenderTarget(aWidth, aHeight, aBindFlag, aFormat, aGpuContext);
 		}
 
 		if ((aBindFlag & D3D11_BIND_DEPTH_STENCIL) > 0)
 		{
-			CreateDepthStencil(aWidth, aHeight);
+			CreateDepthStencil(aWidth, aHeight, aGpuContext);
 		}
 	}
 
-	void Texture::LoadTexture(const CU::String<64>& aPath)
+	void Texture::LoadTexture(const CU::String<64>& aPath, GPUContext& aGpuContext)
 	{
 		myFilePath = aPath;
 
-		HRESULT hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice()
+		HRESULT hr = D3DX11CreateShaderResourceViewFromFile(aGpuContext.GetDevice()
 			, myFilePath.c_str(), NULL, NULL, &myShaderView, NULL);
 		
 
@@ -51,7 +51,7 @@ namespace Easy3D
 				, "Failed to load texture", MB_ICONWARNING);
 
 			myFilePath = "Data/Resource/Texture/T_missing_texture.dds";
-			hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice()
+			hr = D3DX11CreateShaderResourceViewFromFile(aGpuContext.GetDevice()
 				, myFilePath.c_str(), NULL, NULL, &myShaderView, NULL);
 
 			
@@ -62,7 +62,7 @@ namespace Easy3D
 		}
 	}
 
-	void Texture::Resize(float aWidth, float aHeight)
+	void Texture::Resize(float aWidth, float aHeight, GPUContext& aGpuContext)
 	{
 		int bindFlag = 0;
 		if (myShaderView != nullptr)
@@ -84,10 +84,10 @@ namespace Easy3D
 			SAFE_RELEASE(myDepthShaderView);
 		}
 
-		InitForShader(aWidth, aHeight, bindFlag, myFormat);
+		InitForShader(aWidth, aHeight, bindFlag, myFormat, aGpuContext);
 	}
 
-	void Texture::CreateShaderViewAndRenderTarget(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat)
+	void Texture::CreateShaderViewAndRenderTarget(float aWidth, float aHeight, unsigned int aBindFlag, unsigned int aFormat, GPUContext& aGpuContext)
 	{
 		D3D11_TEXTURE2D_DESC tempBufferInfo;
 		tempBufferInfo.Width = static_cast<unsigned int>(aWidth);
@@ -102,24 +102,24 @@ namespace Easy3D
 		tempBufferInfo.CPUAccessFlags = 0;
 		tempBufferInfo.MiscFlags = 0;
 
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myTexture);
+		HRESULT hr = aGpuContext.GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myTexture);
 
 		if ((aBindFlag & D3D11_BIND_SHADER_RESOURCE) > 0)
 		{
-			hr = Engine::GetInstance()->GetDevice()->CreateShaderResourceView(myTexture, NULL, &myShaderView);
+			hr = aGpuContext.GetDevice()->CreateShaderResourceView(myTexture, NULL, &myShaderView);
 			if (FAILED(hr))
 				assert(0);
 		}
 
 		if ((aBindFlag & D3D11_BIND_RENDER_TARGET) > 0)
 		{
-			hr = Engine::GetInstance()->GetDevice()->CreateRenderTargetView(myTexture, NULL, &myRenderTarget);
+			hr = aGpuContext.GetDevice()->CreateRenderTargetView(myTexture, NULL, &myRenderTarget);
 			if (FAILED(hr))
 				assert(0);
 		}
 	}
 
-	void Texture::CreateDepthStencil(float aWidth, float aHeight)
+	void Texture::CreateDepthStencil(float aWidth, float aHeight, GPUContext& aGpuContext)
 	{
 		D3D11_TEXTURE2D_DESC tempBufferInfo;
 		tempBufferInfo.Width = static_cast<unsigned int>(aWidth);
@@ -134,7 +134,7 @@ namespace Easy3D
 		tempBufferInfo.CPUAccessFlags = 0;
 		tempBufferInfo.MiscFlags = 0;
 
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myDepthTexture);
+		HRESULT hr = aGpuContext.GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myDepthTexture);
 		if (FAILED(hr))
 			assert(0);
 
@@ -145,7 +145,7 @@ namespace Easy3D
 		depthDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		depthDesc.Texture2D.MipSlice = 0;
 
-		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilView(myDepthTexture, &depthDesc, &myDepthStencil);
+		hr = aGpuContext.GetDevice()->CreateDepthStencilView(myDepthTexture, &depthDesc, &myDepthStencil);
 		if (FAILED(hr))
 			assert(0);
 
@@ -157,9 +157,8 @@ namespace Easy3D
 		viewDesc.Texture2D.MipLevels = 1;
 		viewDesc.Texture2D.MostDetailedMip = 0;
 
-		hr = Engine::GetInstance()->GetDevice()->CreateShaderResourceView(myDepthTexture, &viewDesc, &myDepthShaderView);
+		hr = aGpuContext.GetDevice()->CreateShaderResourceView(myDepthTexture, &viewDesc, &myDepthShaderView);
 		if (FAILED(hr))
 			assert(0);
 	}
-
 }

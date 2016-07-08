@@ -6,6 +6,7 @@
 
 namespace Easy3D
 {
+	class GPUContext;
 	class GPUData;
 
 	class ModelData
@@ -16,7 +17,7 @@ namespace Easy3D
 		ModelData();
 		~ModelData();
 
-		void Init(EffectID aEffectID);
+		void Init(EffectID aEffectID, GPUContext& aGPUContext);
 		void AddChild(ModelData* aModelData);
 
 	private:

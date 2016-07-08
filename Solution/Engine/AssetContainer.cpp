@@ -29,7 +29,7 @@ namespace Easy3D
 
 		if (myModelID.KeyExists(aModelPath) == false)
 		{
-			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect, myGpuContext);
 
 			myModels[myNextModelID] = modelData;
 			myModelID[aModelPath] = myNextModelID;
@@ -45,7 +45,7 @@ namespace Easy3D
 
 		if (myModelID.KeyExists(aModelPath) == false)
 		{
-			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect);
+			ModelData* modelData = myModelFactory->LoadModel(aModelPath, effect, myGpuContext);
 
 			myModels[myNextModelID] = modelData;
 			myModelID[aModelPath] = myNextModelID;
@@ -71,7 +71,7 @@ namespace Easy3D
 		if (myEffectsID.KeyExists(aFilePath) == false)
 		{
 			Effect* effect = new Effect();
-			effect->Init(aFilePath);
+			effect->Init(aFilePath, myGpuContext);
 
 			myEffects[myNextEffectID] = effect;
 			myEffectsID[aFilePath] = myNextEffectID;
@@ -97,7 +97,7 @@ namespace Easy3D
 		if (myTextures.KeyExists(aFilePath) == false)
 		{
 			Texture* newTex = new Texture();
-			newTex->LoadTexture(aFilePath);
+			newTex->LoadTexture(aFilePath, myGpuContext);
 			myTextures[aFilePath] = newTex;
 		}
 
@@ -106,6 +106,7 @@ namespace Easy3D
 
 	AssetContainer::AssetContainer()
 		: myModelFactory(new FBXFactory())
+		, myGpuContext(Engine::GetInstance()->GetGPUContext())
 	{
 	}
 

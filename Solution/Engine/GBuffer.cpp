@@ -3,34 +3,36 @@
 #include <D3DX11tex.h>
 #include "Effect.h"
 #include "GBuffer.h"
+#include "GPUContext.h"
 #include "Texture.h"
 
 
 namespace Easy3D
 {
 	GBuffer::GBuffer()
+		: myGPUContext(Engine::GetInstance()->GetGPUContext())
 	{
 		CU::Vector2<float> windowSize = Engine::GetInstance()->GetWindowSize();
 
 		myAlbedoAndMetalness = new Texture();
 		myAlbedoAndMetalness->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R8G8B8A8_UNORM, myGPUContext);
 
 		myNormalAndRoughness = new Texture();
 		myNormalAndRoughness->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R8G8B8A8_UNORM, myGPUContext);
 
 		myDepth = new Texture();
 		myDepth->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			, DXGI_FORMAT_R32_FLOAT);
+			, DXGI_FORMAT_R32_FLOAT, myGPUContext);
 
 		myDepthStencil = new Texture();
 		myDepthStencil->InitForShader(windowSize.x, windowSize.y
 			, D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R32_TYPELESS);
+			, DXGI_FORMAT_R32_TYPELESS, myGPUContext);
 	}
 
 
@@ -64,18 +66,19 @@ namespace Easy3D
 		clearColor[2] = aColor.z;
 		clearColor[3] = aColor.w;
 
-		Engine::GetInstance()->GetContext()->ClearRenderTargetView(myAlbedoAndMetalness->GetRenderTarget(), clearColor);
-		Engine::GetInstance()->GetContext()->ClearRenderTargetView(myNormalAndRoughness->GetRenderTarget(), clearColor);
-		Engine::GetInstance()->GetContext()->ClearRenderTargetView(myDepth->GetRenderTarget(), clearColor);
 
-		Engine::GetInstance()->GetContext()->ClearDepthStencilView(myDepthStencil->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+		myGPUContext.GetContext()->ClearRenderTargetView(myAlbedoAndMetalness->GetRenderTarget(), clearColor);
+		myGPUContext.GetContext()->ClearRenderTargetView(myNormalAndRoughness->GetRenderTarget(), clearColor);
+		myGPUContext.GetContext()->ClearRenderTargetView(myDepth->GetRenderTarget(), clearColor);
+		
+		myGPUContext.GetContext()->ClearDepthStencilView(myDepthStencil->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 	}
 
 	void GBuffer::Resize(float aWidth, float aHeight)
 	{
-		myAlbedoAndMetalness->Resize(aWidth, aHeight);
-		myNormalAndRoughness->Resize(aWidth, aHeight);
-		myDepth->Resize(aWidth, aHeight);
+		myAlbedoAndMetalness->Resize(aWidth, aHeight, myGPUContext);
+		myNormalAndRoughness->Resize(aWidth, aHeight, myGPUContext);
+		myDepth->Resize(aWidth, aHeight, myGPUContext);
 	}
 
 }

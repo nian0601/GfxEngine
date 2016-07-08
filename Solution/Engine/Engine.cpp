@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Engine.h"
-#include "DirectX.h"
+#include "GPUContext.h"
 
 namespace Easy3D
 {
@@ -23,14 +23,15 @@ namespace Easy3D
 	}
 
 	Engine::Engine()
-		: myDirectX(nullptr)
+		: myGPUContext(nullptr)
 	{
+		
 	}
 
 
 	Engine::~Engine()
 	{
-		SAFE_DELETE(myDirectX);
+		SAFE_DELETE(myGPUContext);
 	}
 
 	void Engine::CreateWindow(HWND& aHwnd, WNDPROC aWndProc, const CU::Vector2<float>& aSize, const CU::String<30>& aTitle)
@@ -79,33 +80,11 @@ namespace Easy3D
 
 	void Engine::CreateDirectX(const HWND& aHwnd)
 	{
-		myDirectX = new DirectX();
-		myDirectX->Init(aHwnd, myWindowSize);
+		myGPUContext = new GPUContext(aHwnd, myWindowSize);
 	}
 
 	void Engine::Render()
 	{
-		myDirectX->FinishFrame();
+		myGPUContext->FinishFrame();
 	}
-
-	ID3D11Device* Engine::GetDevice() const
-	{
-		return myDirectX->GetDevice();
-	}
-
-	ID3D11DeviceContext* Engine::GetContext() const
-	{
-		return myDirectX->GetContext();
-	}
-
-	void Engine::SetBackbufferAsRenderTarget()
-	{
-		myDirectX->SetBackbufferAsRenderTarget();
-	}
-
-	void Engine::GetBackbuffer(Backbuffer& aBackbufferOut)
-	{
-		myDirectX->GetBackbuffer(aBackbufferOut);
-	}
-
 }

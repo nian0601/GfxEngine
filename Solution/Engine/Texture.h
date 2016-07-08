@@ -9,6 +9,8 @@ struct ID3D11Texture2D;
 
 namespace Easy3D
 {
+	class GPUContext;
+
 	class Texture
 	{
 	public:
@@ -16,9 +18,9 @@ namespace Easy3D
 		~Texture();
 
 		void InitForShader(float aWidth, float aHeight, unsigned int aBindFlag
-			, unsigned int aFormat);
-		void LoadTexture(const CU::String<64>& aPath);
-		void Resize(float aWidth, float aHeight);
+			, unsigned int aFormat, GPUContext& aGpuContext);
+		void LoadTexture(const CU::String<64>& aPath, GPUContext& aGpuContext);
+		void Resize(float aWidth, float aHeight, GPUContext& aGpuContext);
 
 		ID3D11ShaderResourceView* GetShaderView();
 		ID3D11RenderTargetView* GetRenderTarget();
@@ -28,8 +30,8 @@ namespace Easy3D
 
 	private:
 		void CreateShaderViewAndRenderTarget(float aWidth, float aHeight, unsigned int aBindFlag
-			, unsigned int aFormat);
-		void CreateDepthStencil(float aWidth, float aHeight);
+			, unsigned int aFormat, GPUContext& aGpuContext);
+		void CreateDepthStencil(float aWidth, float aHeight, GPUContext& aGpuContext);
 
 		CU::String<64> myFilePath;
 		unsigned int myFormat;

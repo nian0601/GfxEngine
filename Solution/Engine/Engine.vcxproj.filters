@@ -5,7 +5,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Precompile</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="AssetContainer.h">
@@ -56,13 +55,18 @@
     <ClInclude Include="Instance.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>GPUContext</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUContext.h">
+      <Filter>GPUContext</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="stdafx.cpp">
       <Filter>Precompile</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="AssetContainer.cpp">
@@ -104,6 +108,12 @@
     <ClCompile Include="Instance.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>GPUContext</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUContext.cpp">
+      <Filter>GPUContext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -129,6 +139,9 @@
     </Filter>
     <Filter Include="Structs">
       <UniqueIdentifier>{410dad21-b6c2-4984-8c24-d2667e787ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPUContext">
+      <UniqueIdentifier>{0bdf16c1-0d53-4206-b1f1-7c68639c79c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

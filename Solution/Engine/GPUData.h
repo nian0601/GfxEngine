@@ -14,6 +14,7 @@ namespace Easy3D
 	struct IndexBuffer;
 	struct IndexData;
 
+	class GPUContext;
 	class Texture;
 
 	class GPUData
@@ -24,8 +25,8 @@ namespace Easy3D
 		GPUData();
 		~GPUData();
 
-		void Init(EffectID aEffect);
-		void Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData);
+		void Init(EffectID aEffect, GPUContext& aGPUContext);
+		void Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData, GPUContext& aGPUContext);
 		void SetTopology(int aTopology);
 		void AddInputElement(D3D11_INPUT_ELEMENT_DESC* aElement);
 
@@ -36,12 +37,12 @@ namespace Easy3D
 
 		const CU::String<30>& GetTechniqueName() const;
 	private:
-		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect);
+		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect, GPUContext& aGPUContext);
 		void InitVertexBuffer(int aVertexSize, int aBufferUsage, int aCPUUsage);
 		void InitIndexBuffer();
 
-		void SetupVertexBuffer(int aVertexCount, char* aVertexData);
-		void SetupIndexBuffer(int aIndexCount, char* aIndexData);
+		void SetupVertexBuffer(int aVertexCount, char* aVertexData, GPUContext& aGPUContext);
+		void SetupIndexBuffer(int aIndexCount, char* aIndexData, GPUContext& aGPUContext);
 
 		VertexBuffer* myVertexBuffer;
 		VertexData* myVertexData;

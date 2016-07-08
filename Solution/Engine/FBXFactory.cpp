@@ -29,7 +29,7 @@ namespace Easy3D
 		SAFE_DELETE(myLoader);
 	}
 
-	ModelData* FBXFactory::LoadModel(const CU::String<64>& aFilePath, EffectID aEffect)
+	ModelData* FBXFactory::LoadModel(const CU::String<64>& aFilePath, EffectID aEffect, GPUContext& aGPUContext)
 	{
 		if (myModels.KeyExists(aFilePath) == true)
 		{
@@ -42,7 +42,7 @@ namespace Easy3D
 		ModelData* modelData = CreateModel(fbxModelData);
 		myModels[aFilePath] = modelData;
 
-		modelData->Init(aEffect);
+		modelData->Init(aEffect, aGPUContext);
 		return modelData;
 	}
 

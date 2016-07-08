@@ -7,6 +7,7 @@
 namespace Easy3D
 {
 	class Effect;
+	class GPUContext;
 
 	class FullscreenQuad
 	{
@@ -14,9 +15,9 @@ namespace Easy3D
 		FullscreenQuad();
 		~FullscreenQuad();
 
-		void InitFullscreenQuad(EffectID aEffect);
-		void ActivateFullscreenQuad();
-		void RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique);
+		void InitFullscreenQuad(EffectID aEffect, GPUContext& aGPUContext);
+		void ActivateFullscreenQuad(GPUContext& aGPUContext);
+		void RenderFullscreenQuad(EffectID aEffect, const CU::String<30>& aTechnique, GPUContext& aGPUContext);
 
 	private:
 		GPUData myGPUData;

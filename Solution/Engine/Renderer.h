@@ -21,6 +21,7 @@ namespace Easy3D
 {
 	class Camera;
 	class Effect;
+	class GPUContext;
 	class Texture;
 
 	enum eDepthState
@@ -87,6 +88,7 @@ namespace Easy3D
 		ID3D11RenderTargetView* myRenderTargets[4];
 		ID3D11DepthStencilView* myDepthStencil;
 		Backbuffer myBackbuffer;
+		GPUContext& myGPUContext;
 
 		CU::Map<EffectID, CU::Map<CU::String<64>, ID3DX11EffectVariable*>> myEffectVariables;
 

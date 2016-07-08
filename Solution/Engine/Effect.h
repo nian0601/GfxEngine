@@ -13,6 +13,7 @@ struct ID3D11ShaderResourceView;
 
 namespace Easy3D
 {
+	class GPUContext;
 	class Texture;
 
 	class Effect
@@ -21,7 +22,7 @@ namespace Easy3D
 		Effect();
 		~Effect();
 
-		void Init(const CU::String<64>& aFilePath);
+		void Init(const CU::String<64>& aFilePath, GPUContext& aGPUContext);
 
 		ID3DX11Effect* GetEffect() const;
 		ID3DX11EffectTechnique* GetTechnique(const CU::String<30>& aTechniqueName) const;

@@ -16,6 +16,7 @@ namespace Easy3D
 	struct Backbuffer;
 
 	class DirectX;
+	class GPUContext;
 
 	class Engine
 	{
@@ -29,23 +30,23 @@ namespace Easy3D
 
 		void Render();
 
-		ID3D11Device* GetDevice() const;
-		ID3D11DeviceContext* GetContext() const;
-
-		void SetBackbufferAsRenderTarget();
-		void GetBackbuffer(Backbuffer& aBackbufferOut);
-
+		GPUContext& GetGPUContext();
 		const CU::Vector2<float>& GetWindowSize() const;
 
 	private:
 		Engine();
 		~Engine();
 
-		DirectX* myDirectX;
+		GPUContext* myGPUContext;
 		CU::Vector2<float> myWindowSize;
 
 		static Engine* myInstance;
 	};
+
+	inline GPUContext& Engine::GetGPUContext()
+	{
+		return *myGPUContext;
+	}
 
 	inline const CU::Vector2<float>& Engine::GetWindowSize() const
 	{

@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include "Effect.h"
 #include "GfxStructs.h"
+#include "GPUContext.h"
 #include "GPUData.h"
 
 
@@ -42,7 +43,7 @@ namespace Easy3D
 		myVertexFormat.DeleteAll();
 	}
 
-	void GPUData::Init(EffectID aEffect)
+	void GPUData::Init(EffectID aEffect, GPUContext& aGPUContext)
 	{
 		const int size = myVertexFormat.Size();
 		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
@@ -51,19 +52,19 @@ namespace Easy3D
 			vertexDesc[i] = *myVertexFormat[i];
 		}
 
-		InitInputLayout(vertexDesc, size, aEffect);
+		InitInputLayout(vertexDesc, size, aEffect, aGPUContext);
 		delete[] vertexDesc;
 
 		InitVertexBuffer(myVertexData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 		InitIndexBuffer();
 
-		SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData);
-		SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData);
+		SetupVertexBuffer(myVertexData->myNumberOfVertices, myVertexData->myVertexData, aGPUContext);
+		SetupIndexBuffer(myIndexData->myNumberOfIndices, myIndexData->myIndexData, aGPUContext);
 
 		myTechniqueName = "Render";
 	}
 
-	void GPUData::Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData)
+	void GPUData::Init(EffectID aEffect, int aIndexCount, char* aIndexData, int aVertexCount, int aVertexStride, char* aVertexData, GPUContext& aGPUContext)
 	{
 		const int size = myVertexFormat.Size();
 		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
@@ -72,14 +73,14 @@ namespace Easy3D
 			vertexDesc[i] = *myVertexFormat[i];
 		}
 
-		InitInputLayout(vertexDesc, size, aEffect);
+		InitInputLayout(vertexDesc, size, aEffect, aGPUContext);
 		delete[] vertexDesc;
 
 		InitVertexBuffer(aVertexStride, D3D11_USAGE_IMMUTABLE, 0);
 		InitIndexBuffer();
 
-		SetupVertexBuffer(aVertexCount, aVertexData);
-		SetupIndexBuffer(aIndexCount, aIndexData);
+		SetupVertexBuffer(aVertexCount, aVertexData, aGPUContext);
+		SetupIndexBuffer(aIndexCount, aIndexData, aGPUContext);
 
 		myTechniqueName = "Render";
 	}
@@ -94,13 +95,13 @@ namespace Easy3D
 		myVertexFormat.Add(aElement);
 	}
 
-	void GPUData::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect)
+	void GPUData::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, EffectID aEffect, GPUContext& aGPUContext)
 	{
 		Effect* effect = AssetContainer::GetInstance()->GetEffect(aEffect);
 
 		D3DX11_PASS_DESC passDesc;
 		effect->GetTechnique("Render")->GetPassByIndex(0)->GetDesc(&passDesc);
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
+		HRESULT hr = aGPUContext.GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myInputLayout);
 		if (FAILED(hr) != S_OK)
 		{
@@ -136,7 +137,7 @@ namespace Easy3D
 		myIndexBuffer->myBufferDesc->StructureByteStride = 0;
 	}
 
-	void GPUData::SetupVertexBuffer(int aVertexCount, char* aVertexData)
+	void GPUData::SetupVertexBuffer(int aVertexCount, char* aVertexData, GPUContext& aGPUContext)
 	{
 		if (myVertexBuffer->myVertexBuffer != nullptr)
 		{
@@ -147,11 +148,11 @@ namespace Easy3D
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = aVertexData;
 
-		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBuffer->myBufferDesc, &initData
+		DL_ASSERT_EXP(SUCCEEDED(aGPUContext.GetDevice()->CreateBuffer(myVertexBuffer->myBufferDesc, &initData
 			, &myVertexBuffer->myVertexBuffer)) == TRUE, "GPUData::SetupVertexBuffer: Failed to SetupVertexBuffer");
 	}
 
-	void GPUData::SetupIndexBuffer(int aIndexCount, char* aIndexData)
+	void GPUData::SetupIndexBuffer(int aIndexCount, char* aIndexData, GPUContext& aGPUContext)
 	{
 		if (myIndexBuffer->myIndexBuffer != nullptr)
 		{
@@ -162,7 +163,7 @@ namespace Easy3D
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = aIndexData;
 
-		DL_ASSERT_EXP(SUCCEEDED(Engine::GetInstance()->GetDevice()->CreateBuffer(myIndexBuffer->myBufferDesc, &initData,
+		DL_ASSERT_EXP(SUCCEEDED(aGPUContext.GetDevice()->CreateBuffer(myIndexBuffer->myBufferDesc, &initData,
 			&myIndexBuffer->myIndexBuffer)) == TRUE, "GPUData::SetupIndexBuffer: Failed to SetupIndexBuffer");
 	}
 

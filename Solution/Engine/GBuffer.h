@@ -5,6 +5,7 @@
 namespace Easy3D
 {
 	class Effect;
+	class GPUContext;
 	class Texture;
 
 	class GBuffer
@@ -24,5 +25,7 @@ namespace Easy3D
 		Texture* myDepth;
 
 		Texture* myDepthStencil;
+
+		GPUContext& myGPUContext;
 	};
 }

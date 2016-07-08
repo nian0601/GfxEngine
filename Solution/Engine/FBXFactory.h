@@ -29,7 +29,7 @@ namespace Easy3D
 		FBXFactory();
 		~FBXFactory();
 
-		ModelData* LoadModel(const CU::String<64>& aFilePath, EffectID aEffect) override;
+		ModelData* LoadModel(const CU::String<64>& aFilePath, EffectID aEffect, GPUContext& aGPUContext) override;
 		
 	private:
 		ModelData* CreateModel(FBX::FbxModelData* someModelData);

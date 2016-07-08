@@ -6,6 +6,7 @@
 #include <D3DX11async.h>
 #include <D3Dcompiler.h>
 #include "Effect.h"
+#include "GPUContext.h"
 #include "Texture.h"
 
 namespace Easy3D
@@ -27,7 +28,7 @@ namespace Easy3D
 		SAFE_RELEASE(myEffect);
 	}
 
-	void Effect::Init(const CU::String<64>& aFilePath)
+	void Effect::Init(const CU::String<64>& aFilePath, GPUContext& aGPUContext)
 	{
 		myFileName = CU::GetFileNameFromFilePath(aFilePath);
 		myFilePath = aFilePath;
@@ -66,7 +67,7 @@ namespace Easy3D
 			SAFE_RELEASE(compilerMsg);
 		}
 
-		result = D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), NULL, Engine::GetInstance()->GetDevice(), &myEffect);
+		result = D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), NULL, aGPUContext.GetDevice(), &myEffect);
 		DL_ASSERT_EXP(SUCCEEDED(result) == TRUE, "Failed to Create shader");
 
 		if (compiledShader)

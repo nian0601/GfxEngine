@@ -19,16 +19,16 @@ namespace Easy3D
 
 	}
 
-	void ModelData::Init(EffectID aEffectID)
+	void ModelData::Init(EffectID aEffectID, GPUContext& aGPUContext)
 	{
 		if (myIsNullObject == false)
 		{
-			myGPUData->Init(aEffectID);
+			myGPUData->Init(aEffectID, aGPUContext);
 		}
 
 		for each (ModelData* child in myChildren)
 		{
-			child->Init(aEffectID);
+			child->Init(aEffectID, aGPUContext);
 		}
 	}
 

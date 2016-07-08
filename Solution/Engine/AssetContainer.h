@@ -13,6 +13,7 @@ namespace std
 namespace Easy3D
 {
 	class Effect;
+	class GPUContext;
 	class Instance;
 	class IModelFactory;
 	class ModelData;
@@ -51,6 +52,7 @@ namespace Easy3D
 
 		CU::Map<CU::String<64>, Texture*> myTextures;
 
+		GPUContext& myGpuContext;
 		static AssetContainer* myInstance;
 	};
 }

@@ -8,6 +8,7 @@
 #include "Effect.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "GPUContext.h"
 #include "GPUData.h"
 
 #include <PostMaster.h>
@@ -16,9 +17,10 @@ namespace Easy3D
 {
 	Renderer::Renderer(EffectID aFullscreenEffect)
 		: myRenderBuffer(128)
+		, myGPUContext(Engine::GetInstance()->GetGPUContext())
 	{
-		InitFullscreenQuad(aFullscreenEffect);
-		Engine::GetInstance()->GetBackbuffer(myBackbuffer);
+		InitFullscreenQuad(aFullscreenEffect, myGPUContext);
+		myGPUContext.GetBackbuffer(myBackbuffer);
 
 		CreateDepthStencilStates();
 		CreateRasterizerStates();
@@ -98,12 +100,12 @@ namespace Easy3D
 
 	void Renderer::SetRasterizerState(eRasterizer aState)
 	{
-		Engine::GetInstance()->GetContext()->RSSetState(myRasterizerStates[aState]);
+		myGPUContext.GetContext()->RSSetState(myRasterizerStates[aState]);
 	}
 
 	void Renderer::SetDepthStencilState(eDepthState aState)
 	{
-		Engine::GetInstance()->GetContext()->OMSetDepthStencilState(myDepthStencilStates[aState], 1);
+		myGPUContext.GetContext()->OMSetDepthStencilState(myDepthStencilStates[aState], 1);
 	}
 
 	void Renderer::AddRenderTarget(Texture* aTexture)
@@ -115,7 +117,7 @@ namespace Easy3D
 
 	void Renderer::ClearRenderTarget(Texture* aTexture)
 	{
-		Engine::GetInstance()->GetContext()->ClearRenderTargetView(aTexture->GetRenderTarget(), myClearColor);
+		myGPUContext.GetContext()->ClearRenderTargetView(aTexture->GetRenderTarget(), myClearColor);
 	}
 
 	void Renderer::SetDepthStencil(Texture* aTexture)
@@ -125,7 +127,7 @@ namespace Easy3D
 
 	void Renderer::ClearDepthStencil(Texture* aTexture)
 	{
-		Engine::GetInstance()->GetContext()->ClearDepthStencilView(aTexture->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+		myGPUContext.GetContext()->ClearDepthStencilView(aTexture->GetDepthStencil(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 	}
 
 	void Renderer::UseOriginalDepthStencil()
@@ -142,14 +144,14 @@ namespace Easy3D
 
 	void Renderer::ApplyRenderTargetAndDepthStencil()
 	{
-		Engine::GetInstance()->GetContext()->OMSetRenderTargets(myRenderTargetCount, myRenderTargets, myDepthStencil);
+		myGPUContext.GetContext()->OMSetRenderTargets(myRenderTargetCount, myRenderTargets, myDepthStencil);
 		myRenderTargetCount = 0;
 	}
 
 	void Renderer::RenderFullScreen(const CU::String<30>& aTechnique)
 	{
-		ActivateFullscreenQuad();
-		RenderFullscreenQuad(myCurrentEffect, aTechnique);
+		ActivateFullscreenQuad(myGPUContext);
+		RenderFullscreenQuad(myCurrentEffect, aTechnique, myGPUContext);
 	}
 
 	void Renderer::RenderModel(ModelID aModelID)
@@ -195,7 +197,7 @@ namespace Easy3D
 
 	void Renderer::RenderGPUData(const GPUData& someData)
 	{
-		ID3D11DeviceContext* context = Engine::GetInstance()->GetContext();
+		ID3D11DeviceContext* context = myGPUContext.GetContext();
 
 		const unsigned int byteOffset = 0;
 
@@ -230,16 +232,16 @@ namespace Easy3D
 
 		desc.FillMode = D3D11_FILL_WIREFRAME;
 		desc.CullMode = D3D11_CULL_BACK;
-		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::WIRE_FRAME)]);
+		myGPUContext.GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::WIRE_FRAME)]);
 
 
 		desc.FillMode = D3D11_FILL_SOLID;
 		desc.CullMode = D3D11_CULL_BACK;
-		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::CULL_BACK)]);
+		myGPUContext.GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::CULL_BACK)]);
 
 		desc.FillMode = D3D11_FILL_SOLID;
 		desc.CullMode = D3D11_CULL_NONE;
-		Engine::GetInstance()->GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::NO_CULLING)]);
+		myGPUContext.GetDevice()->CreateRasterizerState(&desc, &myRasterizerStates[static_cast<int>(eRasterizer::NO_CULLING)]);
 	}
 
 	void Renderer::CreateDepthStencilStates()
@@ -261,12 +263,12 @@ namespace Easy3D
 
 		stencilDesc.DepthEnable = true;
 		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::ENABLED)]);
+		HRESULT hr = myGPUContext.GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::ENABLED)]);
 		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create ENABLED depthstate");
 
 		stencilDesc.DepthEnable = false;
 		stencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::DISABLED)]);
+		hr = myGPUContext.GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::DISABLED)]);
 		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create DISABLED depthstate");
 
 		stencilDesc.DepthEnable = false;
@@ -274,7 +276,7 @@ namespace Easy3D
 		stencilDesc.StencilEnable = false;
 		stencilDesc.StencilReadMask = UINT8(0xFF);
 		stencilDesc.StencilWriteMask = 0x0;
-		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::NO_READ_NO_WRITE)]);
+		hr = myGPUContext.GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::NO_READ_NO_WRITE)]);
 		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create NO_READ_NO_WRITE depthstate");
 
 		stencilDesc.DepthEnable = true;
@@ -294,7 +296,7 @@ namespace Easy3D
 		stencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_ZERO;
 		stencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
 
-		hr = Engine::GetInstance()->GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::READ_NO_WRITE)]);
+		hr = myGPUContext.GetDevice()->CreateDepthStencilState(&stencilDesc, &myDepthStencilStates[static_cast<int>(eDepthState::READ_NO_WRITE)]);
 		DL_ASSERT_EXP(FAILED(hr) == false, "Failed to create READ_NO_WRITE depthstate");
 	}
 
