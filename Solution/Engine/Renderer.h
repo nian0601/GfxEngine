@@ -45,7 +45,7 @@ namespace Easy3D
 	class Renderer : public FullscreenQuad, public Subscriber
 	{
 	public:
-		Renderer(EffectID aFullscreenEffect);
+		Renderer(EffectID aFullscreenEffect, AssetContainer& aAssetContainer, GPUContext& aGPUContext);
 		~Renderer();
 
 		void ReceiveMessage(const RenderMessage& aMessage) override;

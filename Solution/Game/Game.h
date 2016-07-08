@@ -8,9 +8,6 @@ namespace Easy3D
 {
 	class AssetContainer;
 	class Camera;
-	class Instance;
-	class DeferredRenderer;
-	class Scene;
 }
 
 namespace CU
@@ -33,8 +30,6 @@ private:
 	void LoadLevel(Easy3D::AssetContainer& aAssetContainer);
 
 	Easy3D::Camera* myCamera;
-	Easy3D::Scene* myScene;
-	Easy3D::DeferredRenderer* myRenderer;
 
 	World myWorld;
 };

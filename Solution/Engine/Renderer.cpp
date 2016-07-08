@@ -15,10 +15,10 @@
 
 namespace Easy3D
 {
-	Renderer::Renderer(EffectID aFullscreenEffect)
+	Renderer::Renderer(EffectID aFullscreenEffect, AssetContainer& aAssetContainer, GPUContext& aGPUContext)
 		: myRenderBuffer(128)
-		, myGPUContext(Engine::GetInstance()->GetGPUContext())
-		, myAssetContainer(Engine::GetInstance()->GetAssetContainer())
+		, myGPUContext(aGPUContext)
+		, myAssetContainer(aAssetContainer)
 	{
 		InitFullscreenQuad(aFullscreenEffect, myGPUContext, myAssetContainer);
 		myGPUContext.GetBackbuffer(myBackbuffer);

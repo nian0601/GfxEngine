@@ -6,12 +6,9 @@
 int main()
 {
 	Game game;
-	Easy3D::Engine::Create({ 1280.f, 720.f }, game);
+	Easy3D::Engine engine({ 1280.f, 720.f }, game);
 
-	Easy3D::Engine::GetInstance()->Init();
+	engine.Run();
 
-	Easy3D::Engine::GetInstance()->Run();
-
-	Easy3D::Engine::Destroy();
 	return 0;
 }

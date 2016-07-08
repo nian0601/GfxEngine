@@ -9,28 +9,26 @@
 
 namespace Easy3D
 {
-	GBuffer::GBuffer()
-		: myGPUContext(Engine::GetInstance()->GetGPUContext())
+	GBuffer::GBuffer(GPUContext& aGPUContext, const CU::Vector2<float>& aWindowSize)
+		: myGPUContext(aGPUContext)
 	{
-		CU::Vector2<float> windowSize = Engine::GetInstance()->GetWindowSize();
-
 		myAlbedoAndMetalness = new Texture();
-		myAlbedoAndMetalness->InitForShader(windowSize.x, windowSize.y
+		myAlbedoAndMetalness->InitForShader(aWindowSize.x, aWindowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 			, DXGI_FORMAT_R8G8B8A8_UNORM, myGPUContext);
 
 		myNormalAndRoughness = new Texture();
-		myNormalAndRoughness->InitForShader(windowSize.x, windowSize.y
+		myNormalAndRoughness->InitForShader(aWindowSize.x, aWindowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 			, DXGI_FORMAT_R8G8B8A8_UNORM, myGPUContext);
 
 		myDepth = new Texture();
-		myDepth->InitForShader(windowSize.x, windowSize.y
+		myDepth->InitForShader(aWindowSize.x, aWindowSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 			, DXGI_FORMAT_R32_FLOAT, myGPUContext);
 
 		myDepthStencil = new Texture();
-		myDepthStencil->InitForShader(windowSize.x, windowSize.y
+		myDepthStencil->InitForShader(aWindowSize.x, aWindowSize.y
 			, D3D11_BIND_DEPTH_STENCIL
 			, DXGI_FORMAT_R32_TYPELESS, myGPUContext);
 	}

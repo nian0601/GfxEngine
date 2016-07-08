@@ -3,9 +3,11 @@
 
 namespace Easy3D
 {
+	class AssetContainer;
 	class Camera;
 	class Effect;
 	class GBuffer;
+	class GPUContext;
 	class Instance;
 	class Scene;
 	class Texture;
@@ -14,7 +16,7 @@ namespace Easy3D
 	class DeferredRenderer
 	{
 	public:
-		DeferredRenderer();
+		DeferredRenderer(AssetContainer& aAssetContainer, GPUContext& aGPUContext, const CU::Vector2<float>& aWindowSize);
 		~DeferredRenderer();
 
 		void Render(Scene* aScene);

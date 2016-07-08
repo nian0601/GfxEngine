@@ -6,8 +6,6 @@ namespace Easy3D
 	Camera::Camera()
 		: myIsDirty(true)
 	{
-		CU::Vector2<float> size = Engine::GetInstance()->GetWindowSize();
-		myProjection = CU::Matrix44<float>::CreateProjectionMatrixLH(0.1f, 100.f, size.y / size.x, PI * 0.5f);
 	}
 
 

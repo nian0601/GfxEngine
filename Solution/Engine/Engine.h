@@ -20,41 +20,44 @@ namespace Easy3D
 	struct Backbuffer;
 
 	class AssetContainer;
+	class Camera;
+	class DeferredRenderer;
 	class DirectX;
 	class GPUContext;
 	class WindowHandler;
 	class IGame;
+	class Scene;
 
 	class Engine
 	{
 	public:
-		static void Create(const CU::Vector2<float>& aSize, IGame& aGame);
-		static void Destroy();
-		static Engine* GetInstance();
+		Engine(const CU::Vector2<float>& aSize, IGame& aGame);
+		~Engine();
 
 		void Run();
-		void Init();
-
-		void Render();
 
 		GPUContext& GetGPUContext();
 		AssetContainer& GetAssetContainer();
+		Scene& GetScene();
+		Camera& GetCamera();
 		const CU::Vector2<float>& GetWindowSize() const;
 
 	private:
-		Engine(const CU::Vector2<float>& aSize, IGame& aGame);
-		~Engine();
+		
+
+		void OnResize();
 
 		GPUContext* myGPUContext;
 		WindowHandler* myWindowHandler;
 		AssetContainer* myAssetContainer;
+		Scene* myScene;
+		DeferredRenderer* myRenderer;
+		Camera* myCamera;
 		IGame* myGame;
 		CU::TimerManager* myTimerManager;
 
 		CU::Vector2<float> myWindowSize;
 		bool myIsRunning;
-
-		static Engine* myInstance;
 	};
 
 	inline GPUContext& Engine::GetGPUContext()
@@ -70,5 +73,15 @@ namespace Easy3D
 	inline const CU::Vector2<float>& Engine::GetWindowSize() const
 	{
 		return myWindowSize;
+	}
+
+	inline Scene& Engine::GetScene()
+	{
+		return *myScene;
+	}
+
+	inline Camera& Engine::GetCamera()
+	{
+		return *myCamera;
 	}
 }

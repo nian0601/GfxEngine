@@ -11,7 +11,7 @@ namespace Easy3D
 	class GBuffer
 	{
 	public:
-		GBuffer();
+		GBuffer(GPUContext& aGPUContext, const CU::Vector2<float>& aWindowSize);
 		~GBuffer();
 
 		void Set(Effect* aEffect);

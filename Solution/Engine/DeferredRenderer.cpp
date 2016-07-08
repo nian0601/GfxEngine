@@ -11,20 +11,19 @@
 
 namespace Easy3D
 {
-	DeferredRenderer::DeferredRenderer()
+	DeferredRenderer::DeferredRenderer(AssetContainer& aAssetContainer, GPUContext& aGPUContext, const CU::Vector2<float>& aWindowSize)
 	{
-		myGBuffer = new GBuffer();
+		myGBuffer = new GBuffer(aGPUContext, aWindowSize);
 
-		AssetContainer& assetContainer = Engine::GetInstance()->GetAssetContainer();
-		myFullscreenEffect = assetContainer.LoadEffect("Data/Resource/Shader/S_effect_fullscreen.fx");
-		myPointLightEffect = assetContainer.LoadEffect("Data/Resource/Shader/S_effect_deferred_pointlight.fx");
+		myFullscreenEffect = aAssetContainer.LoadEffect("Data/Resource/Shader/S_effect_fullscreen.fx");
+		myPointLightEffect = aAssetContainer.LoadEffect("Data/Resource/Shader/S_effect_deferred_pointlight.fx");
 
-		myCubemap = assetContainer.RequestTexture("Data/Resource/Texture/church_cubemap.dds");
+		myCubemap = aAssetContainer.RequestTexture("Data/Resource/Texture/church_cubemap.dds");
 
-		myRenderer = new Renderer(myFullscreenEffect);
+		myRenderer = new Renderer(myFullscreenEffect, aAssetContainer, aGPUContext);
 		myRenderer->SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 
-		myPointLightInstance = assetContainer.CreateInstance("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
+		myPointLightInstance = aAssetContainer.CreateInstance("Data/Resource/Model/Light_Mesh/SM_sphere.fbx", "Data/Resource/Shader/S_effect_deferred_pointlight.fx");
 	}
 
 

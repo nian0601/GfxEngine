@@ -33,23 +33,16 @@ Game::Game()
 
 Game::~Game()
 {
-	SAFE_DELETE(myRenderer);
-
 	PostMaster::GetInstance()->Destroy();
 }
 
 void Game::Init(Easy3D::Engine& aEngine)
 {
-	myCamera = new Easy3D::Camera();
+	myCamera = &aEngine.GetCamera();
 
 	LoadLevel(aEngine.GetAssetContainer());
 
-	myScene = new Easy3D::Scene();
-	myScene->SetCamera(*myCamera);
-
-	myScene->AddLight(new Easy3D::PointLight({ -1.2f, -1.f, 3.f }, { 1.f, 0.f, 0.f, 3.f }, 4.f));
-
-	myRenderer = new Easy3D::DeferredRenderer();
+	aEngine.GetScene().AddLight(new Easy3D::PointLight({ -1.2f, -1.f, 3.f }, { 1.f, 0.f, 0.f, 3.f }, 4.f));
 
 	myWorld.AddProcessor<RenderProcessor>();
 	myWorld.AddProcessor<InputProcessor>();
@@ -68,8 +61,6 @@ bool Game::Update(float aDelta)
 
 	myWorld.Update(aDelta);
 
-
-	myRenderer->Render(myScene);
 	return true;
 }
 
