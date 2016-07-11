@@ -43,9 +43,9 @@ namespace Easy3D
 		const CU::Vector2<float>& GetWindowSize() const;
 
 	private:
-		
-
 		void OnResize();
+
+		IGame& myGame;
 
 		GPUContext* myGPUContext;
 		WindowHandler* myWindowHandler;
@@ -53,7 +53,6 @@ namespace Easy3D
 		Scene* myScene;
 		DeferredRenderer* myRenderer;
 		Camera* myCamera;
-		IGame* myGame;
 		CU::TimerManager* myTimerManager;
 
 		CU::Vector2<float> myWindowSize;

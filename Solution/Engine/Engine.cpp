@@ -16,7 +16,7 @@ namespace Easy3D
 	Engine::Engine(const CU::Vector2<float>& aSize, IGame& aGame)
 		: myGPUContext(nullptr)
 		, myWindowSize(aSize)
-		, myGame(&aGame)
+		, myGame(aGame)
 	{
 		myWindowHandler = new WindowHandler(myWindowSize);
 		myGPUContext = new GPUContext(myWindowSize, myWindowHandler->GetHwnd());
@@ -34,7 +34,7 @@ namespace Easy3D
 		CU::InputWrapper::Create(myWindowHandler->GetHwnd(), GetModuleHandle(NULL), DISCL_NONEXCLUSIVE
 			| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
-		myGame->Init(*this);
+		myGame.Init(*this);
 	}
 
 
@@ -68,13 +68,13 @@ namespace Easy3D
 					myWindowSize = myWindowHandler->GetNewSize();
 
 					//OnResize();
-					myGame->OnResize(myWindowSize.x, myWindowSize.y);
+					myGame.OnResize(myWindowSize.x, myWindowSize.y);
 				}
 
 				myTimerManager->Update();
 				CU::InputWrapper::GetInstance()->Update();
 
-				myIsRunning = myGame->Update(myTimerManager->GetMasterTimer().GetTime().GetFrameTime());
+				myIsRunning = myGame.Update(myTimerManager->GetMasterTimer().GetTime().GetFrameTime());
 
 				myRenderer->Render(myScene);
 				myGPUContext->FinishFrame();
